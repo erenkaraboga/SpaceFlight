@@ -3,8 +3,9 @@ package com.spaceflight.navigation
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.RocketLaunch
+import androidx.compose.material.icons.rounded.Newspaper
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.spaceflight.R
 import kotlinx.serialization.Serializable
@@ -24,8 +25,8 @@ enum class TopLevelDestination(
     News(
         route = NewsRoute,
         labelResId = R.string.destination_news,
-        selectedIcon = Icons.Rounded.RocketLaunch,
-        unselectedIcon = Icons.Rounded.RocketLaunch,
+        selectedIcon = Icons.Rounded.Newspaper,
+        unselectedIcon = Icons.Outlined.Newspaper,
     ),
     Favorites(
         route = FavoritesRoute,

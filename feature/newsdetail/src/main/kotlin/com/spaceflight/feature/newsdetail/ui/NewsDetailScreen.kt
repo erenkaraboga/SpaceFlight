@@ -1,0 +1,229 @@
+package com.spaceflight.feature.newsdetail.ui
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.spaceflight.designsystem.component.ErrorView
+import com.spaceflight.designsystem.component.FavoriteButton
+import com.spaceflight.designsystem.motion.sharedContent
+import com.spaceflight.designsystem.motion.sharedImageKey
+import com.spaceflight.designsystem.util.openUrlInCustomTab
+import com.spaceflight.designsystem.util.rememberAbsoluteDate
+import com.spaceflight.designsystem.util.shareText
+import com.spaceflight.feature.newsdetail.R
+import com.spaceflight.feature.newsdetail.presentation.NewsDetailEffect
+import com.spaceflight.feature.newsdetail.presentation.NewsDetailEvent
+import com.spaceflight.feature.newsdetail.presentation.NewsDetailViewModel
+
+@Composable
+fun NewsDetailScreen(
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: NewsDetailViewModel = hiltViewModel(),
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val context = LocalContext.current
+    val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
+    val chooserTitle = stringResource(R.string.newsdetail_share_chooser)
+    val noBrowserMessage = stringResource(R.string.newsdetail_no_browser)
+
+    LaunchedEffect(viewModel) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                NewsDetailEffect.NavigateBack -> onBack()
+
+                is NewsDetailEffect.OpenInBrowser ->
+                    if (!context.openUrlInCustomTab(effect.url, toolbarColor)) {
+                        snackbarHostState.showSnackbar(noBrowserMessage)
+                    }
+
+                is NewsDetailEffect.ShareArticle ->
+                    if (!context.shareText(
+                            effect.title,
+                            "${effect.title}\n\n${effect.url}",
+                            chooserTitle,
+                        )
+                    ) {
+                        snackbarHostState.showSnackbar(noBrowserMessage)
+                    }
+
+                is NewsDetailEffect.ShowMessage ->
+                    snackbarHostState.showSnackbar(context.getString(effect.messageResId))
+            }
+        }
+    }
+
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = MaterialTheme.colorScheme.background,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+    ) { _ ->
+        when {
+            state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+
+            state.article == null -> ErrorView(
+                title = stringResource(R.string.newsdetail_missing_title),
+                description = stringResource(R.string.newsdetail_missing_description),
+                onRetry = { viewModel.onEvent(NewsDetailEvent.Retry) },
+                modifier = Modifier.fillMaxSize(),
+            )
+
+            else -> {
+                val article = state.article!!
+                val scrollState = rememberScrollState()
+                val showTitleInBar by remember {
+                    derivedStateOf { heroTitleAlpha(scrollState.value) < 0.15f }
+                }
+
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
+                ) {
+                    ArticleDetailContent(
+                        title = article.title,
+                        summary = article.summary,
+                        imageUrl = article.imageUrl,
+                        newsSite = article.newsSite,
+                        authors = article.authors,
+                        dateLabel = rememberAbsoluteDate(article.publishedAt),
+                        launchCount = article.launchCount,
+                        eventCount = article.eventCount,
+                        onReadMore = { viewModel.onEvent(NewsDetailEvent.SourceRequested) },
+                        imageModifier = Modifier.sharedContent(sharedImageKey(article.id)),
+                        scrollState = scrollState,
+                    )
+
+                    DetailChrome(
+                        title = article.title,
+                        showTitle = showTitleInBar,
+                        isFavorite = state.isFavorite,
+                        onBack = { viewModel.onEvent(NewsDetailEvent.BackClicked) },
+                        onShare = { viewModel.onEvent(NewsDetailEvent.ShareRequested) },
+                        onFavorite = { viewModel.onEvent(NewsDetailEvent.FavoriteToggled) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailChrome(
+    title: String,
+    showTitle: Boolean,
+    isFavorite: Boolean,
+    onBack: () -> Unit,
+    onShare: () -> Unit,
+    onFavorite: () -> Unit,
+) {
+    val glass = Color.Black.copy(alpha = 0.38f)
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        GlassIconButton(onClick = onBack, containerColor = glass) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.newsdetail_back),
+                tint = Color.White,
+            )
+        }
+
+        AnimatedVisibility(
+            visible = showTitle,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(
+                text = title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White,
+            )
+        }
+        if (!showTitle) {
+            Box(Modifier.weight(1f))
+        }
+
+        GlassIconButton(onClick = onShare, containerColor = glass) {
+            Icon(
+                imageVector = Icons.Rounded.Share,
+                contentDescription = stringResource(R.string.newsdetail_share),
+                tint = Color.White,
+            )
+        }
+        FavoriteButton(
+            isFavorite = isFavorite,
+            onClick = onFavorite,
+            containerColor = glass,
+            inactiveTint = Color.White,
+        )
+    }
+}
+
+@Composable
+private fun GlassIconButton(
+    onClick: () -> Unit,
+    containerColor: Color,
+    content: @Composable () -> Unit,
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(containerColor),
+    ) {
+        content()
+    }
+}

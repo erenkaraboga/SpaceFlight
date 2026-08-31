@@ -10,7 +10,7 @@ import java.time.format.DateTimeParseException
 fun ArticleDto.toEntity(): ArticleEntity = ArticleEntity(
     id = id,
     title = title.orEmpty().trim(),
-    summary = summary.cleanSummary(),
+    summary = summary.orEmpty().cleanedSummary(),
     imageUrl = imageUrl.orEmpty(),
     newsSite = newsSite.orEmpty(),
     url = url.orEmpty(),
@@ -74,17 +74,16 @@ fun ArticleEntity.toFavoriteEntity(favoritedAt: Long): FavoriteArticleEntity =
     toDomain().toFavoriteEntity(favoritedAt)
 
 /**
- * Publishers push their WordPress footer straight into the API summary, so strip the trailing
- * "The post ... appeared first on ..." line and normalise the stray newlines around it.
+ * Publishers often append "The post … appeared first on …" plus leading/trailing newlines. Readers
+ * never asked for that, so it is stripped before the summary is stored.
  */
-internal fun String?.cleanSummary(): String {
-    val text = this?.trim().orEmpty()
-    if (text.isEmpty()) return ""
-    return text
-        .replace(POST_FOOTER, "")
-        .replace(EXCESS_BLANK_LINES, "\n\n")
-        .trim()
-}
+private fun String.cleanedSummary(): String =
+    PUBLISHER_FOOTER.replace(trim(), "").trim()
+
+private val PUBLISHER_FOOTER = Regex(
+    """\s*The post .+ appeared first on .+\.?\s*$""",
+    RegexOption.IGNORE_CASE,
+)
 
 /**
  * `published_at` comes back with second precision and `updated_at` with microseconds; [Instant]
@@ -95,8 +94,3 @@ internal fun String?.toEpochMillis(): Long = try {
 } catch (_: DateTimeParseException) {
     0L
 }
-
-private val POST_FOOTER =
-    Regex("""\s*The post\b[^\n]*?appeared first on[^\n]*$""", RegexOption.IGNORE_CASE)
-
-private val EXCESS_BLANK_LINES = Regex("""\n{3,}""")

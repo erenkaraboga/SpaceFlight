@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="news_title">Uzay Haberleri</string>
+    <string name="news_featured">Öne çıkan</string>
+    <string name="news_latest">Son haberler</string>
     <string name="news_error_title">Haberler yüklenemedi</string>
     <string name="news_empty_title">Haber bulunamadı</string>
     <string name="news_empty_description">“%1$s” ile eşleşen bir sonuç yok. Farklı bir kelime deneyin.</string>
-    <string name="news_detail_placeholder_title">Bir haber seçin</string>
-    <string name="news_detail_placeholder_description">Detayını burada okumak için listeden bir haber seçin.</string>
-    <string name="news_back">Geri</string>
-    <string name="news_share">Paylaş</string>
-    <string name="news_share_chooser">Haberi şununla paylaş</string>
     <string name="news_added_to_favorites">Favorilere eklendi</string>
     <string name="news_removed_from_favorites">Favorilerden çıkarıldı</string>
-    <string name="news_no_browser">Bu bağlantıyı açabilecek bir uygulama yok</string>
-    <string name="news_refresh_failed">Yenilenemedi — kayıtlı haberler gösteriliyor</string>
+    <string name="news_refresh_failed">Yenilenemedi — önbellekteki haberler gösteriliyor</string>
 
     <string name="error_no_connection">İnternet bağlantısı yok. Ağınızı kontrol edip tekrar deneyin.</string>
     <string name="error_timeout">İstek çok uzun sürdü. Tekrar deneyin.</string>

@@ -1,7 +1,6 @@
 package com.spaceflight.core.data.di
 
 import com.spaceflight.core.data.BuildConfig
-import com.spaceflight.core.data.network.KotlinxSerializationConverterFactory
 import com.spaceflight.core.data.network.SpaceflightApi
 import dagger.Module
 import dagger.Provides
@@ -12,6 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -48,9 +48,7 @@ object NetworkModule {
     fun provideRetrofit(client: OkHttpClient, json: Json): Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.API_BASE_URL)
         .client(client)
-        .addConverterFactory(
-            KotlinxSerializationConverterFactory(json, "application/json".toMediaType())
-        )
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 
     @Provides

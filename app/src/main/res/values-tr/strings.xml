@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Uzay Haberleri</string>
     <string name="destination_news">Haberler</string>
     <string name="destination_favorites">Favoriler</string>
 </resources>

@@ -23,8 +23,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "SpaceFlight"
 include(":app")
+include(":designsystem")
 include(":core:domain")
 include(":core:data")
-include(":core:designsystem")
 include(":feature:news")
+include(":feature:newsdetail")
 include(":feature:favorites")

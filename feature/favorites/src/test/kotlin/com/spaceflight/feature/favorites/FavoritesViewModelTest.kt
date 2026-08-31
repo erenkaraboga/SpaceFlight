@@ -1,17 +1,17 @@
 package com.spaceflight.feature.favorites
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.spaceflight.core.domain.usecase.AddFavoriteUseCase
 import com.spaceflight.core.domain.usecase.ObserveFavoritesUseCase
 import com.spaceflight.core.domain.usecase.RemoveFavoriteUseCase
+import com.spaceflight.feature.favorites.presentation.FavoritesEffect
+import com.spaceflight.feature.favorites.presentation.FavoritesEvent
+import com.spaceflight.feature.favorites.presentation.FavoritesViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -26,7 +26,7 @@ class FavoritesViewModelTest {
     )
 
     @Test
-    fun `saved articles arrive and the loading placeholder goes away`() = runTest(
+    fun `favorite articles arrive and the loading placeholder goes away`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = createViewModel()
@@ -87,58 +87,9 @@ class FavoritesViewModelTest {
         assertEquals(listOf(1, 2), viewModel.uiState.value.favorites.map { it.id })
     }
 
-    @Test
-    fun `removing the article currently open clears the detail pane`() = runTest(
-        mainDispatcherRule.testDispatcher
-    ) {
-        val viewModel = createViewModel()
-        advanceUntilIdle()
-        viewModel.onEvent(FavoritesEvent.ArticleSelected(1))
-        advanceUntilIdle()
-        assertTrue(viewModel.uiState.value.selectedArticle != null)
-
-        viewModel.onEvent(FavoritesEvent.FavoriteRemoved(testArticle(1)))
-        advanceUntilIdle()
-
-        assertNull(viewModel.uiState.value.selectedArticleId)
-        assertNull(viewModel.uiState.value.selectedArticle)
-    }
-
-    @Test
-    fun `sharing emits the title alongside the url`() = runTest(
-        mainDispatcherRule.testDispatcher
-    ) {
-        val viewModel = createViewModel()
-
-        viewModel.effects.test {
-            viewModel.onEvent(
-                FavoritesEvent.ShareRequested(testArticle(1, "Starship static fire"))
-            )
-
-            assertEquals(
-                FavoritesEffect.ShareArticle("Starship static fire", "https://example.com/1"),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
-    fun `asking to read the source emits the publisher url`() = runTest(
-        mainDispatcherRule.testDispatcher
-    ) {
-        val viewModel = createViewModel()
-
-        viewModel.effects.test {
-            viewModel.onEvent(FavoritesEvent.SourceRequested(testArticle(1)))
-
-            assertEquals(FavoritesEffect.OpenInBrowser("https://example.com/1"), awaitItem())
-        }
-    }
-
     private fun createViewModel() = FavoritesViewModel(
         observeFavorites = ObserveFavoritesUseCase(repository),
         addFavorite = AddFavoriteUseCase(repository),
         removeFavorite = RemoveFavoriteUseCase(repository),
-        savedStateHandle = SavedStateHandle(),
     )
 }

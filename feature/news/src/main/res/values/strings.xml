@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="news_title">Spaceflight</string>
+    <string name="news_title" translatable="false">SpaceFlight</string>
+    <string name="news_featured">Featured</string>
+    <string name="news_latest">Latest</string>
     <string name="news_error_title">Could not load the news</string>
     <string name="news_empty_title">No articles found</string>
     <string name="news_empty_description">Nothing matched “%1$s”. Try a different keyword.</string>
-    <string name="news_detail_placeholder_title">Select an article</string>
-    <string name="news_detail_placeholder_description">Pick a story from the list to read its details here.</string>
-    <string name="news_back">Back</string>
-    <string name="news_share">Share</string>
-    <string name="news_share_chooser">Share article via</string>
     <string name="news_added_to_favorites">Added to favorites</string>
     <string name="news_removed_from_favorites">Removed from favorites</string>
-    <string name="news_no_browser">No app available to open this link</string>
-    <string name="news_refresh_failed">Could not refresh — showing saved articles</string>
+    <string name="news_refresh_failed">Could not refresh — showing cached articles</string>
 
     <string name="error_no_connection">No internet connection. Check your network and try again.</string>
     <string name="error_timeout">The request took too long. Try again.</string>

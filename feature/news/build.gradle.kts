@@ -35,7 +35,7 @@ kotlin {
 
 dependencies {
     implementation(projects.core.domain)
-    api(projects.core.designsystem)
+    api(projects.designsystem)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -43,10 +43,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.adaptive)
-    implementation(libs.androidx.adaptive.layout)
-    implementation(libs.androidx.adaptive.navigation)
-    implementation(libs.androidx.browser)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

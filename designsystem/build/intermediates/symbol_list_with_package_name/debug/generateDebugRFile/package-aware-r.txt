@@ -1,0 +1,9 @@
+com.spaceflight.designsystem
+string ds_add_to_favorites
+string ds_clear_query
+string ds_close_search
+string ds_offline_banner
+string ds_open_search
+string ds_remove_from_favorites
+string ds_retry
+string ds_search_placeholder

@@ -1,0 +1,14 @@
+com.spaceflight.feature.newsdetail
+plurals newsdetail_related_events
+plurals newsdetail_related_launches
+string newsdetail_added_to_favorites
+string newsdetail_attribution
+string newsdetail_back
+string newsdetail_byline
+string newsdetail_missing_description
+string newsdetail_missing_title
+string newsdetail_no_browser
+string newsdetail_read_full_article
+string newsdetail_removed_from_favorites
+string newsdetail_share
+string newsdetail_share_chooser

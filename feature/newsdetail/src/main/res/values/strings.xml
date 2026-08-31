@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="newsdetail_back">Back</string>
+    <string name="newsdetail_share">Share</string>
+    <string name="newsdetail_share_chooser">Share article via</string>
+    <string name="newsdetail_no_browser">No app available to open this link</string>
+    <string name="newsdetail_added_to_favorites">Added to favorites</string>
+    <string name="newsdetail_removed_from_favorites">Removed from favorites</string>
+    <string name="newsdetail_missing_title">Article not found</string>
+    <string name="newsdetail_missing_description">This story is no longer in the cache. Go back and try again.</string>
+    <string name="newsdetail_read_full_article">Read the full article</string>
+    <string name="newsdetail_byline">By %1$s</string>
+    <string name="newsdetail_attribution">Powered by the Spaceflight News API — The Space Devs</string>
+
+    <plurals name="newsdetail_related_launches">
+        <item quantity="one">%1$d related launch</item>
+        <item quantity="other">%1$d related launches</item>
+    </plurals>
+    <plurals name="newsdetail_related_events">
+        <item quantity="one">%1$d related event</item>
+        <item quantity="other">%1$d related events</item>
+    </plurals>
+</resources>

@@ -2,5 +2,5 @@
 <resources>
     <!-- Matches the Compose theme's background in each mode so the cold-start window does not
          flash the wrong colour before the first frame. -->
-    <color name="space_background">#FFF6F7FC</color>
+    <color name="space_background">#FFFBFAFF</color>
 </resources>

@@ -35,16 +35,12 @@ kotlin {
 
 dependencies {
     implementation(projects.core.domain)
-    api(projects.core.designsystem)
+    api(projects.designsystem)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.browser)
-    implementation(libs.androidx.adaptive)
-    implementation(libs.androidx.adaptive.layout)
-    implementation(libs.androidx.adaptive.navigation)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
