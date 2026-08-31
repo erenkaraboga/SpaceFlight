@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.noop)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.room.runtime)

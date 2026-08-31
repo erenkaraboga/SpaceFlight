@@ -1,10 +1,13 @@
 package com.spaceflight.core.data.di
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.spaceflight.core.data.BuildConfig
 import com.spaceflight.core.data.network.SpaceflightApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -29,17 +32,25 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    fun provideOkHttpClient(
+        @ApplicationContext context: Context,
+    ): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(20, TimeUnit.SECONDS)
         .addInterceptor(
             HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG) {
-                    HttpLoggingInterceptor.Level.BASIC
+                    HttpLoggingInterceptor.Level.BODY
                 } else {
                     HttpLoggingInterceptor.Level.NONE
                 }
-            }
+            },
+        )
+        .addInterceptor(
+            ChuckerInterceptor.Builder(context)
+                .maxContentLength(250_000L)
+                .alwaysReadResponseBody(false)
+                .build(),
         )
         .build()
 

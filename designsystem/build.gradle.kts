@@ -44,6 +44,7 @@ dependencies {
     api(libs.androidx.material3)
     api(libs.androidx.material.icons.extended)
     api(libs.coil.compose)
+    api(libs.haze)
     implementation(libs.coil.network.okhttp)
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)

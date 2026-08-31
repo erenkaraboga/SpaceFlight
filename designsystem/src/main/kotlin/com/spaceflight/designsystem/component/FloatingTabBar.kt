@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +31,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.spaceflight.designsystem.theme.LocalIsDarkTheme
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
 
 data class FloatingTab(
     val label: String,
@@ -38,9 +42,15 @@ data class FloatingTab(
     val unselectedIcon: ImageVector,
 )
 
+private val BarShape = RoundedCornerShape(22.dp)
+private val TabShape = RoundedCornerShape(17.dp)
+
 /**
- * A floating pill of equally sized tabs. Colour is the only thing that animates, so the bar does
- * not reflow or fight the finger on every tap.
+ * A floating glass bar of equally sized tabs. Colour is the only thing that animates, so the bar
+ * does not reflow or fight the finger on every tap.
+ *
+ * Pass the same [HazeState] that is attached to the content behind the bar so the glass can blur
+ * what scrolls underneath. When [hazeState] is null (previews), a solid frosted fill is used.
  */
 @Composable
 fun FloatingTabBar(
@@ -48,42 +58,78 @@ fun FloatingTabBar(
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    hazeState: HazeState? = null,
 ) {
-    val outline = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+    val isDark = LocalIsDarkTheme.current
     val colorSpec = spring<Color>(dampingRatio = 0.9f, stiffness = 380f)
+    val glassBorder = if (isDark) {
+        Color.White.copy(alpha = 0.20f)
+    } else {
+        Color.White.copy(alpha = 0.78f)
+    }
+    val fallbackFill = if (isDark) {
+        Color(0xFF1C1C28).copy(alpha = 0.78f)
+    } else {
+        Color.White.copy(alpha = 0.82f)
+    }
 
     Row(
         modifier = modifier
-            .widthIn(max = 360.dp)
+            .widthIn(max = 340.dp)
             .fillMaxWidth()
-            .height(68.dp)
+            .height(62.dp)
             .shadow(
-                elevation = 16.dp,
-                shape = CircleShape,
-                ambientColor = Color.Black.copy(alpha = 0.18f),
-                spotColor = Color.Black.copy(alpha = 0.14f),
+                elevation = 18.dp,
+                shape = BarShape,
+                ambientColor = Color.Black.copy(alpha = 0.22f),
+                spotColor = Color.Black.copy(alpha = 0.16f),
             )
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-            .border(1.dp, outline, CircleShape)
+            .clip(BarShape)
+            .then(
+                if (hazeState != null) {
+                    Modifier.hazeEffect(state = hazeState) {
+                        blurRadius = 28.dp
+                        noiseFactor = 0.08f
+                        tints = listOf(
+                            HazeTint(
+                                if (isDark) {
+                                    Color.Black.copy(alpha = 0.34f)
+                                } else {
+                                    Color.White.copy(alpha = 0.52f)
+                                },
+                            ),
+                            HazeTint(
+                                if (isDark) {
+                                    Color.White.copy(alpha = 0.08f)
+                                } else {
+                                    Color.White.copy(alpha = 0.22f)
+                                },
+                            ),
+                        )
+                    }
+                } else {
+                    Modifier.background(fallbackFill)
+                },
+            )
+            .border(1.dp, glassBorder, BarShape)
             .selectableGroup()
-            .padding(6.dp),
+            .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         tabs.forEachIndexed { index, tab ->
             val selected = index == selectedIndex
             val container by animateColorAsState(
-                targetValue = if (selected) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    Color.Transparent
+                targetValue = when {
+                    !selected -> Color.Transparent
+                    isDark -> Color.White.copy(alpha = 0.16f)
+                    else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
                 },
                 animationSpec = colorSpec,
                 label = "tabContainer",
             )
             val content by animateColorAsState(
                 targetValue = if (selected) {
-                    MaterialTheme.colorScheme.onPrimary
+                    MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
                 },
@@ -95,7 +141,7 @@ fun FloatingTabBar(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .clip(CircleShape)
+                    .clip(TabShape)
                     .background(container)
                     .selectable(
                         selected = selected,

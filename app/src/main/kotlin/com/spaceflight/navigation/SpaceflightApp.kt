@@ -46,6 +46,8 @@ import com.spaceflight.feature.favorites.ui.FavoritesScreen
 import com.spaceflight.feature.news.ui.NewsScreen
 import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
 import com.spaceflight.feature.newsdetail.ui.NewsDetailScreen
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -71,13 +73,18 @@ fun SpaceflightApp(modifier: Modifier = Modifier) {
         animationSpec = spring(dampingRatio = 0.9f, stiffness = 280f),
         label = "barVisibility",
     )
+    val hazeState = rememberHazeState()
 
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        SharedTransitionLayout(Modifier.fillMaxSize()) {
+        SharedTransitionLayout(
+            Modifier
+                .fillMaxSize()
+                .hazeSource(state = hazeState),
+        ) {
             CompositionLocalProvider(LocalSharedTransitionScope provides this) {
                 NavHost(
                     navController = navController,
@@ -184,6 +191,7 @@ fun SpaceflightApp(modifier: Modifier = Modifier) {
         FloatingTabBar(
             tabs = tabs,
             selectedIndex = selectedTab,
+            hazeState = hazeState,
             onSelect = { index ->
                 val destination = destinations[index]
                 navController.navigate(destination.route) {
@@ -197,7 +205,7 @@ fun SpaceflightApp(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
-                .padding(start = 28.dp, end = 28.dp, bottom = 10.dp)
+                .padding(start = 24.dp, end = 24.dp, bottom = 12.dp)
                 .graphicsLayer {
                     alpha = barProgress
                     translationY = (1f - barProgress) * 120.dp.toPx()
