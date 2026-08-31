@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites_title">Favoriler</string>
+    <string name="favorites_empty_title">Henüz favori yok</string>
+    <string name="favorites_empty_description">Bir haberi burada saklamak için kalp simgesine dokunun — favoriler çevrimdışıyken de okunabilir.</string>
+    <string name="favorites_detail_placeholder_title">Bir favori seçin</string>
+    <string name="favorites_detail_placeholder_description">Detayını burada okumak için kayıtlı bir haber seçin.</string>
+    <string name="favorites_remove">Favorilerden çıkar</string>
+    <string name="favorites_removed">Favorilerden çıkarıldı</string>
+    <string name="favorites_undo">Geri al</string>
+    <string name="favorites_back">Geri</string>
+    <string name="favorites_share">Paylaş</string>
+    <string name="favorites_share_chooser">Haberi şununla paylaş</string>
+    <string name="favorites_no_browser">Bu bağlantıyı açabilecek bir uygulama yok</string>
+</resources>

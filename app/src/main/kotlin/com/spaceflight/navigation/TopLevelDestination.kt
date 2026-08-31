@@ -1,0 +1,36 @@
+package com.spaceflight.navigation
+
+import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.RocketLaunch
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.spaceflight.R
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object NewsRoute
+
+@Serializable
+data object FavoritesRoute
+
+enum class TopLevelDestination(
+    val route: Any,
+    @param:StringRes val labelResId: Int,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+) {
+    News(
+        route = NewsRoute,
+        labelResId = R.string.destination_news,
+        selectedIcon = Icons.Rounded.RocketLaunch,
+        unselectedIcon = Icons.Rounded.RocketLaunch,
+    ),
+    Favorites(
+        route = FavoritesRoute,
+        labelResId = R.string.destination_favorites,
+        selectedIcon = Icons.Rounded.Favorite,
+        unselectedIcon = Icons.Outlined.FavoriteBorder,
+    ),
+}

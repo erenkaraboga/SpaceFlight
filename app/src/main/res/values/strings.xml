@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Spaceflight News</string>
+    <string name="destination_news">News</string>
+    <string name="destination_favorites">Favorites</string>
+</resources>
