@@ -80,7 +80,8 @@ fun ArticleDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(heroHeight)
-                .clip(RectangleShape),
+                .clip(RectangleShape)
+                .then(imageModifier),
         ) {
             RemoteImage(
                 imageUrl = imageUrl,
@@ -88,7 +89,6 @@ fun ArticleDetailContent(
                 shape = RectangleShape,
                 modifier = Modifier
                     .fillMaxSize()
-                    .then(imageModifier)
                     .graphicsLayer { translationY = scrollState.value * ParallaxFactor },
             )
             Box(

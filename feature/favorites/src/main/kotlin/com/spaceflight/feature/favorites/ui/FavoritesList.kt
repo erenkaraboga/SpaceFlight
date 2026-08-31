@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.FavoriteBorder
@@ -24,7 +25,6 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -132,14 +132,16 @@ private fun SwipeToRemoveRow(
     onArticleClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val dismissState = rememberSwipeToDismissBoxState()
-
-    LaunchedEffect(dismissState.currentValue) {
-        if (dismissState.currentValue != SwipeToDismissBoxValue.Settled) {
-            onEvent(FavoritesEvent.FavoriteRemoved(article))
-            dismissState.snapTo(SwipeToDismissBoxValue.Settled)
-        }
-    }
+    val dismissState = rememberSwipeToDismissBoxState(
+        confirmValueChange = { value ->
+            if (value != SwipeToDismissBoxValue.Settled) {
+                onEvent(FavoritesEvent.FavoriteRemoved(article))
+                false
+            } else {
+                true
+            }
+        },
+    )
 
     SwipeToDismissBox(
         state = dismissState,
@@ -160,7 +162,10 @@ private fun SwipeToRemoveRow(
                 state = entranceState,
                 key = article.id,
             ),
-            imageModifier = Modifier.sharedContent(sharedImageKey(article.id)),
+            imageModifier = Modifier.sharedContent(
+                sharedImageKey(article.id),
+                clipShape = RoundedCornerShape(18.dp),
+            ),
         )
     }
 }

@@ -49,6 +49,7 @@ fun HeroArticleCard(
             .fillMaxWidth()
             .aspectRatio(if (isLandscape) 16f / 9f else 4f / 5f)
             .clip(MaterialTheme.shapes.extraLarge)
+            .then(imageModifier)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .clickable(onClick = onClick),
     ) {
@@ -56,9 +57,7 @@ fun HeroArticleCard(
             imageUrl = imageUrl,
             contentDescription = null,
             shape = RectangleShape,
-            modifier = Modifier
-                .fillMaxSize()
-                .then(imageModifier),
+            modifier = Modifier.fillMaxSize(),
         )
 
         Box(

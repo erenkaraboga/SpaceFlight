@@ -8,4 +8,6 @@
     <string name="ds_remove_from_favorites">Remove from favorites</string>
     <string name="ds_retry">Try again</string>
     <string name="ds_search_placeholder">Search</string>
+    <string name="ds_use_dark_theme">Use dark theme</string>
+    <string name="ds_use_light_theme">Use light theme</string>
 </resources>

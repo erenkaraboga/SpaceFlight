@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,6 +37,7 @@ import com.spaceflight.designsystem.motion.sharedContent
 import com.spaceflight.designsystem.motion.sharedImageKey
 import com.spaceflight.designsystem.theme.SpaceflightMotion
 import com.spaceflight.designsystem.util.rememberRelativeDate
+import com.spaceflight.designsystem.util.rememberTodayDate
 import com.spaceflight.feature.news.R
 import com.spaceflight.feature.news.presentation.NewsEvent
 import com.spaceflight.feature.news.presentation.NewsUiState
@@ -56,6 +59,8 @@ fun NewsList(
         Column(Modifier.fillMaxSize()) {
             SearchHeader(
                 title = stringResource(R.string.news_title),
+                subtitle = stringResource(R.string.news_welcome),
+                dateLabel = rememberTodayDate(),
                 query = state.searchQuery,
                 isSearchActive = state.isSearchActive,
                 onQueryChange = { onEvent(NewsEvent.SearchQueryChanged(it)) },
@@ -66,7 +71,11 @@ fun NewsList(
 
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
-                onRefresh = articles::refresh,
+                onRefresh = {
+                    if (articles.loadState.refresh !is LoadState.Loading) {
+                        articles.refresh()
+                    }
+                },
                 modifier = Modifier.fillMaxSize(),
             ) {
                 when {
@@ -140,7 +149,14 @@ private fun ArticleFeed(
                     state = entranceState,
                     key = article.id,
                 )
-            val imageModifier = Modifier.sharedContent(sharedImageKey(article.id))
+            val imageModifier = Modifier.sharedContent(
+                key = sharedImageKey(article.id),
+                clipShape = if (showFeatured && index == 0) {
+                    MaterialTheme.shapes.extraLarge
+                } else {
+                    RoundedCornerShape(18.dp)
+                },
+            )
 
             if (showFeatured && index == 0) {
                 HeroArticleCard(

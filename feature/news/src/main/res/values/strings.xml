@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="news_title" translatable="false">SpaceFlight</string>
+    <string name="news_welcome">Welcome</string>
     <string name="news_featured">Featured</string>
     <string name="news_latest">Latest</string>
     <string name="news_error_title">Could not load the news</string>

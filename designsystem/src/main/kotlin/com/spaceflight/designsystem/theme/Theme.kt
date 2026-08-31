@@ -81,6 +81,7 @@ private val LightColors = lightColorScheme(
 @Composable
 fun SpaceflightTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    onToggleTheme: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
@@ -95,6 +96,7 @@ fun SpaceflightTheme(
     CompositionLocalProvider(
         LocalReducedMotion provides reducedMotion,
         LocalIsDarkTheme provides darkTheme,
+        LocalToggleTheme provides onToggleTheme,
     ) {
         MaterialTheme(
             colorScheme = if (darkTheme) DarkColors else LightColors,

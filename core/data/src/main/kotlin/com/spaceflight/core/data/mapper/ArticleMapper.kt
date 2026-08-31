@@ -78,7 +78,7 @@ fun ArticleEntity.toFavoriteEntity(favoritedAt: Long): FavoriteArticleEntity =
  * never asked for that, so it is stripped before the summary is stored.
  */
 private fun String.cleanedSummary(): String =
-    PUBLISHER_FOOTER.replace(trim(), "").trim()
+    PUBLISHER_FOOTER.replace(this, "").trim()
 
 private val PUBLISHER_FOOTER = Regex(
     """\s*The post .+ appeared first on .+\.?\s*$""",

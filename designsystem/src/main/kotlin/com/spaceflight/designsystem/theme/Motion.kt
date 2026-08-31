@@ -1,5 +1,6 @@
 package com.spaceflight.designsystem.theme
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.snap
@@ -36,10 +37,10 @@ object SpaceflightMotion {
 
     fun <T> fadeThrough(): FiniteAnimationSpec<T> = tween(durationMillis = FadeThroughEnterMillis)
 
-    /** Shared-element morph: damped enough that the photo settles instead of overshooting. */
-    fun sharedBounds(): FiniteAnimationSpec<Rect> = spring(
-        dampingRatio = 0.92f,
-        stiffness = 380f,
+    /** Shared-element morph: a finite tween so clip/shape actually finishes instead of springing. */
+    fun sharedBounds(): FiniteAnimationSpec<Rect> = tween(
+        durationMillis = 280,
+        easing = FastOutSlowInEasing,
     )
 }
 
@@ -51,6 +52,9 @@ val LocalReducedMotion = staticCompositionLocalOf { false }
 
 /** Lets tokens that are not part of the Material colour scheme vary by theme. */
 val LocalIsDarkTheme = staticCompositionLocalOf { true }
+
+/** Optional override from the host; headers show a sun/moon control when this is set. */
+val LocalToggleTheme = staticCompositionLocalOf<(() -> Unit)?> { null }
 
 /** Collapses [spec] to an instant jump when the user has asked for reduced motion. */
 @Composable

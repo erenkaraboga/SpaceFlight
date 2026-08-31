@@ -14,7 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            SpaceflightTheme {
+            val (darkTheme, toggleTheme) = rememberDarkTheme()
+            SpaceflightTheme(darkTheme = darkTheme, onToggleTheme = toggleTheme) {
                 SpaceflightApp()
             }
         }

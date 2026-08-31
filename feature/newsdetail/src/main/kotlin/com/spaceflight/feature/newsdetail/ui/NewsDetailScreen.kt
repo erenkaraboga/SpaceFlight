@@ -133,7 +133,10 @@ fun NewsDetailScreen(
                         launchCount = article.launchCount,
                         eventCount = article.eventCount,
                         onReadMore = { viewModel.onEvent(NewsDetailEvent.SourceRequested) },
-                        imageModifier = Modifier.sharedContent(sharedImageKey(article.id)),
+                        imageModifier = Modifier.sharedContent(
+                            sharedImageKey(article.id),
+                            clipShape = MaterialTheme.shapes.extraLarge,
+                        ),
                         scrollState = scrollState,
                     )
 

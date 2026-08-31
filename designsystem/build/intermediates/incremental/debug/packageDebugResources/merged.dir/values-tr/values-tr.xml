@@ -8,4 +8,6 @@
     <string name="ds_remove_from_favorites">Favorilerden çıkar</string>
     <string name="ds_retry">Tekrar dene</string>
     <string name="ds_search_placeholder">Ara</string>
+    <string name="ds_use_dark_theme">Koyu temayı kullan</string>
+    <string name="ds_use_light_theme">Açık temayı kullan</string>
 </resources>

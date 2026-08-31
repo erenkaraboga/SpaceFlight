@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="news_welcome">Hoş geldiniz</string>
     <string name="news_featured">Öne çıkan</string>
     <string name="news_latest">Son haberler</string>
     <string name="news_error_title">Haberler yüklenemedi</string>

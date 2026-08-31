@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.os.ConfigurationCompat
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -23,6 +24,17 @@ fun rememberRelativeDate(instant: Instant): String = remember(instant) {
         DateUtils.MINUTE_IN_MILLIS,
         DateUtils.FORMAT_ABBREV_RELATIVE,
     ).toString()
+}
+
+@Composable
+fun rememberTodayDate(): String {
+    val locale = currentLocale()
+    return remember(locale) {
+        DateTimeFormatter
+            .ofLocalizedDate(FormatStyle.FULL)
+            .withLocale(locale)
+            .format(LocalDate.now())
+    }
 }
 
 @Composable
