@@ -107,7 +107,6 @@ class ArticleRepositoryImpl @Inject constructor(
 
     private fun pagingConfig() = PagingConfig(
         pageSize = PAGE_SIZE,
-        // Matching the page size keeps the API offsets aligned with what Paging asks for.
         initialLoadSize = PAGE_SIZE,
         prefetchDistance = PAGE_SIZE / 2,
         enablePlaceholders = false,

@@ -31,8 +31,8 @@ import com.spaceflight.designsystem.motion.sharedImageKey
 import com.spaceflight.designsystem.theme.SpaceflightMotion
 import com.spaceflight.designsystem.util.rememberRelativeDate
 import com.spaceflight.feature.favorites.R
-import com.spaceflight.feature.favorites.presentation.FavoritesEvent
-import com.spaceflight.feature.favorites.presentation.FavoritesUiState
+import com.spaceflight.feature.favorites.logic.FavoritesEvent
+import com.spaceflight.feature.favorites.logic.FavoritesUiState
 
 @Composable
 fun FavoritesList(

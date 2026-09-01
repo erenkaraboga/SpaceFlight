@@ -23,8 +23,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.spaceflight.designsystem.component.FloatingBanner
 import com.spaceflight.feature.news.R
-import com.spaceflight.feature.news.presentation.NewsEffect
-import com.spaceflight.feature.news.presentation.NewsViewModel
+import com.spaceflight.feature.news.logic.NewsEffect
+import com.spaceflight.feature.news.logic.NewsViewModel
 import kotlinx.coroutines.delay
 
 @Composable

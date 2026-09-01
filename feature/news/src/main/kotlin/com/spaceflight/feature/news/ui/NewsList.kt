@@ -49,8 +49,8 @@ import com.spaceflight.designsystem.theme.SpaceflightMotion
 import com.spaceflight.designsystem.util.rememberRelativeDate
 import com.spaceflight.designsystem.util.rememberTodayDate
 import com.spaceflight.feature.news.R
-import com.spaceflight.feature.news.presentation.NewsEvent
-import com.spaceflight.feature.news.presentation.NewsUiState
+import com.spaceflight.feature.news.logic.NewsEvent
+import com.spaceflight.feature.news.logic.NewsUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -10,9 +10,9 @@ import com.spaceflight.core.domain.usecase.ObserveArticleUseCase
 import com.spaceflight.core.domain.usecase.ObserveIsFavoriteUseCase
 import com.spaceflight.core.domain.usecase.RefreshArticleUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailEffect
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailEvent
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailViewModel
+import com.spaceflight.feature.newsdetail.logic.NewsDetailEffect
+import com.spaceflight.feature.newsdetail.logic.NewsDetailEvent
+import com.spaceflight.feature.newsdetail.logic.NewsDetailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

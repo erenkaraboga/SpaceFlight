@@ -49,9 +49,9 @@ import com.spaceflight.designsystem.util.openUrlInCustomTab
 import com.spaceflight.designsystem.util.rememberAbsoluteDate
 import com.spaceflight.designsystem.util.shareText
 import com.spaceflight.feature.newsdetail.R
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailEffect
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailEvent
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailViewModel
+import com.spaceflight.feature.newsdetail.logic.NewsDetailEffect
+import com.spaceflight.feature.newsdetail.logic.NewsDetailEvent
+import com.spaceflight.feature.newsdetail.logic.NewsDetailViewModel
 
 @Composable
 fun NewsDetailScreen(

@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import com.spaceflight.core.domain.usecase.GetArticlesUseCase
 import com.spaceflight.core.domain.usecase.ObserveFavoriteIdsUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
-import com.spaceflight.feature.news.presentation.NewsEffect
-import com.spaceflight.feature.news.presentation.NewsEvent
-import com.spaceflight.feature.news.presentation.NewsViewModel
+import com.spaceflight.feature.news.logic.NewsEffect
+import com.spaceflight.feature.news.logic.NewsEvent
+import com.spaceflight.feature.news.logic.NewsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
