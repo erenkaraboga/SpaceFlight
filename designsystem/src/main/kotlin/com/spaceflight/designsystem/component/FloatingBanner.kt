@@ -7,11 +7,13 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,11 +23,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.spaceflight.designsystem.theme.SpaceflightTheme
 
 /**
  * A floating pill message that sits above chrome like a bottom bar, instead of Material's snackbar
  * which docks to the screen edge and reads as a system toast.
+ *
+ * @param visible Controls the visibility of the banner with enter/exit animations.
+ * @param message The main text content displayed inside the pill.
+ * @param modifier The [Modifier] to be applied to the banner container.
+ * @param actionLabel Optional text label for the action button.
+ * @param onAction Optional callback invoked when the action button is clicked.
  */
 @Composable
 fun FloatingBanner(
@@ -72,6 +82,36 @@ fun FloatingBanner(
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }
+            }
+        }
+    }
+}
+
+@Preview(name = "Floating Banner Variants", showBackground = true)
+@Composable
+private fun FloatingBannerPreview() {
+    SpaceflightTheme {
+        Surface {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                FloatingBanner(
+                    visible = true,
+                    message = "Added to favorites",
+                    actionLabel = "Undo",
+                    onAction = {}
+                )
+                FloatingBanner(
+                    visible = true,
+                    message = "Switched to offline mode"
+                )
+                FloatingBanner(
+                    visible = true,
+                    message = "Failed to upload image. Please check your network connection and try again.",
+                    actionLabel = "Retry",
+                    onAction = {}
+                )
             }
         }
     }

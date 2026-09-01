@@ -10,8 +10,6 @@ import androidx.compose.ui.graphics.Color
  * layered from near-black upwards so cards separate by elevation alone, without borders or shadows.
  */
 internal object SpaceColors {
-
-    // Dark neutrals, from the void up to the highest card surface.
     val Void = Color(0xFF07070C)
     val Abyss = Color(0xFF0C0C13)
     val Slate = Color(0xFF14141E)
@@ -21,7 +19,6 @@ internal object SpaceColors {
     val Muted = Color(0xFF9E9BB4)
     val Bright = Color(0xFFEDEBF7)
 
-    // Light neutrals.
     val Daylight = Color(0xFFFFFBF7)
     val Card = Color(0xFFFFFFFF)
     val CardSunk = Color(0xFFF7F1EB)
@@ -30,7 +27,6 @@ internal object SpaceColors {
     val MutedInk = Color(0xFF56536B)
     val Ink = Color(0xFF13111F)
 
-    // Accents. Solar orange is the brand; teal stays as the secondary cool note.
     val Solar = Color(0xFFFF8F4A)
     val SolarDeep = Color(0xFF8A3A12)
     val SolarInk = Color(0xFF3A1400)

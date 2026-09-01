@@ -17,11 +17,22 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,8 +41,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spaceflight.designsystem.theme.LocalIsDarkTheme
+import com.spaceflight.designsystem.theme.SpaceColors
+import com.spaceflight.designsystem.theme.SpaceflightTheme
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
@@ -51,6 +65,12 @@ private val TabShape = RoundedCornerShape(17.dp)
  *
  * Pass the same [HazeState] that is attached to the content behind the bar so the glass can blur
  * what scrolls underneath. When [hazeState] is null (previews), a solid frosted fill is used.
+ *
+ * @param tabs The list of [FloatingTab] items to be rendered in the bar.
+ * @param selectedIndex The index of the currently active tab.
+ * @param onSelect Callback invoked with the tab index when a user selects a tab.
+ * @param modifier The [Modifier] to be applied to the tab bar container.
+ * @param hazeState Optional [HazeState] used to apply a frosted glass blur effect over background content.
  */
 @Composable
 fun FloatingTabBar(
@@ -68,7 +88,7 @@ fun FloatingTabBar(
         Color.White.copy(alpha = 0.78f)
     }
     val fallbackFill = if (isDark) {
-        Color(0xFF1C1C28).copy(alpha = 0.78f)
+        SpaceColors.SlateHigh.copy(alpha = 0.78f)
     } else {
         Color.White.copy(alpha = 0.82f)
     }
@@ -167,6 +187,41 @@ fun FloatingTabBar(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
+        }
+    }
+}
+
+@Preview(name = "Floating Tab Bar", showBackground = true)
+@Composable
+private fun FloatingTabBarPreview() {
+    val sampleTabs = remember {
+        listOf(
+            FloatingTab(
+                label = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home,
+            ),
+            FloatingTab(
+                label = "Search",
+                selectedIcon = Icons.Filled.Search,
+                unselectedIcon = Icons.Outlined.Search,
+            ),
+            FloatingTab(
+                label = "Profile",
+                selectedIcon = Icons.Filled.Person,
+                unselectedIcon = Icons.Outlined.Person,
+            ),
+        )
+    }
+    var selectedIndex by remember { mutableIntStateOf(0) }
+
+    SpaceflightTheme {
+        Surface(modifier = Modifier.padding(16.dp)) {
+            FloatingTabBar(
+                tabs = sampleTabs,
+                selectedIndex = selectedIndex,
+                onSelect = { selectedIndex = it },
+            )
         }
     }
 }
