@@ -10,4 +10,6 @@
     <string name="ds_remove_from_favorites">Favorilerden çıkar</string>
     <string name="ds_use_dark_theme">Koyu temayı kullan</string>
     <string name="ds_use_light_theme">Açık temayı kullan</string>
+    <string name="ds_use_grid_layout">Haberleri ızgara olarak göster</string>
+    <string name="ds_use_list_layout">Haberleri liste olarak göster</string>
 </resources>

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
  * A fixed palette rather than dynamic colour: the app leans on a deep-space identity, and letting
  * the wallpaper repaint it would wash that away.
  *
- * The accents are named after what they evoke - an aurora over a night sky - and the neutrals are
+ * The accents are named after what they evoke - solar fire over a night sky - and the neutrals are
  * layered from near-black upwards so cards separate by elevation alone, without borders or shadows.
  */
 internal object SpaceColors {
@@ -22,32 +22,26 @@ internal object SpaceColors {
     val Bright = Color(0xFFEDEBF7)
 
     // Light neutrals.
-    val Daylight = Color(0xFFFBFAFF)
+    val Daylight = Color(0xFFFFFBF7)
     val Card = Color(0xFFFFFFFF)
-    val CardSunk = Color(0xFFF2F0FA)
-    val CardRaised = Color(0xFFE9E6F6)
-    val DividerLight = Color(0xFFDFDBEE)
+    val CardSunk = Color(0xFFF7F1EB)
+    val CardRaised = Color(0xFFF0E8E0)
+    val DividerLight = Color(0xFFE8DDD4)
     val MutedInk = Color(0xFF56536B)
     val Ink = Color(0xFF13111F)
 
-    // Accents.
-    val Aurora = Color(0xFFA88BFF)
-    val AuroraDeep = Color(0xFF4B2CA8)
-    val AuroraInk = Color(0xFF1B0B45)
-    val AuroraPale = Color(0xFFE8DEFF)
-    val AuroraStrong = Color(0xFF6A3CE0)
+    // Accents. Solar orange is the brand; teal stays as the secondary cool note.
+    val Solar = Color(0xFFFF8F4A)
+    val SolarDeep = Color(0xFF8A3A12)
+    val SolarInk = Color(0xFF3A1400)
+    val SolarPale = Color(0xFFFFE0CC)
+    val SolarStrong = Color(0xFFD4520B)
 
     val Ion = Color(0xFF5FEAD4)
     val IonDeep = Color(0xFF0B5F55)
     val IonInk = Color(0xFF00332B)
     val IonPale = Color(0xFFB7FFF1)
     val IonStrong = Color(0xFF00786A)
-
-    val Solar = Color(0xFFFFA574)
-    val SolarDeep = Color(0xFF8A3A12)
-    val SolarInk = Color(0xFF441700)
-    val SolarPale = Color(0xFFFFDCC9)
-    val SolarStrong = Color(0xFFB0491C)
 
     val Alert = Color(0xFFFF8D8D)
     val AlertDeep = Color(0xFF7C1D1D)

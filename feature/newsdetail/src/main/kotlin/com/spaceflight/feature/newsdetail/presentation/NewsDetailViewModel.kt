@@ -7,7 +7,6 @@ import com.spaceflight.core.domain.usecase.ObserveArticleUseCase
 import com.spaceflight.core.domain.usecase.ObserveIsFavoriteUseCase
 import com.spaceflight.core.domain.usecase.RefreshArticleUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
-import com.spaceflight.feature.newsdetail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +42,9 @@ class NewsDetailViewModel @Inject constructor(
     init {
         observeArticle(articleId)
             .onEach { article ->
-                _uiState.update { it.copy(article = article, isLoading = false) }
+                if (article != null) {
+                    _uiState.update { it.copy(article = article, isLoading = false) }
+                }
             }
             .launchIn(viewModelScope)
 
@@ -62,13 +63,7 @@ class NewsDetailViewModel @Inject constructor(
 
             NewsDetailEvent.FavoriteToggled -> viewModelScope.launch {
                 val article = _uiState.value.article ?: return@launch
-                val added = toggleFavorite(article)
-                _effects.send(
-                    NewsDetailEffect.ShowMessage(
-                        if (added) R.string.newsdetail_added_to_favorites
-                        else R.string.newsdetail_removed_from_favorites
-                    )
-                )
+                toggleFavorite(article)
             }
 
             NewsDetailEvent.ShareRequested -> viewModelScope.launch {
@@ -86,6 +81,11 @@ class NewsDetailViewModel @Inject constructor(
     }
 
     private fun refresh() {
-        viewModelScope.launch { refreshArticle(articleId) }
+        viewModelScope.launch {
+            refreshArticle(articleId)
+            if (_uiState.value.article == null) {
+                _uiState.update { it.copy(isLoading = false) }
+            }
+        }
     }
 }

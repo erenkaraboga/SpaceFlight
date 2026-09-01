@@ -86,9 +86,6 @@ fun NewsDetailScreen(
                     ) {
                         snackbarHostState.showSnackbar(noBrowserMessage)
                     }
-
-                is NewsDetailEffect.ShowMessage ->
-                    snackbarHostState.showSnackbar(context.getString(effect.messageResId))
             }
         }
     }

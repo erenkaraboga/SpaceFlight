@@ -2,18 +2,22 @@ package com.spaceflight.core.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.spaceflight.core.data.database.dao.ArticleDao
 import com.spaceflight.core.data.mapper.toDomain
+import com.spaceflight.core.data.mapper.toEntity
 import com.spaceflight.core.data.network.SpaceflightApi
 import com.spaceflight.core.data.network.toAppError
 import com.spaceflight.core.domain.model.Article
 import kotlinx.coroutines.CancellationException
 
 /**
- * Search results are served straight from the API instead of the cache: they are a transient view
- * of the archive and would otherwise pollute the offline feed snapshot.
+ * Search hits the API, then writes each page into Room so opening a result can read the same
+ * article the list already showed. The home feed is still a dated window; a later refresh replaces
+ * it with the latest snapshot.
  */
 class SearchArticlePagingSource(
     private val api: SpaceflightApi,
+    private val articleDao: ArticleDao,
     private val query: String,
     private val pageSize: Int,
 ) : PagingSource<Int, Article>() {
@@ -32,8 +36,10 @@ class SearchArticlePagingSource(
                 offset = offset,
                 search = query,
             )
+            val entities = response.results.map { it.toEntity() }
+            if (entities.isNotEmpty()) articleDao.upsertAll(entities)
             LoadResult.Page(
-                data = response.results.map { it.toDomain() },
+                data = entities.map { it.toDomain() },
                 prevKey = if (offset == 0) null else (offset - pageSize).coerceAtLeast(0),
                 nextKey = if (response.next == null || response.results.isEmpty()) {
                     null

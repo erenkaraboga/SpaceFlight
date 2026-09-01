@@ -9,7 +9,7 @@ import com.spaceflight.core.domain.model.AppError
 import com.spaceflight.feature.news.R
 
 fun LazyPagingItems<*>.isInitialLoad(): Boolean =
-    loadState.refresh is LoadState.Loading && itemCount == 0
+    itemCount == 0 && !isInitialFailure() && !isEmptyResult()
 
 fun LazyPagingItems<*>.isInitialFailure(): Boolean =
     loadState.refresh is LoadState.Error && itemCount == 0

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.spaceflight.feature.newsdetail.NewsDetailViewModelTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-01T06:39:05.195Z" hostname="Eren-Mac-mini.local" time="0.091">
+  <properties/>
+  <testcase name="the cached article is shown and refreshed behind the scenes" classname="com.spaceflight.feature.newsdetail.NewsDetailViewModelTest" time="0.073"/>
+  <testcase name="asking to read the source emits the publisher url" classname="com.spaceflight.feature.newsdetail.NewsDetailViewModelTest" time="0.011"/>
+  <testcase name="a missing article leaves the screen empty so the error state can take over" classname="com.spaceflight.feature.newsdetail.NewsDetailViewModelTest" time="0.001"/>
+  <testcase name="back asks the host to pop" classname="com.spaceflight.feature.newsdetail.NewsDetailViewModelTest" time="0.002"/>
+  <testcase name="sharing emits the title alongside the url" classname="com.spaceflight.feature.newsdetail.NewsDetailViewModelTest" time="0.003"/>
+  <testcase name="favoriting flips the heart without a message" classname="com.spaceflight.feature.newsdetail.NewsDetailViewModelTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

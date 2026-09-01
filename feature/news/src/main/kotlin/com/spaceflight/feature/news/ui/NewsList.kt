@@ -9,7 +9,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -20,6 +27,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -27,10 +35,12 @@ import com.spaceflight.core.domain.model.Article
 import com.spaceflight.designsystem.component.EmptyState
 import com.spaceflight.designsystem.component.ErrorView
 import com.spaceflight.designsystem.component.InlineRetry
+import com.spaceflight.designsystem.component.LayoutToggleButton
 import com.spaceflight.designsystem.component.OfflineBanner
 import com.spaceflight.designsystem.component.ScreenCanvas
 import com.spaceflight.designsystem.component.SearchHeader
 import com.spaceflight.designsystem.component.SectionHeader
+import com.spaceflight.designsystem.component.StaggeredEntranceState
 import com.spaceflight.designsystem.component.rememberStaggeredEntranceState
 import com.spaceflight.designsystem.component.staggeredEntrance
 import com.spaceflight.designsystem.motion.sharedContent
@@ -52,6 +62,8 @@ fun NewsList(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+    val gridState = rememberLazyGridState()
+    val (isGrid, toggleGrid) = rememberGridLayout()
     val isRefreshing = articles.loadState.refresh is LoadState.Loading &&
         articles.itemCount > 0
 
@@ -79,7 +91,10 @@ fun NewsList(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 when {
-                    articles.isInitialLoad() -> LoadingList()
+                    articles.isInitialLoad() -> LoadingList(
+                        isGrid = isGrid,
+                        onToggleLayout = toggleGrid,
+                    )
 
                     articles.isInitialFailure() -> ErrorView(
                         title = stringResource(R.string.news_error_title),
@@ -101,7 +116,10 @@ fun NewsList(
                     else -> ArticleFeed(
                         state = state,
                         articles = articles,
+                        isGrid = isGrid,
+                        onToggleLayout = toggleGrid,
                         listState = listState,
+                        gridState = gridState,
                         onEvent = onEvent,
                         onArticleClick = onArticleClick,
                     )
@@ -115,103 +133,264 @@ fun NewsList(
 private fun ArticleFeed(
     state: NewsUiState,
     articles: LazyPagingItems<Article>,
+    isGrid: Boolean,
+    onToggleLayout: () -> Unit,
     listState: LazyListState,
+    gridState: LazyGridState,
     onEvent: (NewsEvent) -> Unit,
     onArticleClick: (Int) -> Unit,
 ) {
     val showFeatured = state.searchQuery.isBlank()
     val entranceState = rememberStaggeredEntranceState()
+    val feedPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 108.dp)
 
-    LazyColumn(
-        state = listState,
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 108.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        items(
-            count = articles.itemCount,
-            key = { index -> articles.peek(index)?.id ?: index },
-        ) { index ->
-            val article = articles[index] ?: return@items
-            val isFavorite = article.id in state.favoriteIds
-            val dateLabel = rememberRelativeDate(article.publishedAt)
-            val itemModifier = Modifier
-                .animateItem(
-                    fadeInSpec = tween(
-                        durationMillis = SpaceflightMotion.FadeThroughEnterMillis,
-                        easing = FastOutSlowInEasing,
-                    ),
-                    fadeOutSpec = tween(180),
-                    placementSpec = spring(dampingRatio = 0.9f, stiffness = 380f),
-                )
-                .staggeredEntrance(
-                    index = index,
-                    state = entranceState,
-                    key = article.id,
-                )
-            val imageModifier = Modifier.sharedContent(
-                key = sharedImageKey(article.id),
-                clipShape = if (showFeatured && index == 0) {
-                    MaterialTheme.shapes.extraLarge
-                } else {
-                    RoundedCornerShape(18.dp)
-                },
-            )
-
-            if (showFeatured && index == 0) {
-                HeroArticleCard(
-                    eyebrow = stringResource(R.string.news_featured),
-                    title = article.title,
-                    imageUrl = article.imageUrl,
-                    newsSite = article.newsSite,
-                    dateLabel = dateLabel,
-                    isFavorite = isFavorite,
-                    onClick = { onArticleClick(article.id) },
-                    onFavoriteClick = { onEvent(NewsEvent.FavoriteToggled(article)) },
-                    modifier = itemModifier,
-                    imageModifier = imageModifier,
-                )
-            } else {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(14.dp),
-                    modifier = itemModifier,
+    if (isGrid) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            state = gridState,
+            contentPadding = feedPadding,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            if (showFeatured && articles.itemCount > 0) {
+                item(
+                    key = "featured",
+                    span = { GridItemSpan(maxLineSpan) },
                 ) {
-                    if (showFeatured && index == 1) {
-                        SectionHeader(
-                            title = stringResource(R.string.news_latest),
-                            modifier = Modifier.padding(top = 8.dp, bottom = 2.dp),
+                    val article = articles[0]
+                    if (article == null) {
+                        HeroArticleCardPlaceholder(modifier = feedItemModifier())
+                    } else {
+                        FeedArticle(
+                            article = article,
+                            index = 0,
+                            featured = true,
+                            grid = false,
+                            state = state,
+                            entranceState = entranceState,
+                            onEvent = onEvent,
+                            onArticleClick = onArticleClick,
+                            modifier = feedItemModifier(),
                         )
                     }
-                    ArticleCard(
-                        title = article.title,
-                        summary = article.summary,
-                        imageUrl = article.imageUrl,
-                        newsSite = article.newsSite,
-                        dateLabel = dateLabel,
-                        isFavorite = isFavorite,
-                        onClick = { onArticleClick(article.id) },
-                        onFavoriteClick = { onEvent(NewsEvent.FavoriteToggled(article)) },
-                        imageModifier = imageModifier,
+                }
+                item(
+                    key = "latest-header",
+                    span = { GridItemSpan(maxLineSpan) },
+                ) {
+                    LatestSectionHeader(
+                        isGrid = isGrid,
+                        onToggleLayout = onToggleLayout,
+                    )
+                }
+            } else if (!showFeatured) {
+                item(
+                    key = "latest-header",
+                    span = { GridItemSpan(maxLineSpan) },
+                ) {
+                    LatestSectionHeader(
+                        isGrid = isGrid,
+                        onToggleLayout = onToggleLayout,
                     )
                 }
             }
-        }
 
-        when (val append = articles.loadState.append) {
-            is LoadState.Loading -> item { ArticleCardPlaceholder() }
-            is LoadState.Error -> item {
-                InlineRetry(
-                    message = stringResource(append.error.messageResId()),
-                    onRetry = articles::retry,
+            val tileOffset = if (showFeatured) 1 else 0
+            items(
+                count = (articles.itemCount - tileOffset).coerceAtLeast(0),
+                key = { gridIndex -> articles.peek(gridIndex + tileOffset)?.id ?: gridIndex },
+            ) { gridIndex ->
+                val index = gridIndex + tileOffset
+                val article = articles[index] ?: return@items
+                FeedArticle(
+                    article = article,
+                    index = index,
+                    featured = false,
+                    grid = true,
+                    state = state,
+                    entranceState = entranceState,
+                    onEvent = onEvent,
+                    onArticleClick = onArticleClick,
+                    modifier = feedItemModifier(),
                 )
             }
-            else -> Unit
+
+            when (val append = articles.loadState.append) {
+                is LoadState.Loading -> item(span = { GridItemSpan(maxLineSpan) }) {
+                    ArticleCardPlaceholder()
+                }
+                is LoadState.Error -> item(span = { GridItemSpan(maxLineSpan) }) {
+                    InlineRetry(
+                        message = stringResource(append.error.messageResId()),
+                        onRetry = articles::retry,
+                    )
+                }
+                else -> Unit
+            }
+        }
+    } else {
+        LazyColumn(
+            state = listState,
+            contentPadding = feedPadding,
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            if (showFeatured && articles.itemCount > 0) {
+                item(key = "featured") {
+                    val article = articles[0]
+                    if (article == null) {
+                        HeroArticleCardPlaceholder(modifier = feedItemModifier())
+                    } else {
+                        FeedArticle(
+                            article = article,
+                            index = 0,
+                            featured = true,
+                            grid = false,
+                            state = state,
+                            entranceState = entranceState,
+                            onEvent = onEvent,
+                            onArticleClick = onArticleClick,
+                            modifier = feedItemModifier(),
+                        )
+                    }
+                }
+                item(key = "latest-header") {
+                    LatestSectionHeader(
+                        isGrid = isGrid,
+                        onToggleLayout = onToggleLayout,
+                    )
+                }
+            } else if (!showFeatured) {
+                item(key = "latest-header") {
+                    LatestSectionHeader(
+                        isGrid = isGrid,
+                        onToggleLayout = onToggleLayout,
+                    )
+                }
+            }
+
+            val listOffset = if (showFeatured) 1 else 0
+            items(
+                count = (articles.itemCount - listOffset).coerceAtLeast(0),
+                key = { listIndex -> articles.peek(listIndex + listOffset)?.id ?: listIndex },
+            ) { listIndex ->
+                val index = listIndex + listOffset
+                val article = articles[index] ?: return@items
+                FeedArticle(
+                    article = article,
+                    index = index,
+                    featured = false,
+                    grid = false,
+                    state = state,
+                    entranceState = entranceState,
+                    onEvent = onEvent,
+                    onArticleClick = onArticleClick,
+                    modifier = feedItemModifier(),
+                )
+            }
+
+            when (val append = articles.loadState.append) {
+                is LoadState.Loading -> item { ArticleCardPlaceholder() }
+                is LoadState.Error -> item {
+                    InlineRetry(
+                        message = stringResource(append.error.messageResId()),
+                        onRetry = articles::retry,
+                    )
+                }
+                else -> Unit
+            }
         }
     }
 }
 
 @Composable
-private fun LoadingList(modifier: Modifier = Modifier) {
+private fun FeedArticle(
+    article: Article,
+    index: Int,
+    featured: Boolean,
+    grid: Boolean,
+    state: NewsUiState,
+    entranceState: StaggeredEntranceState,
+    onEvent: (NewsEvent) -> Unit,
+    onArticleClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val isFavorite = article.id in state.favoriteIds
+    val dateLabel = rememberRelativeDate(article.publishedAt)
+    val itemModifier = modifier.staggeredEntrance(
+        index = index,
+        state = entranceState,
+        key = article.id,
+    )
+    val imageModifier = Modifier.sharedContent(
+        key = sharedImageKey(article.id),
+        clipShape = when {
+            featured -> MaterialTheme.shapes.extraLarge
+            grid -> MaterialTheme.shapes.large
+            else -> RoundedCornerShape(18.dp)
+        },
+    )
+
+    when {
+        featured -> HeroArticleCard(
+            eyebrow = stringResource(R.string.news_featured),
+            title = article.title,
+            imageUrl = article.imageUrl,
+            newsSite = article.newsSite,
+            dateLabel = dateLabel,
+            isFavorite = isFavorite,
+            onClick = { onArticleClick(article.id) },
+            onFavoriteClick = { onEvent(NewsEvent.FavoriteToggled(article)) },
+            modifier = itemModifier,
+            imageModifier = imageModifier,
+        )
+        grid -> ArticleTile(
+            title = article.title,
+            imageUrl = article.imageUrl,
+            dateLabel = dateLabel,
+            isFavorite = isFavorite,
+            onClick = { onArticleClick(article.id) },
+            onFavoriteClick = { onEvent(NewsEvent.FavoriteToggled(article)) },
+            modifier = itemModifier,
+            imageModifier = imageModifier,
+        )
+        else -> ArticleCard(
+            title = article.title,
+            summary = article.summary,
+            imageUrl = article.imageUrl,
+            newsSite = article.newsSite,
+            dateLabel = dateLabel,
+            isFavorite = isFavorite,
+            onClick = { onArticleClick(article.id) },
+            onFavoriteClick = { onEvent(NewsEvent.FavoriteToggled(article)) },
+            modifier = itemModifier,
+            imageModifier = imageModifier,
+        )
+    }
+}
+
+@Composable
+private fun LatestSectionHeader(
+    isGrid: Boolean,
+    onToggleLayout: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SectionHeader(
+        title = stringResource(R.string.news_latest),
+        modifier = modifier.padding(top = 8.dp, bottom = 2.dp),
+        trailingContent = {
+            LayoutToggleButton(isGrid = isGrid, onClick = onToggleLayout)
+        },
+    )
+}
+
+@Composable
+private fun LoadingList(
+    isGrid: Boolean,
+    onToggleLayout: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val entranceState = rememberStaggeredEntranceState()
 
     Column(
@@ -221,11 +400,34 @@ private fun LoadingList(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         HeroArticleCardPlaceholder(Modifier.staggeredEntrance(0, entranceState))
-        SectionHeader(title = stringResource(R.string.news_latest))
+        LatestSectionHeader(isGrid = isGrid, onToggleLayout = onToggleLayout)
         repeat(PlaceholderCount) {
             ArticleCardPlaceholder(Modifier.staggeredEntrance(it + 1, entranceState))
         }
     }
 }
+
+private fun LazyItemScope.feedItemModifier(): Modifier = Modifier.animateItem(
+    fadeInSpec = FeedFadeIn,
+    fadeOutSpec = FeedFadeOut,
+    placementSpec = FeedPlacement,
+)
+
+private fun LazyGridItemScope.feedItemModifier(): Modifier =
+    Modifier.animateItem(
+        fadeInSpec = FeedFadeIn,
+        fadeOutSpec = FeedFadeOut,
+        placementSpec = FeedPlacement,
+    )
+
+private val FeedFadeIn = tween<Float>(
+    durationMillis = SpaceflightMotion.FadeThroughEnterMillis,
+    easing = FastOutSlowInEasing,
+)
+private val FeedFadeOut = tween<Float>(180)
+private val FeedPlacement = spring<IntOffset>(
+    dampingRatio = 0.9f,
+    stiffness = 380f,
+)
 
 private const val PlaceholderCount = 5

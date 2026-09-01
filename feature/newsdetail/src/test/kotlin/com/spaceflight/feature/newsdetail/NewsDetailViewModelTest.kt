@@ -70,20 +70,13 @@ class NewsDetailViewModelTest {
     }
 
     @Test
-    fun `favoriting reports it and flips the heart`() = runTest(
+    fun `favoriting flips the heart without a message`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = createViewModel(articleId = 1)
         advanceUntilIdle()
 
-        viewModel.effects.test {
-            viewModel.onEvent(NewsDetailEvent.FavoriteToggled)
-
-            assertEquals(
-                NewsDetailEffect.ShowMessage(R.string.newsdetail_added_to_favorites),
-                awaitItem(),
-            )
-        }
+        viewModel.onEvent(NewsDetailEvent.FavoriteToggled)
         advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value.isFavorite)

@@ -22,5 +22,4 @@ sealed interface NewsDetailEffect {
     data object NavigateBack : NewsDetailEffect
     data class OpenInBrowser(val url: String) : NewsDetailEffect
     data class ShareArticle(val title: String, val url: String) : NewsDetailEffect
-    data class ShowMessage(val messageResId: Int) : NewsDetailEffect
 }

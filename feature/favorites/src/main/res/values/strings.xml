@@ -2,8 +2,8 @@
 <resources>
     <string name="favorites_title">Favorites</string>
     <string name="favorites_subtitle">Stories you want to come back to</string>
-    <string name="favorites_empty_title">No favorites yet</string>
-    <string name="favorites_empty_description">Tap the heart on any article to keep it here — favorites stay readable offline.</string>
+    <string name="favorites_empty_title">None yet</string>
+    <string name="favorites_empty_description">Heart a story and it stays here.</string>
     <string name="favorites_remove">Remove from favorites</string>
     <string name="favorites_removed">Removed from favorites</string>
     <string name="favorites_undo">Undo</string>

@@ -13,18 +13,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColors = darkColorScheme(
-    primary = SpaceColors.Aurora,
-    onPrimary = SpaceColors.AuroraInk,
-    primaryContainer = SpaceColors.AuroraDeep,
-    onPrimaryContainer = SpaceColors.AuroraPale,
+    primary = SpaceColors.Solar,
+    onPrimary = SpaceColors.SolarInk,
+    primaryContainer = SpaceColors.SolarDeep,
+    onPrimaryContainer = SpaceColors.SolarPale,
     secondary = SpaceColors.Ion,
     onSecondary = SpaceColors.IonInk,
     secondaryContainer = SpaceColors.IonDeep,
     onSecondaryContainer = SpaceColors.IonPale,
-    tertiary = SpaceColors.Solar,
-    onTertiary = SpaceColors.SolarInk,
-    tertiaryContainer = SpaceColors.SolarDeep,
-    onTertiaryContainer = SpaceColors.SolarPale,
+    tertiary = SpaceColors.Ion,
+    onTertiary = SpaceColors.IonInk,
+    tertiaryContainer = SpaceColors.IonDeep,
+    onTertiaryContainer = SpaceColors.IonPale,
     background = SpaceColors.Void,
     onBackground = SpaceColors.Bright,
     surface = SpaceColors.Void,
@@ -46,18 +46,18 @@ private val DarkColors = darkColorScheme(
 )
 
 private val LightColors = lightColorScheme(
-    primary = SpaceColors.AuroraStrong,
+    primary = SpaceColors.SolarStrong,
     onPrimary = Color.White,
-    primaryContainer = SpaceColors.AuroraPale,
-    onPrimaryContainer = SpaceColors.AuroraInk,
+    primaryContainer = SpaceColors.SolarPale,
+    onPrimaryContainer = SpaceColors.SolarInk,
     secondary = SpaceColors.IonStrong,
     onSecondary = Color.White,
     secondaryContainer = SpaceColors.IonPale,
     onSecondaryContainer = SpaceColors.IonInk,
-    tertiary = SpaceColors.SolarStrong,
+    tertiary = SpaceColors.IonStrong,
     onTertiary = Color.White,
-    tertiaryContainer = SpaceColors.SolarPale,
-    onTertiaryContainer = SpaceColors.SolarInk,
+    tertiaryContainer = SpaceColors.IonPale,
+    onTertiaryContainer = SpaceColors.IonInk,
     background = SpaceColors.Daylight,
     onBackground = SpaceColors.Ink,
     surface = SpaceColors.Daylight,
@@ -108,20 +108,20 @@ fun SpaceflightTheme(
 }
 
 /**
- * A wash of aurora light behind the top of each screen. It is what stops the near-black background
- * from reading as flat grey, and it is the one place the brand colours appear unmixed.
+ * A wash of solar light behind the top of each screen. It is what stops the near-black background
+ * from reading as flat grey, and it is the one place the brand colour appears unmixed.
  */
 val MaterialTheme.auroraWash: Brush
     @Composable
     get() = if (LocalIsDarkTheme.current) {
         Brush.verticalGradient(
-            0f to SpaceColors.Aurora.copy(alpha = 0.20f),
+            0f to SpaceColors.Solar.copy(alpha = 0.22f),
             0.55f to SpaceColors.Ion.copy(alpha = 0.05f),
             1f to Color.Transparent,
         )
     } else {
         Brush.verticalGradient(
-            0f to SpaceColors.Aurora.copy(alpha = 0.22f),
+            0f to SpaceColors.Solar.copy(alpha = 0.24f),
             0.55f to SpaceColors.Ion.copy(alpha = 0.10f),
             1f to Color.Transparent,
         )

@@ -3,7 +3,6 @@ package com.spaceflight.core.data.database.dao
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
-import androidx.room.Update
 import androidx.room.Upsert
 import com.spaceflight.core.data.database.entity.ArticleEntity
 import kotlinx.coroutines.flow.Flow
@@ -29,13 +28,6 @@ interface ArticleDao {
 
     @Upsert
     suspend fun upsertAll(articles: List<ArticleEntity>)
-
-    /**
-     * Refreshing a single article must not insert it into the feed cache: an article opened from
-     * favourites is not necessarily part of the current feed window.
-     */
-    @Update
-    suspend fun updateIfPresent(article: ArticleEntity): Int
 
     @Query("DELETE FROM articles")
     suspend fun clearAll()

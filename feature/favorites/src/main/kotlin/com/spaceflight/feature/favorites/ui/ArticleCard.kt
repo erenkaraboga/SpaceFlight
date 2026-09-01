@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.spaceflight.designsystem.component.FavoriteButton
+import com.spaceflight.designsystem.component.PhotoFavoriteButton
 import com.spaceflight.designsystem.component.PillBadge
 import com.spaceflight.designsystem.component.RemoteImage
 import com.spaceflight.designsystem.component.ShimmerSurface
@@ -38,70 +38,73 @@ fun ArticleCard(
     modifier: Modifier = Modifier,
     imageModifier: Modifier = Modifier,
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable(onClick = onClick)
-            .padding(14.dp),
-        horizontalArrangement = Arrangement.spacedBy(14.dp),
+            .clickable(onClick = onClick),
     ) {
-        Column(Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-            )
-
-            if (summary.isNotBlank()) {
-                Spacer(Modifier.height(6.dp))
+        Row(
+            modifier = Modifier.padding(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Column(Modifier.weight(1f)) {
                 Text(
-                    text = summary,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
                 )
+
+                if (summary.isNotBlank()) {
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        text = summary,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    PillBadge(
+                        text = newsSite,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+                    Text(
+                        text = dateLabel,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                    )
+                }
             }
 
-            Spacer(Modifier.height(12.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                PillBadge(
-                    text = newsSite,
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                    modifier = Modifier.weight(1f, fill = false),
-                )
-                Text(
-                    text = dateLabel,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                )
-            }
-        }
-
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             RemoteImage(
                 imageUrl = imageUrl,
                 contentDescription = null,
                 shape = RoundedCornerShape(18.dp),
                 modifier = Modifier
-                    .size(width = 96.dp, height = 96.dp)
+                    .size(96.dp)
                     .then(imageModifier),
             )
-            Spacer(Modifier.height(4.dp))
-            FavoriteButton(
-                isFavorite = isFavorite,
-                onClick = onFavoriteClick,
-                size = 36.dp,
-            )
         }
+
+        PhotoFavoriteButton(
+            isFavorite = isFavorite,
+            onClick = onFavoriteClick,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(8.dp),
+        )
     }
 }
 

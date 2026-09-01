@@ -13,4 +13,6 @@ string ds_remove_from_favorites
 string ds_retry
 string ds_search_placeholder
 string ds_use_dark_theme
+string ds_use_grid_layout
 string ds_use_light_theme
+string ds_use_list_layout

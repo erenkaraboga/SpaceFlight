@@ -58,11 +58,12 @@ class ArticleRepositoryImplTest {
     }
 
     @Test
-    fun `searching online asks the API instead of the cache`() = runTest {
+    fun `searching online caches hits so a later detail screen can read them`() = runTest {
         val results = repository().getArticles("remote").asSnapshot()
 
         assertEquals(listOf(3), results.map { it.id })
         assertEquals("remote", api.lastSearch)
+        assertEquals("Remote", articleDao.stored.first { it.id == 3 }.title)
     }
 
     @Test
@@ -100,6 +101,14 @@ class ArticleRepositoryImplTest {
             "Starship completes static fire (updated)",
             articleDao.stored.first { it.id == 1 }.title,
         )
+    }
+
+    @Test
+    fun `refreshing inserts an article the feed has never cached`() = runTest {
+        val result = repository().refreshArticle(3)
+
+        assertTrue(result.isSuccess)
+        assertEquals("Remote", articleDao.stored.first { it.id == 3 }.title)
     }
 
     private fun entity(id: Int, title: String) = ArticleEntity(

@@ -41,12 +41,6 @@ class FakeArticleDao(initial: List<ArticleEntity> = emptyList()) : ArticleDao {
         this.articles.value = this.articles.value + articles.associateBy { it.id }
     }
 
-    override suspend fun updateIfPresent(article: ArticleEntity): Int {
-        if (article.id !in articles.value) return 0
-        articles.value = articles.value + (article.id to article)
-        return 1
-    }
-
     override suspend fun clearAll() {
         articles.value = emptyMap()
     }

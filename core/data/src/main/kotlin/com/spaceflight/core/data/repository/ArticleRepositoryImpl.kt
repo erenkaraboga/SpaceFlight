@@ -59,7 +59,7 @@ class ArticleRepositoryImpl @Inject constructor(
                     Pager(
                         config = pagingConfig(),
                         pagingSourceFactory = {
-                            SearchArticlePagingSource(api, query, PAGE_SIZE)
+                            SearchArticlePagingSource(api, articleDao, query, PAGE_SIZE)
                         },
                     ).flow
                 } else {
@@ -80,7 +80,7 @@ class ArticleRepositoryImpl @Inject constructor(
 
     override suspend fun refreshArticle(id: Int): Result<Unit> = try {
         val entity = api.getArticle(id).toEntity()
-        articleDao.updateIfPresent(entity)
+        articleDao.upsertAll(listOf(entity))
         favoriteDao.getById(id)?.let { existing ->
             favoriteDao.upsert(
                 existing.copy(

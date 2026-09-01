@@ -87,3 +87,20 @@ fun FavoriteButton(
         )
     }
 }
+
+/** Frosted heart for sitting on a thumbnail. */
+@Composable
+fun PhotoFavoriteButton(
+    isFavorite: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FavoriteButton(
+        isFavorite = isFavorite,
+        onClick = onClick,
+        modifier = modifier,
+        containerColor = Color.Black.copy(alpha = 0.35f),
+        inactiveTint = Color.White,
+        size = 36.dp,
+    )
+}
