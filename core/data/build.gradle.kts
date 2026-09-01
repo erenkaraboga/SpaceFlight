@@ -1,35 +1,18 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    id("spaceflight.android.library")
+    id("spaceflight.android.hilt")
 }
 
 android {
     namespace = "com.spaceflight.core.data"
-    compileSdk = libs.versions.compileSdk.get().toInt()
 
-    defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
-    }
-
+    // ArticleMapper.kt calls java.time directly (Instant.parse/ofEpochMilli), API 26+.
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
-}
-
 dependencies {
-
     implementation(projects.core.domain)
     implementation(projects.core.model)
     implementation(projects.core.database)
@@ -38,9 +21,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.paging.runtime)
-
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 

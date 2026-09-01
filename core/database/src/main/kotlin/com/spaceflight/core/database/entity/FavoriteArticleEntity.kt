@@ -17,7 +17,6 @@ data class FavoriteArticleEntity(
     val url: String,
     val authors: List<String>,
     val publishedAt: Long,
-    val updatedAt: Long,
     val isFeatured: Boolean,
     val launchCount: Int,
     val eventCount: Int,

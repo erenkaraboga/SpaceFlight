@@ -2,7 +2,6 @@ package com.spaceflight.core.data.mapper
 
 import com.spaceflight.core.network.dto.ArticleDto
 import com.spaceflight.core.network.dto.AuthorDto
-import com.spaceflight.core.network.dto.EventDto
 import com.spaceflight.core.network.dto.LaunchDto
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -26,12 +25,12 @@ class ArticleMapperTest {
     }
 
     @Test
-    fun `keeps authors whose socials are null and drops nameless ones`() {
+    fun `keeps named authors and drops nameless ones`() {
         val dto = fullDto().copy(
             authors = listOf(
-                AuthorDto(name = "Beverly Casillas", socials = null),
-                AuthorDto(name = "  ", socials = null),
-                AuthorDto(name = null, socials = null),
+                AuthorDto(name = "Beverly Casillas"),
+                AuthorDto(name = "  "),
+                AuthorDto(name = null),
             )
         )
 
@@ -44,16 +43,14 @@ class ArticleMapperTest {
     }
 
     @Test
-    fun `parses both second and microsecond precision timestamps`() {
+    fun `parses microsecond precision timestamps, truncated to millis`() {
         val article = fullDto().copy(
-            publishedAt = "2026-08-31T14:54:27Z",
-            updatedAt = "2026-08-31T15:05:59.462497Z",
+            publishedAt = "2026-08-31T15:05:59.462497Z",
         ).toDomain()
 
-        assertEquals(Instant.parse("2026-08-31T14:54:27Z"), article.publishedAt)
         // Timestamps are cached as epoch milliseconds, so the API's microseconds are truncated -
         // harmless for a screen that shows "2 hours ago" and a formatted date.
-        assertEquals(Instant.parse("2026-08-31T15:05:59.462Z"), article.updatedAt)
+        assertEquals(Instant.parse("2026-08-31T15:05:59.462Z"), article.publishedAt)
     }
 
     @Test
@@ -105,15 +102,14 @@ class ArticleMapperTest {
     private fun fullDto() = ArticleDto(
         id = 39746,
         title = "Roman Space Telescope Headed to Deep Space",
-        authors = listOf(AuthorDto(name = "Beverly Casillas", socials = null)),
+        authors = listOf(AuthorDto(name = "Beverly Casillas")),
         url = "https://www.spacescout.info/2026/08/roman-space-telescope",
         imageUrl = "https://example.com/header.jpg",
         newsSite = "Space Scout",
         summary = "The observatory will shed new light on dark energy.",
         publishedAt = "2026-08-31T14:54:27Z",
-        updatedAt = "2026-08-31T15:05:59.462497Z",
         featured = true,
-        launches = listOf(LaunchDto(launchId = "521f3a1c", provider = "Launch Library 2")),
-        events = emptyList<EventDto>(),
+        launches = listOf(LaunchDto()),
+        events = emptyList(),
     )
 }

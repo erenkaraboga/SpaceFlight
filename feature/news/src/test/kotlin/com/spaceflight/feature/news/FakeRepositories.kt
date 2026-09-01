@@ -90,7 +90,6 @@ fun testArticle(id: Int, title: String = "Article $id") = Article(
     url = "https://example.com/$id",
     authors = listOf("Ada Lovelace"),
     publishedAt = Instant.ofEpochMilli(id.toLong()),
-    updatedAt = Instant.ofEpochMilli(id.toLong()),
     isFeatured = false,
     launchCount = 0,
     eventCount = 0,

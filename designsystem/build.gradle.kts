@@ -1,33 +1,15 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id("spaceflight.android.library")
+    id("spaceflight.android.compose")
 }
 
 android {
     namespace = "com.spaceflight.designsystem"
-    compileSdk = libs.versions.compileSdk.get().toInt()
 
-    defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
+    // DateFormatting.kt calls java.time directly (Instant/LocalDate/DateTimeFormatter), which is
+    // API 26+ -- desugaring backports it down to minSdk 24.
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
-    }
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 

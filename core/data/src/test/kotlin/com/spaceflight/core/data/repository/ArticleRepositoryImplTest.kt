@@ -120,7 +120,6 @@ class ArticleRepositoryImplTest {
         url = "https://example.com/$id",
         authors = emptyList(),
         publishedAt = id.toLong(),
-        updatedAt = id.toLong(),
         isFeatured = false,
         launchCount = 0,
         eventCount = 0,

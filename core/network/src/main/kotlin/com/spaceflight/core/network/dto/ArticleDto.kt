@@ -5,16 +5,17 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PaginatedArticlesDto(
-    val count: Int = 0,
     val next: String? = null,
-    val previous: String? = null,
     val results: List<ArticleDto> = emptyList(),
 )
 
 /**
  * Mirrors the `Article` schema of SNAPI v4. Almost everything carries a default because the live API
- * is looser than its OpenAPI document: `socials` is documented as an object yet arrives as `null`,
- * and `featured` is absent from the schema's required list.
+ * is looser than its OpenAPI document, and `featured` is absent from the schema's required list.
+ *
+ * Only what the app actually shows is modeled here: `count`/`previous` (unused pagination fields),
+ * `updated_at`, per-author `socials`, and the per-launch/per-event fields all get parsed straight
+ * past by `ignoreUnknownKeys` -- [launches] and [events] exist only to be counted.
  */
 @Serializable
 data class ArticleDto(
@@ -26,7 +27,6 @@ data class ArticleDto(
     @SerialName("news_site") val newsSite: String? = null,
     val summary: String? = null,
     @SerialName("published_at") val publishedAt: String? = null,
-    @SerialName("updated_at") val updatedAt: String? = null,
     val featured: Boolean? = null,
     val launches: List<LaunchDto> = emptyList(),
     val events: List<EventDto> = emptyList(),
@@ -35,27 +35,12 @@ data class ArticleDto(
 @Serializable
 data class AuthorDto(
     val name: String? = null,
-    val socials: SocialsDto? = null,
 )
 
+/** Only the list size is ever read (see [ArticleDto.launches]); per-launch fields aren't modeled. */
 @Serializable
-data class SocialsDto(
-    val x: String? = null,
-    val youtube: String? = null,
-    val instagram: String? = null,
-    val linkedin: String? = null,
-    val mastodon: String? = null,
-    val bluesky: String? = null,
-)
+class LaunchDto
 
+/** Only the list size is ever read (see [ArticleDto.events]); per-event fields aren't modeled. */
 @Serializable
-data class LaunchDto(
-    @SerialName("launch_id") val launchId: String? = null,
-    val provider: String? = null,
-)
-
-@Serializable
-data class EventDto(
-    @SerialName("event_id") val eventId: Int? = null,
-    val provider: String? = null,
-)
+class EventDto

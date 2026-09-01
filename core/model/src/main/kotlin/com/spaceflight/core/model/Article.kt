@@ -17,7 +17,6 @@ data class Article(
     val url: String,
     val authors: List<String>,
     val publishedAt: Instant,
-    val updatedAt: Instant,
     val isFeatured: Boolean,
     val launchCount: Int,
     val eventCount: Int,

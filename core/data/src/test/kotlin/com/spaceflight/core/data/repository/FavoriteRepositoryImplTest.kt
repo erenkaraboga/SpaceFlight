@@ -97,7 +97,6 @@ class FavoriteRepositoryImplTest {
         url = "https://example.com/$id",
         authors = emptyList(),
         publishedAt = Instant.ofEpochMilli(id.toLong()),
-        updatedAt = Instant.ofEpochMilli(id.toLong()),
         isFeatured = false,
         launchCount = 0,
         eventCount = 0,

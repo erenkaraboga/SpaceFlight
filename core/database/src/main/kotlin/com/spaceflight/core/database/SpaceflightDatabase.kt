@@ -16,7 +16,7 @@ import com.spaceflight.core.database.entity.RemoteKeyEntity
         FavoriteArticleEntity::class,
         RemoteKeyEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)

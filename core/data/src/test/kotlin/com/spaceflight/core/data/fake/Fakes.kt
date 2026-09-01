@@ -113,7 +113,6 @@ class FakeSpaceflightApi(
         lastSearch = search
         val page = articles.drop(offset).take(limit)
         return PaginatedArticlesDto(
-            count = articles.size,
             next = if (offset + page.size < articles.size) "next" else null,
             results = page,
         )

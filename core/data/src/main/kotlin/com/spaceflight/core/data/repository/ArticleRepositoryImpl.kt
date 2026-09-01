@@ -90,7 +90,6 @@ class ArticleRepositoryImpl @Inject constructor(
                     url = entity.url,
                     authors = entity.authors,
                     publishedAt = entity.publishedAt,
-                    updatedAt = entity.updatedAt,
                     isFeatured = entity.isFeatured,
                     launchCount = entity.launchCount,
                     eventCount = entity.eventCount,
