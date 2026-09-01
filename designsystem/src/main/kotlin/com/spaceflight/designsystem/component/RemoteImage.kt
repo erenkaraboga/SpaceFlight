@@ -7,13 +7,17 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,11 +27,20 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
-import com.spaceflight.designsystem.theme.LocalReducedMotion
+import com.spaceflight.designsystem.theme.SpaceflightTheme
 
-/** Remote image with a shimmer while loading and a neutral fallback if the URL is missing or dead. */
+/**
+ * Remote image with a shimmer while loading and a neutral fallback if the URL is missing or dead.
+ *
+ * @param imageUrl The web URL of the image to be fetched.
+ * @param contentDescription Text description of the image for accessibility.
+ * @param modifier The [Modifier] to be applied to the image container.
+ * @param shape The clipping [Shape] of the image container.
+ * @param contentScale Scaling strategy for fitting the image inside its bounds.
+ */
 @Composable
 fun RemoteImage(
     imageUrl: String,
@@ -46,6 +59,11 @@ fun RemoteImage(
     )
 }
 
+/**
+ * Placeholder layout with a neutral background and icon used when image fetching fails or URL is blank.
+ *
+ * @param modifier The [Modifier] to be applied to the fallback layout.
+ */
 @Composable
 private fun ImageFallback(modifier: Modifier = Modifier) {
     Box(
@@ -61,16 +79,15 @@ private fun ImageFallback(modifier: Modifier = Modifier) {
     }
 }
 
-/** A slow highlight sweep used while images and list placeholders load. */
+/**
+ * A slow highlight sweep used while images and list placeholders load.
+ *
+ * @param modifier The [Modifier] to be applied to the shimmer layout.
+ */
 @Composable
 fun ShimmerSurface(modifier: Modifier = Modifier) {
     val base = MaterialTheme.colorScheme.surfaceVariant
     val highlight = MaterialTheme.colorScheme.surfaceContainerHigh
-
-    if (LocalReducedMotion.current) {
-        Box(modifier.background(base))
-        return
-    }
 
     val transition = rememberInfiniteTransition(label = "shimmer")
     val progress = transition.animateFloat(
@@ -95,4 +112,29 @@ fun ShimmerSurface(modifier: Modifier = Modifier) {
             )
         }
     )
+}
+
+@Preview(name = "Remote Image States", showBackground = true)
+@Composable
+private fun RemoteImagePreview() {
+    SpaceflightTheme {
+        Surface {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                ShimmerSurface(
+                    modifier = Modifier
+                        .size(width = 200.dp, height = 120.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                )
+
+                RemoteImage(
+                    imageUrl = "",
+                    contentDescription = "Fallback placeholder example",
+                    modifier = Modifier.size(width = 200.dp, height = 120.dp)
+                )
+            }
+        }
+    }
 }

@@ -23,10 +23,14 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,14 +40,25 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spaceflight.designsystem.R
-import com.spaceflight.designsystem.theme.respectingMotionPreference
 import com.spaceflight.designsystem.theme.SpaceflightMotion
+import com.spaceflight.designsystem.theme.SpaceflightTheme
+import com.spaceflight.designsystem.theme.respectingMotionPreference
 
 /**
  * A large title that collapses into a search field in the same slot, so the content below does not
  * jump when search opens. The caller owns the query.
+ *
+ * @param title The primary title text displayed when search is inactive.
+ * @param query The current text value of the search query.
+ * @param isSearchActive Controls whether the search field or the title row is visible.
+ * @param onQueryChange Callback invoked when the search query text changes.
+ * @param onSearchActiveChange Callback invoked when the search field is opened or closed.
+ * @param modifier The [Modifier] to be applied to the header layout.
+ * @param subtitle Optional subtitle text displayed below the main title.
+ * @param dateLabel Optional date or contextual metadata label displayed below the title/subtitle.
  */
 @Composable
 fun SearchHeader(
@@ -208,37 +223,41 @@ private fun SearchField(
     }
 }
 
+
+
+@Preview(name = "Header Components Variants", showBackground = true)
 @Composable
-fun ScreenHeader(
-    title: String,
-    modifier: Modifier = Modifier,
-    subtitle: String? = null,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .padding(start = 20.dp, end = 12.dp, top = 12.dp, bottom = 12.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.displaySmall,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+private fun HeaderComponentsPreview() {
+    SpaceflightTheme {
+        Surface {
+            Column(
+                modifier = Modifier.padding(vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                var queryInactive by remember { mutableStateOf("") }
+                var isSearchActive1 by remember { mutableStateOf(false) }
+
+                SearchHeader(
+                    title = "Launches",
+                    subtitle = "Falcon Heavy & Starship",
+                    dateLabel = "September 2026",
+                    query = queryInactive,
+                    isSearchActive = isSearchActive1,
+                    onQueryChange = { queryInactive = it },
+                    onSearchActiveChange = { isSearchActive1 = it },
+                )
+
+                var queryActive by remember { mutableStateOf("Starlink") }
+                var isSearchActive2 by remember { mutableStateOf(true) }
+
+                SearchHeader(
+                    title = "Launches",
+                    query = queryActive,
+                    isSearchActive = isSearchActive2,
+                    onQueryChange = { queryActive = it },
+                    onSearchActiveChange = { isSearchActive2 = it },
                 )
             }
         }
-        ThemeToggleButton()
     }
 }

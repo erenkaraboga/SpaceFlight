@@ -1,5 +1,6 @@
 package com.spaceflight.feature.news.ui
 
+import LayoutToggleButton
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -35,7 +36,6 @@ import com.spaceflight.core.domain.model.Article
 import com.spaceflight.designsystem.component.EmptyState
 import com.spaceflight.designsystem.component.ErrorView
 import com.spaceflight.designsystem.component.InlineRetry
-import com.spaceflight.designsystem.component.LayoutToggleButton
 import com.spaceflight.designsystem.component.OfflineBanner
 import com.spaceflight.designsystem.component.ScreenCanvas
 import com.spaceflight.designsystem.component.SearchHeader

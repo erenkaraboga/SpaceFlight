@@ -88,7 +88,7 @@ fun FloatingTabBar(
         Color.White.copy(alpha = 0.78f)
     }
     val fallbackFill = if (isDark) {
-        SpaceColors.SlateHigh.copy(alpha = 0.78f)
+        MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.78f)
     } else {
         Color.White.copy(alpha = 0.82f)
     }

@@ -11,7 +11,6 @@ data class FavoritesUiState(
 
 sealed interface FavoritesEvent {
     data class FavoriteRemoved(val article: Article) : FavoritesEvent
-    data object UndoRemoval : FavoritesEvent
 }
 
 sealed interface FavoritesEffect {
