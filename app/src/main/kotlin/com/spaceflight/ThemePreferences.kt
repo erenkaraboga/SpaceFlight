@@ -7,8 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.spaceflight.core.domain.usecase.ObserveDarkThemeOverrideUseCase
-import com.spaceflight.core.domain.usecase.SetDarkThemeOverrideUseCase
+import com.spaceflight.core.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,11 +17,9 @@ import javax.inject.Inject
 
 /**
  * Resolves the effective dark-theme flag (saved override, or the system setting when there is
- * none yet) and hands back a toggle. The saved override now lives behind [ThemeViewModel] /
- * [com.spaceflight.core.domain.repository.UserPreferencesRepository] instead of a raw
- * `SharedPreferences` read in this composable, so it goes through the same repository/use-case
- * path as everything else the app persists — and no longer risks colliding with feed layout's own
- * preference, which used to live in a separate copy of this exact pattern under the same file name.
+ * none yet) and hands back a toggle. `app` has no domain layer of its own in this architecture --
+ * unlike a feature module, it does not own use cases -- so [ThemeViewModel] talks to
+ * [UserPreferencesRepository] directly instead of through one.
  */
 @Composable
 fun rememberDarkTheme(viewModel: ThemeViewModel = hiltViewModel()): Pair<Boolean, () -> Unit> {
@@ -34,14 +31,13 @@ fun rememberDarkTheme(viewModel: ThemeViewModel = hiltViewModel()): Pair<Boolean
 
 @HiltViewModel
 class ThemeViewModel @Inject constructor(
-    observeDarkThemeOverride: ObserveDarkThemeOverrideUseCase,
-    private val setDarkThemeOverrideUseCase: SetDarkThemeOverrideUseCase,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
-    val darkThemeOverride: StateFlow<Boolean?> = observeDarkThemeOverride()
+    val darkThemeOverride: StateFlow<Boolean?> = userPreferencesRepository.darkThemeOverride
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     fun setDarkThemeOverride(enabled: Boolean) {
-        viewModelScope.launch { setDarkThemeOverrideUseCase(enabled) }
+        viewModelScope.launch { userPreferencesRepository.setDarkThemeOverride(enabled) }
     }
 }

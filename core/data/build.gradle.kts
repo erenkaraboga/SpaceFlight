@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
@@ -14,11 +13,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-        buildConfigField("String", "API_BASE_URL", "\"https://api.spaceflightnewsapi.net/v4/\"")
-    }
-
-    buildFeatures {
-        buildConfig = true
     }
 
     compileOptions {
@@ -34,28 +28,15 @@ kotlin {
     }
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
-
 dependencies {
-    api(projects.core.domain)
+
+    implementation(projects.core.domain)
+    implementation(projects.core.model)
+    implementation(projects.core.database)
+    implementation(projects.core.network)
+    implementation(projects.core.common)
 
     implementation(libs.androidx.core.ktx)
-
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging)
-    debugImplementation(libs.chucker)
-    releaseImplementation(libs.chucker.noop)
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.paging)
-    ksp(libs.androidx.room.compiler)
-
     implementation(libs.androidx.paging.runtime)
 
     implementation(libs.hilt.android)

@@ -2,12 +2,12 @@ package com.spaceflight.core.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.spaceflight.core.data.database.dao.ArticleDao
+import com.spaceflight.core.database.dao.ArticleDao
 import com.spaceflight.core.data.mapper.toDomain
 import com.spaceflight.core.data.mapper.toEntity
-import com.spaceflight.core.data.network.SpaceflightApi
-import com.spaceflight.core.data.network.toAppError
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.network.SpaceflightApi
+import com.spaceflight.core.common.error.toAppError
+import com.spaceflight.core.model.Article
 import kotlinx.coroutines.CancellationException
 
 /**

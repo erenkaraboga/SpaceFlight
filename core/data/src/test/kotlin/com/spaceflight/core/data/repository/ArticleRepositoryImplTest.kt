@@ -1,14 +1,14 @@
 package com.spaceflight.core.data.repository
 
 import androidx.paging.testing.asSnapshot
-import com.spaceflight.core.data.database.SpaceflightDatabase
-import com.spaceflight.core.data.database.entity.ArticleEntity
+import com.spaceflight.core.database.SpaceflightDatabase
+import com.spaceflight.core.database.entity.ArticleEntity
 import com.spaceflight.core.data.fake.FakeArticleDao
 import com.spaceflight.core.data.fake.FakeFavoriteArticleDao
 import com.spaceflight.core.data.fake.FakeNetworkMonitor
 import com.spaceflight.core.data.fake.FakeSpaceflightApi
 import com.spaceflight.core.data.mapper.toFavoriteEntity
-import com.spaceflight.core.data.network.dto.ArticleDto
+import com.spaceflight.core.network.dto.ArticleDto
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

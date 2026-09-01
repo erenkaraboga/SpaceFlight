@@ -5,12 +5,12 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.spaceflight.core.data.database.SpaceflightDatabase
-import com.spaceflight.core.data.database.entity.ArticleEntity
-import com.spaceflight.core.data.database.entity.RemoteKeyEntity
+import com.spaceflight.core.database.SpaceflightDatabase
+import com.spaceflight.core.database.entity.ArticleEntity
+import com.spaceflight.core.database.entity.RemoteKeyEntity
 import com.spaceflight.core.data.mapper.toEntity
-import com.spaceflight.core.data.network.SpaceflightApi
-import com.spaceflight.core.data.network.toAppError
+import com.spaceflight.core.network.SpaceflightApi
+import com.spaceflight.core.common.error.toAppError
 import kotlinx.coroutines.CancellationException
 
 /**

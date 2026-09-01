@@ -1,7 +1,7 @@
 package com.spaceflight.feature.favorites
 
-import com.spaceflight.core.domain.model.AppError
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.model.AppError
+import com.spaceflight.core.model.Article
 import com.spaceflight.core.domain.repository.FavoriteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -2,8 +2,8 @@ package com.spaceflight.core.data.repository
 
 import app.cash.turbine.test
 import com.spaceflight.core.data.fake.FakeFavoriteArticleDao
-import com.spaceflight.core.domain.model.AppError
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.model.AppError
+import com.spaceflight.core.model.Article
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

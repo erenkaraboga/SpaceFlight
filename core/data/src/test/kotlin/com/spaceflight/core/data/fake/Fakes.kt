@@ -2,13 +2,13 @@ package com.spaceflight.core.data.fake
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.spaceflight.core.data.database.dao.ArticleDao
-import com.spaceflight.core.data.database.dao.FavoriteArticleDao
-import com.spaceflight.core.data.database.entity.ArticleEntity
-import com.spaceflight.core.data.database.entity.FavoriteArticleEntity
-import com.spaceflight.core.data.network.SpaceflightApi
-import com.spaceflight.core.data.network.dto.ArticleDto
-import com.spaceflight.core.data.network.dto.PaginatedArticlesDto
+import com.spaceflight.core.database.dao.ArticleDao
+import com.spaceflight.core.database.dao.FavoriteArticleDao
+import com.spaceflight.core.database.entity.ArticleEntity
+import com.spaceflight.core.database.entity.FavoriteArticleEntity
+import com.spaceflight.core.network.SpaceflightApi
+import com.spaceflight.core.network.dto.ArticleDto
+import com.spaceflight.core.network.dto.PaginatedArticlesDto
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

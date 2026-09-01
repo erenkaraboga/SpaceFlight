@@ -23,7 +23,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-        isCoreLibraryDesugaringEnabled = true
     }
 }
 
@@ -35,12 +34,11 @@ kotlin {
 
 dependencies {
     implementation(projects.core.domain)
-    implementation(projects.core.ui)
+    implementation(projects.core.model)
+    implementation(projects.core.common)
     api(projects.designsystem)
 
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.runtime)
@@ -48,7 +46,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.androidx.ui.tooling.preview)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

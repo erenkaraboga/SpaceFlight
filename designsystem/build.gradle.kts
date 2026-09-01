@@ -33,7 +33,6 @@ kotlin {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
     api(libs.androidx.browser)
 
     api(platform(libs.androidx.compose.bom))
@@ -45,7 +44,6 @@ dependencies {
     api(libs.androidx.material.icons.extended)
     api(libs.coil.compose)
     api(libs.haze)
-    implementation(libs.coil.network.okhttp)
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
 

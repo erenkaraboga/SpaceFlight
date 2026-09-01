@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
       <module name="SpaceFlight.core.designsystem" target="21" />
+      <module name="SpaceFlight.core.ui" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>

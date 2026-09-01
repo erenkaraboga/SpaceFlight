@@ -1,9 +1,9 @@
 package com.spaceflight.core.data.mapper
 
-import com.spaceflight.core.data.database.entity.ArticleEntity
-import com.spaceflight.core.data.database.entity.FavoriteArticleEntity
-import com.spaceflight.core.data.network.dto.ArticleDto
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.database.entity.ArticleEntity
+import com.spaceflight.core.database.entity.FavoriteArticleEntity
+import com.spaceflight.core.network.dto.ArticleDto
+import com.spaceflight.core.model.Article
 import java.time.Instant
 import java.time.format.DateTimeParseException
 

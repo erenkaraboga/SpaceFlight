@@ -1,6 +1,6 @@
 package com.spaceflight.core.domain.repository
 
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.model.Article
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {

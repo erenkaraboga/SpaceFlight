@@ -1,9 +1,9 @@
 package com.spaceflight.core.data.mapper
 
-import com.spaceflight.core.data.network.dto.ArticleDto
-import com.spaceflight.core.data.network.dto.AuthorDto
-import com.spaceflight.core.data.network.dto.EventDto
-import com.spaceflight.core.data.network.dto.LaunchDto
+import com.spaceflight.core.network.dto.ArticleDto
+import com.spaceflight.core.network.dto.AuthorDto
+import com.spaceflight.core.network.dto.EventDto
+import com.spaceflight.core.network.dto.LaunchDto
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

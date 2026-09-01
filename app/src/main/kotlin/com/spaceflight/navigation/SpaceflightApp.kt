@@ -39,13 +39,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.spaceflight.designsystem.component.FloatingTab
 import com.spaceflight.designsystem.component.FloatingTabBar
+import com.spaceflight.designsystem.component.FloatingTabBarDefaults
 import com.spaceflight.designsystem.motion.LocalNavAnimatedVisibilityScope
 import com.spaceflight.designsystem.motion.LocalSharedTransitionScope
 import com.spaceflight.designsystem.theme.SpaceflightMotion
-import com.spaceflight.feature.favorites.ui.FavoritesScreen
-import com.spaceflight.feature.news.ui.NewsScreen
+import com.spaceflight.feature.favorites.presentation.FavoritesScreen
+import com.spaceflight.feature.news.presentation.NewsScreen
 import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
-import com.spaceflight.feature.newsdetail.ui.NewsDetailScreen
+import com.spaceflight.feature.newsdetail.presentation.NewsDetailScreen
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 
@@ -205,7 +206,7 @@ fun SpaceflightApp(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
-                .padding(start = 24.dp, end = 24.dp, bottom = 12.dp)
+                .padding(start = 24.dp, end = 24.dp, bottom = FloatingTabBarDefaults.BottomSpacing)
                 .graphicsLayer {
                     alpha = barProgress
                     translationY = (1f - barProgress) * 120.dp.toPx()

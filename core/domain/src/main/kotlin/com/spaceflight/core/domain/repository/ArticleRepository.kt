@@ -1,7 +1,7 @@
 package com.spaceflight.core.domain.repository
 
 import androidx.paging.PagingData
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.model.Article
 import kotlinx.coroutines.flow.Flow
 
 interface ArticleRepository {

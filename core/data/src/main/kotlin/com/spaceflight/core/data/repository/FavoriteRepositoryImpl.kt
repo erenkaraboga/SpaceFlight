@@ -1,11 +1,11 @@
 package com.spaceflight.core.data.repository
 
-import com.spaceflight.core.data.database.dao.FavoriteArticleDao
+import com.spaceflight.core.database.dao.FavoriteArticleDao
 import com.spaceflight.core.data.mapper.toDomain
 import com.spaceflight.core.data.mapper.toFavoriteEntity
-import com.spaceflight.core.data.util.safeCall
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.common.error.safeCall
 import com.spaceflight.core.domain.repository.FavoriteRepository
+import com.spaceflight.core.model.Article
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

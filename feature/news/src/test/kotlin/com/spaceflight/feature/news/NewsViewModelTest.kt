@@ -1,15 +1,15 @@
 package com.spaceflight.feature.news
 
 import app.cash.turbine.test
-import com.spaceflight.core.domain.usecase.GetArticlesUseCase
-import com.spaceflight.core.domain.usecase.ObserveFavoriteIdsUseCase
+import com.spaceflight.feature.news.domain.usecase.GetArticlesUseCase
+import com.spaceflight.feature.news.domain.usecase.ObserveFavoriteIdsUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.designsystem.text.UiText
-import com.spaceflight.feature.news.logic.NewsEffect
-import com.spaceflight.feature.news.logic.NewsEvent
-import com.spaceflight.core.domain.model.AppError
-import com.spaceflight.core.ui.error.toUiText
-import com.spaceflight.feature.news.logic.NewsViewModel
+import com.spaceflight.feature.news.presentation.NewsEffect
+import com.spaceflight.feature.news.presentation.NewsEvent
+import com.spaceflight.core.model.AppError
+import com.spaceflight.core.common.error.toUiText
+import com.spaceflight.feature.news.presentation.NewsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy

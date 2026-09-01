@@ -19,13 +19,6 @@ sealed interface UiText {
     data class Resource(@StringRes val resId: Int, val args: List<Any> = emptyList()) : UiText
 }
 
-/** Resolves this [UiText] to a plain [String] from composable code. */
-@Composable
-fun UiText.asString(): String = when (this) {
-    is UiText.Literal -> value
-    is UiText.Resource -> stringResource(resId, *args.toTypedArray())
-}
-
 /** Resolves this [UiText] to a plain [String] outside composition (e.g. inside a Channel/effect collector). */
 fun UiText.asString(context: Context): String = when (this) {
     is UiText.Literal -> value

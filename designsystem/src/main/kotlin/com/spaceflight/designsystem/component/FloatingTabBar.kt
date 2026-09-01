@@ -60,6 +60,25 @@ private val BarShape = RoundedCornerShape(22.dp)
 private val TabShape = RoundedCornerShape(17.dp)
 
 /**
+ * Sizing shared between [FloatingTabBar] and any screen content that needs to clear it -- most
+ * notably a Scaffold's own [androidx.compose.material3.SnackbarHost], which floats inside the
+ * screen's own content while the tab bar is drawn as a separate overlay on top of it. Without
+ * this clearance a snackbar surfaces right at the bottom of the screen and ends up hidden behind
+ * the bar instead of appearing above it.
+ */
+object FloatingTabBarDefaults {
+    val Height = 62.dp
+    val BottomSpacing = 12.dp
+
+    /**
+     * Total vertical space the bar occupies above the screen's bottom edge, excluding the system
+     * navigation bar inset -- add [androidx.compose.foundation.layout.navigationBarsPadding]
+     * separately, the same way [FloatingTabBar] itself does.
+     */
+    val ClearanceHeight = Height + BottomSpacing
+}
+
+/**
  * A floating glass bar of equally sized tabs. Colour is the only thing that animates, so the bar
  * does not reflow or fight the finger on every tap.
  *
@@ -97,7 +116,7 @@ fun FloatingTabBar(
         modifier = modifier
             .widthIn(max = 340.dp)
             .fillMaxWidth()
-            .height(62.dp)
+            .height(FloatingTabBarDefaults.Height)
             .shadow(
                 elevation = 18.dp,
                 shape = BarShape,

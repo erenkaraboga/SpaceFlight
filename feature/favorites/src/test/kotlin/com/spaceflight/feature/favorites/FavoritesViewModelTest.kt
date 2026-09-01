@@ -1,13 +1,13 @@
 package com.spaceflight.feature.favorites
 
 import app.cash.turbine.test
-import com.spaceflight.core.domain.model.AppError
-import com.spaceflight.core.domain.usecase.ObserveFavoritesUseCase
-import com.spaceflight.core.domain.usecase.RemoveFavoriteUseCase
-import com.spaceflight.core.ui.error.toUiText
-import com.spaceflight.feature.favorites.logic.FavoritesEffect
-import com.spaceflight.feature.favorites.logic.FavoritesEvent
-import com.spaceflight.feature.favorites.logic.FavoritesViewModel
+import com.spaceflight.core.model.AppError
+import com.spaceflight.feature.favorites.domain.usecase.ObserveFavoritesUseCase
+import com.spaceflight.feature.favorites.domain.usecase.RemoveFavoriteUseCase
+import com.spaceflight.core.common.error.toUiText
+import com.spaceflight.feature.favorites.presentation.FavoritesEffect
+import com.spaceflight.feature.favorites.presentation.FavoritesEvent
+import com.spaceflight.feature.favorites.presentation.FavoritesViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest

@@ -2,8 +2,8 @@ package com.spaceflight.feature.news
 
 import androidx.paging.PagingData
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
-import com.spaceflight.core.domain.model.AppError
-import com.spaceflight.core.domain.model.Article
+import com.spaceflight.core.model.AppError
+import com.spaceflight.core.model.Article
 import com.spaceflight.core.domain.repository.ArticleRepository
 import com.spaceflight.core.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
