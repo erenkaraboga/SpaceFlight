@@ -168,7 +168,6 @@ internal val SpaceflightTypography = Typography(
     ),
 )
 
-/** Newspaper kicker: small caps-tracking sans, never the serif. */
 val EyebrowTextStyle: TextStyle = TextStyle(
     fontFamily = SourceSans,
     fontSize = 11.sp,

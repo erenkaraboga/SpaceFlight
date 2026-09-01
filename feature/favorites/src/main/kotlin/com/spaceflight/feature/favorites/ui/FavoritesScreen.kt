@@ -36,7 +36,6 @@ fun FavoritesScreen(
             }
         }
     }
-
     Scaffold(
         modifier = modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(snackbarHostState) },

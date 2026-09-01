@@ -20,6 +20,8 @@ import com.spaceflight.core.ui.error.toUiText
 import com.spaceflight.designsystem.text.asString
 import com.spaceflight.feature.news.logic.NewsEffect
 import com.spaceflight.feature.news.logic.NewsViewModel
+import com.spaceflight.feature.news.logic.appendError
+import com.spaceflight.feature.news.logic.refreshError
 
 @Composable
 fun NewsScreen(

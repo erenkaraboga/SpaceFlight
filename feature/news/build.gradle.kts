@@ -49,7 +49,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-
+    implementation(libs.androidx.ui.tooling.preview)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)

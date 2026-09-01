@@ -1,4 +1,4 @@
-package com.spaceflight.feature.news.ui
+package com.spaceflight.feature.news.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,18 +13,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spaceflight.designsystem.component.PhotoFavoriteButton
 import com.spaceflight.designsystem.component.PillBadge
 import com.spaceflight.designsystem.component.RemoteImage
 import com.spaceflight.designsystem.component.ShimmerSurface
 
+/**
+ * A card component that displays a news article item in a list.
+ *
+ * @param title The headline of the article. Truncated to a maximum of 3 lines.
+ * @param summary A brief summary of the article. Rendered below the title if not blank.
+ * @param imageUrl The remote URL of the article image.
+ * @param newsSite The source/publisher name of the article (e.g., NASA, SpaceNews).
+ * @param dateLabel The formatted publication date string.
+ * @param isFavorite Indicates whether the article is marked as favorite.
+ * @param onClick Callback invoked when the article card is clicked.
+ * @param onFavoriteClick Callback invoked when the favorite button is clicked.
+ * @param modifier The [Modifier] to be applied to the outer container.
+ * @param imageModifier Additional [Modifier] to be applied directly to the image component.
+ */
 @Composable
 fun ArticleCard(
     title: String,
@@ -108,6 +124,11 @@ fun ArticleCard(
     }
 }
 
+/**
+ * A placeholder skeleton component displayed while article data is loading.
+ *
+ * @param modifier The [Modifier] to be applied to the outer layout.
+ */
 @Composable
 fun ArticleCardPlaceholder(modifier: Modifier = Modifier) {
     Row(
@@ -137,6 +158,12 @@ fun ArticleCardPlaceholder(modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Internal shimmer bar used to construct loading placeholders.
+ *
+ * @param widthFraction The fraction of maximum width to occupy (0.0f to 1.0f).
+ * @param height The height of the shimmer bar.
+ */
 @Composable
 private fun ShimmerBar(widthFraction: Float, height: androidx.compose.ui.unit.Dp) {
     Box(
@@ -150,5 +177,57 @@ private fun ShimmerBar(widthFraction: Float, height: androidx.compose.ui.unit.Dp
                 .fillMaxWidth()
                 .height(height)
         )
+    }
+}
+
+// ==========================================
+// PREVIEWS
+// ==========================================
+
+@Preview(name = "Article Card - Default", showBackground = true)
+@Composable
+private fun ArticleCardPreview() {
+    MaterialTheme {
+        Surface(modifier = Modifier.padding(16.dp)) {
+            ArticleCard(
+                title = "Artemis III: NASA's Lunar South Pole Exploration Mission",
+                summary = "NASA outlines key goals for human landing near the lunar south pole in upcoming mission.",
+                imageUrl = "",
+                newsSite = "NASA",
+                dateLabel = "2 hours ago",
+                isFavorite = false,
+                onClick = {},
+                onFavoriteClick = {},
+            )
+        }
+    }
+}
+
+@Preview(name = "Article Card - Favorited", showBackground = true)
+@Composable
+private fun ArticleCardFavoritePreview() {
+    MaterialTheme {
+        Surface(modifier = Modifier.padding(16.dp)) {
+            ArticleCard(
+                title = "Starship Prepares for Orbital Test Flight",
+                summary = "SpaceX is finalizing preparations for the next launch iteration from Starbase.",
+                imageUrl = "",
+                newsSite = "SpaceNews",
+                dateLabel = "1 day ago",
+                isFavorite = true,
+                onClick = {},
+                onFavoriteClick = {},
+            )
+        }
+    }
+}
+
+@Preview(name = "Article Card - Loading Placeholder", showBackground = true)
+@Composable
+private fun ArticleCardPlaceholderPreview() {
+    MaterialTheme {
+        Surface(modifier = Modifier.padding(16.dp)) {
+            ArticleCardPlaceholder()
+        }
     }
 }

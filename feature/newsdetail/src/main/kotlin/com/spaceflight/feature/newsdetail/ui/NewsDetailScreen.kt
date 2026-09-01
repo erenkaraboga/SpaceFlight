@@ -105,6 +105,7 @@ fun NewsDetailScreen(
             state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
+
             state.article == null -> EmptyState(
                 title = stringResource(R.string.newsdetail_missing_title),
                 description = stringResource(R.string.newsdetail_missing_description),
@@ -113,42 +114,42 @@ fun NewsDetailScreen(
             )
 
             else -> {
-                val article = state.article!!
                 val scrollState = rememberScrollState()
                 val showTitleInBar by remember {
                     derivedStateOf { heroTitleAlpha(scrollState.value) < 0.15f }
                 }
+                state.article?.let { article ->
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background),
+                    ) {
+                        ArticleDetailContent(
+                            title = article.title,
+                            summary = article.summary,
+                            imageUrl = article.imageUrl,
+                            newsSite = article.newsSite,
+                            authors = article.authors,
+                            dateLabel = rememberAbsoluteDate(article.publishedAt),
+                            launchCount = article.launchCount,
+                            eventCount = article.eventCount,
+                            onReadMore = { viewModel.onEvent(NewsDetailEvent.SourceRequested) },
+                            imageModifier = Modifier.sharedContent(
+                                sharedImageKey(article.id),
+                                clipShape = MaterialTheme.shapes.extraLarge,
+                            ),
+                            scrollState = scrollState,
+                        )
 
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background),
-                ) {
-                    ArticleDetailContent(
-                        title = article.title,
-                        summary = article.summary,
-                        imageUrl = article.imageUrl,
-                        newsSite = article.newsSite,
-                        authors = article.authors,
-                        dateLabel = rememberAbsoluteDate(article.publishedAt),
-                        launchCount = article.launchCount,
-                        eventCount = article.eventCount,
-                        onReadMore = { viewModel.onEvent(NewsDetailEvent.SourceRequested) },
-                        imageModifier = Modifier.sharedContent(
-                            sharedImageKey(article.id),
-                            clipShape = MaterialTheme.shapes.extraLarge,
-                        ),
-                        scrollState = scrollState,
-                    )
-
-                    DetailChrome(
-                        title = article.title,
-                        showTitle = showTitleInBar,
-                        isFavorite = state.isFavorite,
-                        onBack = { viewModel.onEvent(NewsDetailEvent.BackClicked) },
-                        onShare = { viewModel.onEvent(NewsDetailEvent.ShareRequested) },
-                        onFavorite = { viewModel.onEvent(NewsDetailEvent.FavoriteToggled) },
-                    )
+                        DetailChrome(
+                            title = article.title,
+                            showTitle = showTitleInBar,
+                            isFavorite = state.isFavorite,
+                            onBack = { viewModel.onEvent(NewsDetailEvent.BackClicked) },
+                            onShare = { viewModel.onEvent(NewsDetailEvent.ShareRequested) },
+                            onFavorite = { viewModel.onEvent(NewsDetailEvent.FavoriteToggled) },
+                        )
+                    }
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.spaceflight.feature.news.ui
+package com.spaceflight.feature.news.logic
 
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
