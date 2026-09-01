@@ -3,6 +3,7 @@ package com.spaceflight.core.data.repository
 import com.spaceflight.core.data.database.dao.FavoriteArticleDao
 import com.spaceflight.core.data.mapper.toDomain
 import com.spaceflight.core.data.mapper.toFavoriteEntity
+import com.spaceflight.core.data.util.safeCall
 import com.spaceflight.core.domain.model.Article
 import com.spaceflight.core.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
@@ -23,20 +24,21 @@ class FavoriteRepositoryImpl @Inject constructor(
 
     override fun observeIsFavorite(id: Int): Flow<Boolean> = favoriteDao.observeIsFavorite(id)
 
-    override suspend fun addFavorite(article: Article) {
+    override suspend fun addFavorite(article: Article): Result<Unit> = safeCall {
         favoriteDao.upsert(article.toFavoriteEntity(System.currentTimeMillis()))
     }
 
-    override suspend fun removeFavorite(id: Int) {
+    override suspend fun removeFavorite(id: Int): Result<Unit> = safeCall {
         favoriteDao.deleteById(id)
     }
 
-    override suspend fun toggleFavorite(article: Article): Boolean =
+    override suspend fun toggleFavorite(article: Article): Result<Boolean> = safeCall {
         if (favoriteDao.isFavorite(article.id)) {
-            removeFavorite(article.id)
+            favoriteDao.deleteById(article.id)
             false
         } else {
-            addFavorite(article)
+            favoriteDao.upsert(article.toFavoriteEntity(System.currentTimeMillis()))
             true
         }
+    }
 }

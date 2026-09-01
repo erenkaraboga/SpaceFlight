@@ -4,16 +4,9 @@
     <string name="news_welcome">Welcome</string>
     <string name="news_featured">Featured</string>
     <string name="news_latest">Latest</string>
-    <string name="news_error_title">Could not load the news</string>
     <string name="news_empty_title">No articles found</string>
+    <string name="news_empty_generic_description">Nothing here yet. Pull down to refresh.</string>
     <string name="news_empty_description">Nothing matched “%1$s”. Try a different keyword.</string>
     <string name="news_added_to_favorites">Added to favorites</string>
     <string name="news_removed_from_favorites">Removed from favorites</string>
-    <string name="news_refresh_failed">Could not refresh — showing cached articles</string>
-
-    <string name="error_no_connection">No internet connection. Check your network and try again.</string>
-    <string name="error_timeout">The request took too long. Try again.</string>
-    <string name="error_server">The news service is unavailable right now.</string>
-    <string name="error_parsing">The response could not be read.</string>
-    <string name="error_unknown">Something went wrong.</string>
 </resources>

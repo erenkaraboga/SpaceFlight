@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ds_retry">Tekrar dene</string>
     <string name="ds_offline_banner">Çevrimdışısınız — önbellekteki içerik gösteriliyor</string>
     <string name="ds_search_placeholder">Ara</string>
     <string name="ds_open_search">Ara</string>

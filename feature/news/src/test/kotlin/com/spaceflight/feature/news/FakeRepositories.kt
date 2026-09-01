@@ -2,6 +2,7 @@ package com.spaceflight.feature.news
 
 import androidx.paging.PagingData
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
+import com.spaceflight.core.domain.model.AppError
 import com.spaceflight.core.domain.model.Article
 import com.spaceflight.core.domain.repository.ArticleRepository
 import com.spaceflight.core.domain.repository.FavoriteRepository
@@ -32,7 +33,7 @@ class FakeArticleRepository(
     }
 }
 
-class FakeFavoriteRepository : FavoriteRepository {
+class FakeFavoriteRepository(private var failure: AppError? = null) : FavoriteRepository {
 
     private val favorites = MutableStateFlow<Map<Int, Article>>(emptyMap())
 
@@ -42,22 +43,33 @@ class FakeFavoriteRepository : FavoriteRepository {
 
     override fun observeIsFavorite(id: Int): Flow<Boolean> = favorites.map { id in it }
 
-    override suspend fun addFavorite(article: Article) {
+    /** Makes the next mutating call (`addFavorite`/`removeFavorite`/`toggleFavorite`) fail once. */
+    fun failNextWrite(error: AppError) {
+        failure = error
+    }
+
+    override suspend fun addFavorite(article: Article): Result<Unit> {
+        failure?.let { return Result.failure(it.also { failure = null }) }
         favorites.value = favorites.value + (article.id to article)
+        return Result.success(Unit)
     }
 
-    override suspend fun removeFavorite(id: Int) {
+    override suspend fun removeFavorite(id: Int): Result<Unit> {
+        failure?.let { return Result.failure(it.also { failure = null }) }
         favorites.value = favorites.value - id
+        return Result.success(Unit)
     }
 
-    override suspend fun toggleFavorite(article: Article): Boolean =
-        if (article.id in favorites.value) {
+    override suspend fun toggleFavorite(article: Article): Result<Boolean> {
+        failure?.let { return Result.failure(it.also { failure = null }) }
+        return if (article.id in favorites.value) {
             removeFavorite(article.id)
-            false
+            Result.success(false)
         } else {
             addFavorite(article)
-            true
+            Result.success(true)
         }
+    }
 }
 
 class FakeNetworkMonitor(isOnline: Boolean = true) : NetworkMonitor {

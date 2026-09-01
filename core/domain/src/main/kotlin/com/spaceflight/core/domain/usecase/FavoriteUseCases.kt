@@ -26,17 +26,11 @@ class ObserveIsFavoriteUseCase @Inject constructor(
 class ToggleFavoriteUseCase @Inject constructor(
     private val repository: FavoriteRepository,
 ) {
-    suspend operator fun invoke(article: Article): Boolean = repository.toggleFavorite(article)
-}
-
-class AddFavoriteUseCase @Inject constructor(
-    private val repository: FavoriteRepository,
-) {
-    suspend operator fun invoke(article: Article) = repository.addFavorite(article)
+    suspend operator fun invoke(article: Article): Result<Boolean> = repository.toggleFavorite(article)
 }
 
 class RemoveFavoriteUseCase @Inject constructor(
     private val repository: FavoriteRepository,
 ) {
-    suspend operator fun invoke(id: Int) = repository.removeFavorite(id)
+    suspend operator fun invoke(id: Int): Result<Unit> = repository.removeFavorite(id)
 }

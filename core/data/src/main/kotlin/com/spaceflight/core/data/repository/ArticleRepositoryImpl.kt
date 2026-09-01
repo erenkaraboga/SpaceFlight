@@ -11,13 +11,12 @@ import com.spaceflight.core.data.database.dao.FavoriteArticleDao
 import com.spaceflight.core.data.mapper.toDomain
 import com.spaceflight.core.data.mapper.toEntity
 import com.spaceflight.core.data.network.SpaceflightApi
-import com.spaceflight.core.data.network.toAppError
 import com.spaceflight.core.data.paging.ArticleRemoteMediator
 import com.spaceflight.core.data.paging.SearchArticlePagingSource
+import com.spaceflight.core.data.util.safeCall
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
 import com.spaceflight.core.domain.model.Article
 import com.spaceflight.core.domain.repository.ArticleRepository
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -78,7 +77,7 @@ class ArticleRepositoryImpl @Inject constructor(
             cached?.toDomain() ?: favorite?.toDomain()
         }.distinctUntilChanged()
 
-    override suspend fun refreshArticle(id: Int): Result<Unit> = try {
+    override suspend fun refreshArticle(id: Int): Result<Unit> = safeCall {
         val entity = api.getArticle(id).toEntity()
         articleDao.upsertAll(listOf(entity))
         favoriteDao.getById(id)?.let { existing ->
@@ -98,11 +97,6 @@ class ArticleRepositoryImpl @Inject constructor(
                 )
             )
         }
-        Result.success(Unit)
-    } catch (cancellation: CancellationException) {
-        throw cancellation
-    } catch (error: Exception) {
-        Result.failure(error.toAppError())
     }
 
     private fun pagingConfig() = PagingConfig(

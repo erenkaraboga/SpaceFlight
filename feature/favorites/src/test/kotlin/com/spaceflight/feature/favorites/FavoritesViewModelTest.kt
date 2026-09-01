@@ -1,9 +1,10 @@
 package com.spaceflight.feature.favorites
 
 import app.cash.turbine.test
-import com.spaceflight.core.domain.usecase.AddFavoriteUseCase
+import com.spaceflight.core.domain.model.AppError
 import com.spaceflight.core.domain.usecase.ObserveFavoritesUseCase
 import com.spaceflight.core.domain.usecase.RemoveFavoriteUseCase
+import com.spaceflight.core.ui.error.toUiText
 import com.spaceflight.feature.favorites.logic.FavoritesEffect
 import com.spaceflight.feature.favorites.logic.FavoritesEvent
 import com.spaceflight.feature.favorites.logic.FavoritesViewModel
@@ -12,6 +13,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 
@@ -35,61 +37,72 @@ class FavoritesViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
+        assertNull(state.error)
         assertEquals(listOf(1, 2), state.favorites.map { it.id })
     }
 
     @Test
-    fun `removing an article drops it and offers an undo`() = runTest(
+    fun `removing an article drops it from the list`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.effects.test {
-            viewModel.onEvent(FavoritesEvent.FavoriteRemoved(testArticle(1)))
-
-            assertEquals(
-                FavoritesEffect.ShowUndoRemoval("Article 1"),
-                awaitItem(),
-            )
-        }
+        viewModel.onEvent(FavoritesEvent.FavoriteRemoved(testArticle(1)))
         advanceUntilIdle()
 
         assertEquals(listOf(2), viewModel.uiState.value.favorites.map { it.id })
     }
 
     @Test
-    fun `undo restores the article that was just removed`() = runTest(
+    fun `a failed removal surfaces the same mapped message every screen would show`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = createViewModel()
         advanceUntilIdle()
-        viewModel.onEvent(FavoritesEvent.FavoriteRemoved(testArticle(1, "Starship static fire")))
-        advanceUntilIdle()
+        repository.failNextWrite(AppError.NoConnection())
 
-        viewModel.onEvent(FavoritesEvent.UndoRemoval)
-        advanceUntilIdle()
+        viewModel.effects.test {
+            viewModel.onEvent(FavoritesEvent.FavoriteRemoved(testArticle(1)))
 
-        val restored = viewModel.uiState.value.favorites.first { it.id == 1 }
-        assertEquals("Starship static fire", restored.title)
+            assertEquals(FavoritesEffect.ShowMessage(AppError.NoConnection().toUiText()), awaitItem())
+        }
+        // The removal itself never went through, so the article is still there.
+        assertEquals(listOf(1, 2), viewModel.uiState.value.favorites.map { it.id })
     }
 
     @Test
-    fun `undo without a prior removal does nothing`() = runTest(
+    fun `a failure loading favorites is shown as a full-screen error, not silently swallowed`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
+        repository.failNextObserve(AppError.NoConnection())
+
         val viewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.onEvent(FavoritesEvent.UndoRemoval)
+        val state = viewModel.uiState.value
+        assertFalse(state.isLoading)
+        assertEquals(AppError.NoConnection().toUiText(), state.error)
+    }
+
+    @Test
+    fun `retrying after a load failure re-subscribes and recovers`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        repository.failNextObserve(AppError.NoConnection())
+        val viewModel = createViewModel()
         advanceUntilIdle()
 
-        assertEquals(listOf(1, 2), viewModel.uiState.value.favorites.map { it.id })
+        viewModel.onEvent(FavoritesEvent.Retry)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertNull(state.error)
+        assertEquals(listOf(1, 2), state.favorites.map { it.id })
     }
 
     private fun createViewModel() = FavoritesViewModel(
         observeFavorites = ObserveFavoritesUseCase(repository),
-        addFavorite = AddFavoriteUseCase(repository),
         removeFavorite = RemoveFavoriteUseCase(repository),
     )
 }

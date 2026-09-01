@@ -4,7 +4,4 @@
     <string name="favorites_subtitle">Tekrar okumak istediğin haberler</string>
     <string name="favorites_empty_title">Kayıt yok</string>
     <string name="favorites_empty_description">Bir habere kalp bırak, burada dursun.</string>
-    <string name="favorites_remove">Favorilerden çıkar</string>
-    <string name="favorites_removed">Favorilerden çıkarıldı</string>
-    <string name="favorites_undo">Geri al</string>
 </resources>

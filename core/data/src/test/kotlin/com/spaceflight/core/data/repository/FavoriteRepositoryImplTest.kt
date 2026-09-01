@@ -2,6 +2,7 @@ package com.spaceflight.core.data.repository
 
 import app.cash.turbine.test
 import com.spaceflight.core.data.fake.FakeFavoriteArticleDao
+import com.spaceflight.core.domain.model.AppError
 import com.spaceflight.core.domain.model.Article
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -9,6 +10,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.IOException
 import java.time.Instant
 
 class FavoriteRepositoryImplTest {
@@ -18,7 +20,7 @@ class FavoriteRepositoryImplTest {
 
     @Test
     fun `toggling an unfavorited article stores it and reports it as favorited`() = runTest {
-        val added = repository.toggleFavorite(article(1))
+        val added = repository.toggleFavorite(article(1)).getOrThrow()
 
         assertTrue(added)
         assertEquals(listOf(1), repository.observeFavoriteIds().first().toList())
@@ -28,7 +30,7 @@ class FavoriteRepositoryImplTest {
     fun `toggling a favorited article removes it again`() = runTest {
         repository.toggleFavorite(article(1))
 
-        val stillFavorited = repository.toggleFavorite(article(1))
+        val stillFavorited = repository.toggleFavorite(article(1)).getOrThrow()
 
         assertFalse(stillFavorited)
         assertTrue(repository.observeFavorites().first().isEmpty())
@@ -64,6 +66,26 @@ class FavoriteRepositoryImplTest {
             repository.addFavorite(article(3))
             assertTrue(awaitItem())
         }
+    }
+
+    @Test
+    fun `a dao failure while adding a favorite is reported as a Result failure, not a crash`() = runTest {
+        dao.failNextWrite(IOException("disk full"))
+
+        val result = repository.addFavorite(article(1))
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is AppError.NoConnection)
+    }
+
+    @Test
+    fun `a dao failure while toggling a favorite is reported as a Result failure`() = runTest {
+        dao.failNextWrite(IOException("disk full"))
+
+        val result = repository.toggleFavorite(article(1))
+
+        assertTrue(result.isFailure)
+        assertTrue(repository.observeFavorites().first().isEmpty())
     }
 
     private fun article(id: Int) = Article(

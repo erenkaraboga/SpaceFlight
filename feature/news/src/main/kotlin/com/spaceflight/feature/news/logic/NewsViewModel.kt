@@ -8,7 +8,12 @@ import com.spaceflight.core.domain.connectivity.NetworkMonitor
 import com.spaceflight.core.domain.model.Article
 import com.spaceflight.core.domain.usecase.GetArticlesUseCase
 import com.spaceflight.core.domain.usecase.ObserveFavoriteIdsUseCase
+import com.spaceflight.core.domain.usecase.ObserveGridLayoutUseCase
+import com.spaceflight.core.domain.usecase.SetGridLayoutUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
+import com.spaceflight.core.ui.error.toAppErrorOrUnknown
+import com.spaceflight.core.ui.error.toUiText
+import com.spaceflight.designsystem.text.UiText
 import com.spaceflight.feature.news.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,6 +40,8 @@ class NewsViewModel @Inject constructor(
     getArticles: GetArticlesUseCase,
     private val toggleFavorite: ToggleFavoriteUseCase,
     observeFavoriteIds: ObserveFavoriteIdsUseCase,
+    private val setGridLayout: SetGridLayoutUseCase,
+    observeGridLayout: ObserveGridLayoutUseCase,
     networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
@@ -56,6 +63,10 @@ class NewsViewModel @Inject constructor(
             .onEach { ids -> _uiState.update { it.copy(favoriteIds = ids) } }
             .launchIn(viewModelScope)
 
+        observeGridLayout()
+            .onEach { isGrid -> _uiState.update { it.copy(isGridLayout = isGrid) } }
+            .launchIn(viewModelScope)
+
         networkMonitor.isOnline
             .onEach { isOnline -> _uiState.update { it.copy(isOffline = !isOnline) } }
             .launchIn(viewModelScope)
@@ -75,13 +86,22 @@ class NewsViewModel @Inject constructor(
                 }
 
             is NewsEvent.FavoriteToggled -> viewModelScope.launch {
-                val added = toggleFavorite(event.article)
-                _effects.send(
-                    NewsEffect.ShowMessage(
-                        if (added) R.string.news_added_to_favorites
-                        else R.string.news_removed_from_favorites
-                    )
+                val text = toggleFavorite(event.article).fold(
+                    onSuccess = { added ->
+                        UiText.Resource(
+                            if (added) R.string.news_added_to_favorites
+                            else R.string.news_removed_from_favorites,
+                        )
+                    },
+                    onFailure = { error -> error.toAppErrorOrUnknown().toUiText() },
                 )
+                _effects.send(NewsEffect.ShowMessage(text))
+            }
+
+            NewsEvent.LayoutToggled -> {
+                val next = !_uiState.value.isGridLayout
+                _uiState.update { it.copy(isGridLayout = next) }
+                viewModelScope.launch { setGridLayout(next) }
             }
         }
     }

@@ -34,8 +34,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.spaceflight.core.domain.model.Article
 import com.spaceflight.designsystem.component.EmptyState
-import com.spaceflight.designsystem.component.ErrorView
-import com.spaceflight.designsystem.component.InlineRetry
 import com.spaceflight.designsystem.component.OfflineBanner
 import com.spaceflight.designsystem.component.ScreenCanvas
 import com.spaceflight.designsystem.component.SearchHeader
@@ -63,7 +61,8 @@ fun NewsList(
 ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
-    val (isGrid, toggleGrid) = rememberGridLayout()
+    val isGrid = state.isGridLayout
+    val toggleGrid: () -> Unit = { onEvent(NewsEvent.LayoutToggled) }
     val isRefreshing = articles.loadState.refresh is LoadState.Loading &&
         articles.itemCount > 0
 
@@ -96,19 +95,13 @@ fun NewsList(
                         onToggleLayout = toggleGrid,
                     )
 
-                    articles.isInitialFailure() -> ErrorView(
-                        title = stringResource(R.string.news_error_title),
-                        description = articles.refreshErrorMessage(),
-                        onRetry = articles::retry,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-
-                    articles.isEmptyResult() -> EmptyState(
+                    articles.itemCount == 0 -> EmptyState(
                         title = stringResource(R.string.news_empty_title),
-                        description = stringResource(
-                            R.string.news_empty_description,
-                            state.searchQuery.trim(),
-                        ),
+                        description = if (state.searchQuery.isBlank()) {
+                            stringResource(R.string.news_empty_generic_description)
+                        } else {
+                            stringResource(R.string.news_empty_description, state.searchQuery.trim())
+                        },
                         icon = Icons.Rounded.SearchOff,
                         modifier = Modifier.fillMaxSize(),
                     )
@@ -216,15 +209,9 @@ private fun ArticleFeed(
                 )
             }
 
-            when (val append = articles.loadState.append) {
+            when (articles.loadState.append) {
                 is LoadState.Loading -> item(span = { GridItemSpan(maxLineSpan) }) {
                     ArticleCardPlaceholder()
-                }
-                is LoadState.Error -> item(span = { GridItemSpan(maxLineSpan) }) {
-                    InlineRetry(
-                        message = stringResource(append.error.messageResId()),
-                        onRetry = articles::retry,
-                    )
                 }
                 else -> Unit
             }
@@ -290,14 +277,8 @@ private fun ArticleFeed(
                 )
             }
 
-            when (val append = articles.loadState.append) {
+            when (articles.loadState.append) {
                 is LoadState.Loading -> item { ArticleCardPlaceholder() }
-                is LoadState.Error -> item {
-                    InlineRetry(
-                        message = stringResource(append.error.messageResId()),
-                        onRetry = articles::retry,
-                    )
-                }
                 else -> Unit
             }
         }

@@ -2,6 +2,7 @@ package com.spaceflight.feature.favorites.logic
 
 import androidx.compose.runtime.Immutable
 import com.spaceflight.core.domain.model.Article
+import com.spaceflight.designsystem.text.UiText
 
 @Immutable
 data class FavoritesUiState(
@@ -14,5 +15,5 @@ sealed interface FavoritesEvent {
 }
 
 sealed interface FavoritesEffect {
-    data class ShowUndoRemoval(val articleTitle: String) : FavoritesEffect
+    data class ShowMessage(val text: UiText) : FavoritesEffect
 }

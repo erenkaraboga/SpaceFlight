@@ -52,9 +52,15 @@ class FakeArticleDao(initial: List<ArticleEntity> = emptyList()) : ArticleDao {
 
 class FakeFavoriteArticleDao(
     initial: List<FavoriteArticleEntity> = emptyList(),
+    private var failure: Throwable? = null,
 ) : FavoriteArticleDao {
 
     private val favorites = MutableStateFlow(initial.associateBy { it.id })
+
+    /** Makes the next mutating call (`upsert`/`deleteById`) throw, to exercise the failure path. */
+    fun failNextWrite(error: Throwable) {
+        failure = error
+    }
 
     override fun observeAll(): Flow<List<FavoriteArticleEntity>> =
         favorites.map { it.values.sortedByDescending(FavoriteArticleEntity::favoritedAt) }
@@ -70,10 +76,12 @@ class FakeFavoriteArticleDao(
     override suspend fun getById(id: Int): FavoriteArticleEntity? = favorites.value[id]
 
     override suspend fun upsert(favorite: FavoriteArticleEntity) {
+        failure?.let { throw it.also { failure = null } }
         favorites.value = favorites.value + (favorite.id to favorite)
     }
 
     override suspend fun deleteById(id: Int) {
+        failure?.let { throw it.also { failure = null } }
         favorites.value = favorites.value - id
     }
 }

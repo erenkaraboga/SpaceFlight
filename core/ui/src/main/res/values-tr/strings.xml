@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_no_connection">İnternet bağlantısı yok. Ağınızı kontrol edip tekrar deneyin.</string>
+    <string name="error_timeout">İstek çok uzun sürdü. Tekrar deneyin.</string>
+    <string name="error_server">Haber servisi şu anda kullanılamıyor.</string>
+    <string name="error_parsing">Yanıt okunamadı.</string>
+    <string name="error_unknown">Bir şeyler ters gitti.</string>
+</resources>

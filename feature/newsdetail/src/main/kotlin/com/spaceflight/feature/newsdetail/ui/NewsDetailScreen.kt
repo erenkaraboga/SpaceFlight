@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -41,10 +42,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.spaceflight.designsystem.component.ErrorView
+import com.spaceflight.designsystem.component.EmptyState
 import com.spaceflight.designsystem.component.FavoriteButton
 import com.spaceflight.designsystem.motion.sharedContent
 import com.spaceflight.designsystem.motion.sharedImageKey
+import com.spaceflight.designsystem.text.asString
 import com.spaceflight.designsystem.util.openUrlInCustomTab
 import com.spaceflight.designsystem.util.rememberAbsoluteDate
 import com.spaceflight.designsystem.util.shareText
@@ -86,6 +88,9 @@ fun NewsDetailScreen(
                     ) {
                         snackbarHostState.showSnackbar(noBrowserMessage)
                     }
+
+                is NewsDetailEffect.ShowMessage ->
+                    snackbarHostState.showSnackbar(effect.text.asString(context))
             }
         }
     }
@@ -100,11 +105,10 @@ fun NewsDetailScreen(
             state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
-
-            state.article == null -> ErrorView(
+            state.article == null -> EmptyState(
                 title = stringResource(R.string.newsdetail_missing_title),
                 description = stringResource(R.string.newsdetail_missing_description),
-                onRetry = { viewModel.onEvent(NewsDetailEvent.Retry) },
+                icon = Icons.Rounded.SearchOff,
                 modifier = Modifier.fillMaxSize(),
             )
 

@@ -35,6 +35,7 @@ kotlin {
 
 dependencies {
     implementation(projects.core.domain)
+    implementation(projects.core.ui)
     api(projects.designsystem)
 
     implementation(libs.androidx.core.ktx)

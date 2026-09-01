@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ds_retry">Try again</string>
     <string name="ds_offline_banner">You are offline — showing cached content</string>
     <string name="ds_search_placeholder">Search</string>
     <string name="ds_open_search">Search</string>

@@ -4,8 +4,11 @@ import app.cash.turbine.test
 import com.spaceflight.core.domain.usecase.GetArticlesUseCase
 import com.spaceflight.core.domain.usecase.ObserveFavoriteIdsUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
+import com.spaceflight.designsystem.text.UiText
 import com.spaceflight.feature.news.logic.NewsEffect
 import com.spaceflight.feature.news.logic.NewsEvent
+import com.spaceflight.core.domain.model.AppError
+import com.spaceflight.core.ui.error.toUiText
 import com.spaceflight.feature.news.logic.NewsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -77,7 +80,7 @@ class NewsViewModelTest {
         viewModel.effects.test {
             viewModel.onEvent(NewsEvent.FavoriteToggled(testArticle(1)))
 
-            assertEquals(NewsEffect.ShowMessage(R.string.news_added_to_favorites), awaitItem())
+            assertEquals(NewsEffect.ShowMessage(UiText.Resource(R.string.news_added_to_favorites)), awaitItem())
         }
         advanceUntilIdle()
 
@@ -95,7 +98,22 @@ class NewsViewModelTest {
         viewModel.effects.test {
             viewModel.onEvent(NewsEvent.FavoriteToggled(testArticle(1)))
 
-            assertEquals(NewsEffect.ShowMessage(R.string.news_removed_from_favorites), awaitItem())
+            assertEquals(NewsEffect.ShowMessage(UiText.Resource(R.string.news_removed_from_favorites)), awaitItem())
+        }
+    }
+
+    @Test
+    fun `a failed favorite toggle surfaces the same mapped message every screen would show`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        favoriteRepository.failNextWrite(AppError.NoConnection())
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.effects.test {
+            viewModel.onEvent(NewsEvent.FavoriteToggled(testArticle(1)))
+
+            assertEquals(NewsEffect.ShowMessage(AppError.NoConnection().toUiText()), awaitItem())
         }
     }
 

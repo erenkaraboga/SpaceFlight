@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_no_connection">No internet connection. Check your network and try again.</string>
+    <string name="error_timeout">The request took too long. Try again.</string>
+    <string name="error_server">The news service is unavailable right now.</string>
+    <string name="error_parsing">The response could not be read.</string>
+    <string name="error_unknown">Something went wrong.</string>
+</resources>

@@ -3,6 +3,7 @@ package com.spaceflight.feature.newsdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
 import app.cash.turbine.test
+import com.spaceflight.core.domain.model.AppError
 import com.spaceflight.core.domain.model.Article
 import com.spaceflight.core.domain.repository.ArticleRepository
 import com.spaceflight.core.domain.repository.FavoriteRepository
@@ -10,6 +11,7 @@ import com.spaceflight.core.domain.usecase.ObserveArticleUseCase
 import com.spaceflight.core.domain.usecase.ObserveIsFavoriteUseCase
 import com.spaceflight.core.domain.usecase.RefreshArticleUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
+import com.spaceflight.core.ui.error.toUiText
 import com.spaceflight.feature.newsdetail.logic.NewsDetailEffect
 import com.spaceflight.feature.newsdetail.logic.NewsDetailEvent
 import com.spaceflight.feature.newsdetail.logic.NewsDetailViewModel
@@ -55,6 +57,7 @@ class NewsDetailViewModelTest {
 
         assertEquals("Starship static fire", viewModel.uiState.value.article?.title)
         assertFalse(viewModel.uiState.value.isLoading)
+        assertNull(viewModel.uiState.value.error)
         assertEquals(listOf(1), articleRepository.refreshedIds)
     }
 
@@ -70,6 +73,51 @@ class NewsDetailViewModelTest {
     }
 
     @Test
+    fun `a refresh failure with nothing cached is shown as a full-screen error`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        articleRepository.failNextRefresh(AppError.NoConnection())
+
+        val viewModel = createViewModel(articleId = 404)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertFalse(state.isLoading)
+        assertNull(state.article)
+        assertEquals(AppError.NoConnection().toUiText(), state.error)
+    }
+
+    @Test
+    fun `retrying after a failed refresh clears the error once it succeeds`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        articleRepository.failNextRefresh(AppError.NoConnection())
+        val viewModel = createViewModel(articleId = 404)
+        advanceUntilIdle()
+
+        viewModel.onEvent(NewsDetailEvent.Retry)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.error)
+    }
+
+    @Test
+    fun `a refresh failure with a cached article keeps showing it and only sends a message`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        articleRepository.failNextRefresh(AppError.NoConnection())
+        val viewModel = createViewModel(articleId = 1)
+
+        viewModel.effects.test {
+            advanceUntilIdle()
+
+            assertEquals(NewsDetailEffect.ShowMessage(AppError.NoConnection().toUiText()), awaitItem())
+        }
+        assertEquals("Starship static fire", viewModel.uiState.value.article?.title)
+        assertNull(viewModel.uiState.value.error)
+    }
+
+    @Test
     fun `favoriting flips the heart without a message`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
@@ -80,6 +128,21 @@ class NewsDetailViewModelTest {
         advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value.isFavorite)
+    }
+
+    @Test
+    fun `a failed favorite toggle surfaces the same mapped message every screen would show`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        val viewModel = createViewModel(articleId = 1)
+        advanceUntilIdle()
+        favoriteRepository.failNextWrite(AppError.NoConnection())
+
+        viewModel.effects.test {
+            viewModel.onEvent(NewsDetailEvent.FavoriteToggled)
+
+            assertEquals(NewsDetailEffect.ShowMessage(AppError.NoConnection().toUiText()), awaitItem())
+        }
     }
 
     @Test
@@ -148,6 +211,11 @@ private class FakeArticleRepository(
 ) : ArticleRepository {
 
     val refreshedIds = mutableListOf<Int>()
+    private var refreshFailure: AppError? = null
+
+    fun failNextRefresh(error: AppError) {
+        refreshFailure = error
+    }
 
     override fun getArticles(query: String): Flow<PagingData<Article>> =
         flowOf(PagingData.from(articles))
@@ -157,6 +225,7 @@ private class FakeArticleRepository(
 
     override suspend fun refreshArticle(id: Int): Result<Unit> {
         refreshedIds += id
+        refreshFailure?.let { return Result.failure(it.also { refreshFailure = null }) }
         return Result.success(Unit)
     }
 }
@@ -164,6 +233,11 @@ private class FakeArticleRepository(
 private class FakeFavoriteRepository : FavoriteRepository {
 
     private val favorites = MutableStateFlow<Map<Int, Article>>(emptyMap())
+    private var writeFailure: AppError? = null
+
+    fun failNextWrite(error: AppError) {
+        writeFailure = error
+    }
 
     override fun observeFavorites(): Flow<List<Article>> = favorites.map { it.values.toList() }
 
@@ -171,22 +245,28 @@ private class FakeFavoriteRepository : FavoriteRepository {
 
     override fun observeIsFavorite(id: Int): Flow<Boolean> = favorites.map { id in it }
 
-    override suspend fun addFavorite(article: Article) {
+    override suspend fun addFavorite(article: Article): Result<Unit> {
+        writeFailure?.let { return Result.failure(it.also { writeFailure = null }) }
         favorites.value = favorites.value + (article.id to article)
+        return Result.success(Unit)
     }
 
-    override suspend fun removeFavorite(id: Int) {
+    override suspend fun removeFavorite(id: Int): Result<Unit> {
+        writeFailure?.let { return Result.failure(it.also { writeFailure = null }) }
         favorites.value = favorites.value - id
+        return Result.success(Unit)
     }
 
-    override suspend fun toggleFavorite(article: Article): Boolean =
-        if (article.id in favorites.value) {
+    override suspend fun toggleFavorite(article: Article): Result<Boolean> {
+        writeFailure?.let { return Result.failure(it.also { writeFailure = null }) }
+        return if (article.id in favorites.value) {
             removeFavorite(article.id)
-            false
+            Result.success(false)
         } else {
             addFavorite(article)
-            true
+            Result.success(true)
         }
+    }
 }
 
 private fun testArticle(id: Int, title: String = "Article $id") = Article(

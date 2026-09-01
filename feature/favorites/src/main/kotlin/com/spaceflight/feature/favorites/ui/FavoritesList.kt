@@ -49,7 +49,6 @@ fun FavoritesList(
                 title = stringResource(R.string.favorites_title),
                 subtitle = stringResource(R.string.favorites_subtitle),
             )
-
             when {
                 state.isLoading -> Column(
                     verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -67,7 +66,6 @@ fun FavoritesList(
                 }
 
                 state.favorites.isEmpty() -> FavoritesEmpty()
-
                 else -> LazyColumn(
                     contentPadding = PaddingValues(
                         start = 16.dp,

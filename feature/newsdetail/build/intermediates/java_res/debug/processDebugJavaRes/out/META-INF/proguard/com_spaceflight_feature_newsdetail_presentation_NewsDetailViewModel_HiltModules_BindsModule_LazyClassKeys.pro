@@ -1,1 +1,0 @@
--keep,allowobfuscation,allowshrinking class com.spaceflight.feature.newsdetail.presentation.NewsDetailViewModel

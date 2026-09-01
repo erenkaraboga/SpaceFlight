@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.Inbox
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -36,57 +33,10 @@ import com.spaceflight.designsystem.R
 import com.spaceflight.designsystem.theme.SpaceflightTheme
 
 /**
- * Full-pane failure state, used when there is nothing cached to fall back to.
- *
- * @param title The headline text explaining what failed.
- * @param description Detailed message providing context or guidance for the user.
- * @param onRetry Callback invoked when the user clicks the retry button.
- * @param modifier The [Modifier] to be applied to the layout container.
- * @param icon The primary vector icon representing the error state. Defaults to [Icons.Rounded.CloudOff].
- */
-@Composable
-fun ErrorView(
-    title: String,
-    description: String,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier,
-    icon: ImageVector = Icons.Rounded.CloudOff,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(48.dp),
-        )
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
-        Button(onClick = onRetry) {
-            Icon(Icons.Rounded.Refresh, contentDescription = null, Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(R.string.ds_retry))
-        }
-    }
-}
-
-/**
- * Centered empty state placeholder displayed when a screen or list has no items.
+ * Centered placeholder shown when a screen or list has nothing to display — no items, or nothing
+ * cached yet after a failed load. Deliberately generic: it never renders a reason (that goes out as
+ * a transient snackbar instead), so there is only ever one "nothing here" look across the app
+ * instead of a separate error-specific widget.
  *
  * @param title The main headline text indicating the empty condition.
  * @param description Detailed message explaining why the list is empty or how to populate it.
@@ -168,36 +118,6 @@ fun OfflineBanner(
     }
 }
 
-/**
- * Inline retry row shown at the bottom of the list when appending a page fails.
- *
- * @param message Explanation or error message displayed alongside the retry button.
- * @param onRetry Callback invoked when the user taps the retry button.
- * @param modifier The [Modifier] to be applied to the row layout.
- */
-@Composable
-fun InlineRetry(
-    message: String,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f),
-        )
-        Button(onClick = onRetry) { Text(stringResource(R.string.ds_retry)) }
-    }
-}
-
 @Preview(name = "State & Feedback Components", showBackground = true)
 @Composable
 private fun StatusComponentsPreview() {
@@ -208,24 +128,10 @@ private fun StatusComponentsPreview() {
             ) {
                 OfflineBanner(isVisible = true)
 
-                InlineRetry(
-                    message = "Failed to load more spaceflight articles.",
-                    onRetry = {},
-                )
-
-                HorizontalDivider()
-
                 EmptyState(
                     title = "No Articles Yet",
                     description = "Articles and launches you save will appear here.",
                     icon = Icons.Rounded.Inbox,
-                )
-
-                HorizontalDivider()
-                ErrorView(
-                    title = "Connection Failed",
-                    description = "Unable to fetch articles",
-                    onRetry = {},
                 )
             }
         }

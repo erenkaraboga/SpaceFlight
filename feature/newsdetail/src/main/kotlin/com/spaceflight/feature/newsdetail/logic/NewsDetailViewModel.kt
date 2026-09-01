@@ -3,10 +3,14 @@ package com.spaceflight.feature.newsdetail.logic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.spaceflight.core.domain.usecase.ObserveArticleUseCase
 import com.spaceflight.core.domain.usecase.ObserveIsFavoriteUseCase
 import com.spaceflight.core.domain.usecase.RefreshArticleUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
+import com.spaceflight.core.ui.error.toAppErrorOrUnknown
+import com.spaceflight.core.ui.error.toUiText
+import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -29,9 +33,7 @@ class NewsDetailViewModel @Inject constructor(
     private val toggleFavorite: ToggleFavoriteUseCase,
 ) : ViewModel() {
 
-    private val articleId: Int = checkNotNull(savedStateHandle["articleId"]) {
-        "NewsDetailRoute.articleId is required"
-    }
+    private val articleId: Int = savedStateHandle.toRoute<NewsDetailRoute>().articleId
 
     private val _uiState = MutableStateFlow(NewsDetailUiState())
     val uiState: StateFlow<NewsDetailUiState> = _uiState.asStateFlow()
@@ -52,7 +54,7 @@ class NewsDetailViewModel @Inject constructor(
             .onEach { isFavorite -> _uiState.update { it.copy(isFavorite = isFavorite) } }
             .launchIn(viewModelScope)
 
-        refresh()
+        refreshArticle()
     }
 
     fun onEvent(event: NewsDetailEvent) {
@@ -63,7 +65,13 @@ class NewsDetailViewModel @Inject constructor(
 
             NewsDetailEvent.FavoriteToggled -> viewModelScope.launch {
                 val article = _uiState.value.article ?: return@launch
-                toggleFavorite(article)
+                toggleFavorite(article).onFailure { error ->
+                    _effects.send(
+                        NewsDetailEffect.ShowMessage(
+                            error.toAppErrorOrUnknown().toUiText()
+                        )
+                    )
+                }
             }
 
             NewsDetailEvent.ShareRequested -> viewModelScope.launch {
@@ -75,17 +83,21 @@ class NewsDetailViewModel @Inject constructor(
                 val article = _uiState.value.article ?: return@launch
                 _effects.send(NewsDetailEffect.OpenInBrowser(article.url))
             }
-
-            NewsDetailEvent.Retry -> refresh()
         }
     }
 
-    private fun refresh() {
+    private fun refreshArticle() {
         viewModelScope.launch {
-            refreshArticle(articleId)
-            if (_uiState.value.article == null) {
-                _uiState.update { it.copy(isLoading = false) }
-            }
+            refreshArticle(articleId).fold(
+                onSuccess = { _uiState.update { it.copy(isLoading = false) } },
+                onFailure = { error ->
+                    _effects.send(
+                        NewsDetailEffect.ShowMessage(
+                            error.toAppErrorOrUnknown().toUiText()
+                        )
+                    )
+                },
+            )
         }
     }
 }
