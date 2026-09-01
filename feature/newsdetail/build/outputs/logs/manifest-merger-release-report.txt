@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml:2:13-83
+INJECTED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml:2:13-83
+	package
+		INJECTED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml
+	xmlns:android
+		ADDED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml:2:23-81
+uses-sdk
+INJECTED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml reason: use-sdk injection requested
+INJECTED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml
+INJECTED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml
+	android:targetSdkVersion
+		INJECTED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml
+	android:minSdkVersion
+		INJECTED from /Users/eren/SpaceFlight/feature/newsdetail/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15636528811429220488.xml
