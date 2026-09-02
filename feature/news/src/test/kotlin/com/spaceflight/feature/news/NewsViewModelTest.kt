@@ -3,6 +3,8 @@ package com.spaceflight.feature.news
 import app.cash.turbine.test
 import com.spaceflight.feature.news.domain.usecase.GetArticlesUseCase
 import com.spaceflight.feature.news.domain.usecase.ObserveFavoriteIdsUseCase
+import com.spaceflight.feature.news.domain.usecase.ObserveGridLayoutUseCase
+import com.spaceflight.feature.news.domain.usecase.SetGridLayoutUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.designsystem.text.UiText
 import com.spaceflight.feature.news.presentation.state.NewsEffect
@@ -11,6 +13,7 @@ import com.spaceflight.core.model.AppError
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.feature.news.presentation.NewsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -31,6 +34,7 @@ class NewsViewModelTest {
     )
     private val favoriteRepository = FakeFavoriteRepository()
     private val networkMonitor = FakeNetworkMonitor()
+    private val userPreferencesRepository = FakeUserPreferencesRepository()
 
     @Test
     fun `keystrokes collapse into a single search request`() = runTest(
@@ -130,10 +134,45 @@ class NewsViewModelTest {
         assertTrue(viewModel.uiState.value.isOffline)
     }
 
+    @Test
+    fun `the saved grid layout preference is loaded into the initial state`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        val viewModel = NewsViewModel(
+            getArticles = GetArticlesUseCase(articleRepository),
+            toggleFavorite = ToggleFavoriteUseCase(favoriteRepository),
+            observeFavoriteIds = ObserveFavoriteIdsUseCase(favoriteRepository),
+            setGridLayout = SetGridLayoutUseCase(userPreferencesRepository),
+            observeGridLayout = ObserveGridLayoutUseCase(
+                FakeUserPreferencesRepository(initialGridLayout = true),
+            ),
+            networkMonitor = networkMonitor,
+        )
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isGridLayout)
+    }
+
+    @Test
+    fun `toggling the layout flips the state immediately and persists in the background`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onEvent(NewsEvent.LayoutToggled)
+
+        assertTrue("the flag flips before the write completes", viewModel.uiState.value.isGridLayout)
+        advanceUntilIdle()
+        assertTrue(userPreferencesRepository.isGridLayout.first())
+    }
+
     private fun createViewModel() = NewsViewModel(
         getArticles = GetArticlesUseCase(articleRepository),
         toggleFavorite = ToggleFavoriteUseCase(favoriteRepository),
         observeFavoriteIds = ObserveFavoriteIdsUseCase(favoriteRepository),
+        setGridLayout = SetGridLayoutUseCase(userPreferencesRepository),
+        observeGridLayout = ObserveGridLayoutUseCase(userPreferencesRepository),
         networkMonitor = networkMonitor,
     )
 }

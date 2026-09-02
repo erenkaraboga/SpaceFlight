@@ -2,15 +2,35 @@ package com.spaceflight.feature.news
 
 import androidx.paging.PagingData
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
-import com.spaceflight.core.model.AppError
-import com.spaceflight.core.model.Article
 import com.spaceflight.core.domain.repository.ArticleRepository
 import com.spaceflight.core.domain.repository.FavoriteRepository
+import com.spaceflight.core.domain.repository.UserPreferencesRepository
+import com.spaceflight.core.model.AppError
+import com.spaceflight.core.model.Article
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.rules.TestWatcher
+import org.junit.runner.Description
 import java.time.Instant
+
+/** `viewModelScope` runs on the main dispatcher, which does not exist in a JVM test. */
+@OptIn(ExperimentalCoroutinesApi::class)
+class MainDispatcherRule(
+    val testDispatcher: TestDispatcher = StandardTestDispatcher(),
+) : TestWatcher() {
+
+    override fun starting(description: Description) = Dispatchers.setMain(testDispatcher)
+
+    override fun finished(description: Description) = Dispatchers.resetMain()
+}
 
 class FakeArticleRepository(
     private val articles: List<Article> = emptyList(),
@@ -78,6 +98,26 @@ class FakeNetworkMonitor(isOnline: Boolean = true) : NetworkMonitor {
 
     fun setOnline(value: Boolean) {
         online.value = value
+    }
+}
+
+class FakeUserPreferencesRepository(
+    initialGridLayout: Boolean = false,
+) : UserPreferencesRepository {
+
+    private val darkTheme = MutableStateFlow<Boolean?>(null)
+    private val gridLayout = MutableStateFlow(initialGridLayout)
+
+    override val darkThemeOverride: Flow<Boolean?> = darkTheme
+
+    override suspend fun setDarkThemeOverride(enabled: Boolean) {
+        darkTheme.value = enabled
+    }
+
+    override val isGridLayout: Flow<Boolean> = gridLayout
+
+    override suspend fun setGridLayout(enabled: Boolean) {
+        gridLayout.value = enabled
     }
 }
 
