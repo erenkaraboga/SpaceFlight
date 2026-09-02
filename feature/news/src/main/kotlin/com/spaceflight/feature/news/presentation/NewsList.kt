@@ -103,7 +103,7 @@ fun NewsList(
                     isFullyLoadedAndEmpty -> {
                         EmptyState(
                             title = stringResource(R.string.news_empty_title),
-                            description = stringResource(R.string.news_empty_description),
+                            description = stringResource(R.string.news_empty_generic_description),
                             icon = Icons.Rounded.SearchOff,
                             modifier = Modifier
                                 .fillMaxSize()

@@ -6,7 +6,6 @@
     <string name="news_latest">Latest</string>
     <string name="news_empty_title">No articles found</string>
     <string name="news_empty_generic_description">Nothing here yet. Pull down to refresh.</string>
-    <string name="news_empty_description">Nothing matched “%1$s”. Try a different keyword.</string>
     <string name="news_added_to_favorites">Added to favorites</string>
     <string name="news_removed_from_favorites">Removed from favorites</string>
     <string name="news_error_title">Something went wrong</string>

@@ -8,13 +8,8 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Newspaper
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.spaceflight.R
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object NewsRoute
-
-@Serializable
-data object FavoritesRoute
+import com.spaceflight.feature.favorites.navigation.FavoritesRoute
+import com.spaceflight.feature.news.navigation.NewsRoute
 
 enum class TopLevelDestination(
     val route: Any,
