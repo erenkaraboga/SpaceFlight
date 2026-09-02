@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,11 +33,27 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideForceHttpsInterceptor(): Interceptor = Interceptor { chain ->
+        val request = chain.request()
+        val url = request.url
+
+        val newUrl = if (url.scheme == "http") {
+            url.newBuilder().scheme("https").build()
+        } else {
+            url
+        }
+        chain.proceed(request.newBuilder().url(newUrl).build())
+    }
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
+        forceHttpsInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(20, TimeUnit.SECONDS)
+        .addInterceptor(forceHttpsInterceptor)
         .addInterceptor(
             HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG) {

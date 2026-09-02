@@ -36,7 +36,7 @@ fun NewsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 is NewsEffect.ShowMessage ->

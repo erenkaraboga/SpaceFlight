@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,6 +54,7 @@ import com.spaceflight.feature.newsdetail.presentation.components.ArticleDetailC
 import com.spaceflight.feature.newsdetail.presentation.components.heroTitleAlpha
 import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEffect
 import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEvent
+import kotlinx.coroutines.launch
 
 @Composable
 fun NewsDetailScreen(
@@ -62,20 +64,21 @@ fun NewsDetailScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
     val chooserTitle = stringResource(R.string.newsdetail_share_chooser)
     val noBrowserMessage = stringResource(R.string.newsdetail_no_browser)
 
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 NewsDetailEffect.NavigateBack -> onBack()
 
                 is NewsDetailEffect.OpenInBrowser ->
                     if (!context.openUrlInCustomTab(effect.url, toolbarColor)) {
-                        snackbarHostState.showSnackbar(noBrowserMessage)
+                        scope.launch { snackbarHostState.showSnackbar(noBrowserMessage) }
                     }
 
                 is NewsDetailEffect.ShareArticle ->
@@ -85,11 +88,13 @@ fun NewsDetailScreen(
                             chooserTitle,
                         )
                     ) {
-                        snackbarHostState.showSnackbar(noBrowserMessage)
+                        scope.launch { snackbarHostState.showSnackbar(noBrowserMessage) }
                     }
 
-                is NewsDetailEffect.ShowMessage ->
-                    snackbarHostState.showSnackbar(effect.text.asString(context))
+                is NewsDetailEffect.ShowMessage -> {
+                    val message = effect.text.asString(context)
+                    scope.launch { snackbarHostState.showSnackbar(message) }
+                }
             }
         }
     }
@@ -101,7 +106,10 @@ fun NewsDetailScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { _ ->
         when {
-            state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            state.isLoading -> Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
 
@@ -119,7 +127,7 @@ fun NewsDetailScreen(
                 }
                 state.article?.let { article ->
                     Box(
-                        Modifier
+                        modifier = Modifier
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.background),
                     ) {

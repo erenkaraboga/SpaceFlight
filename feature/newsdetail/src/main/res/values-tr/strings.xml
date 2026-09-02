@@ -4,8 +4,6 @@
     <string name="newsdetail_share">Paylaş</string>
     <string name="newsdetail_share_chooser">Haberi şununla paylaş</string>
     <string name="newsdetail_no_browser">Bu bağlantıyı açabilecek bir uygulama yok</string>
-    <string name="newsdetail_added_to_favorites">Favorilere eklendi</string>
-    <string name="newsdetail_removed_from_favorites">Favorilerden çıkarıldı</string>
     <string name="newsdetail_missing_title">Haber bulunamadı</string>
     <string name="newsdetail_missing_description">Bu haber artık önbellekte yok. Geri dönüp tekrar deneyin.</string>
     <string name="newsdetail_read_full_article">Haberin tamamını oku</string>
