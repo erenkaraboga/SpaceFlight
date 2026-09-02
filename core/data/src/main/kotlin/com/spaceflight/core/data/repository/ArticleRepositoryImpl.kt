@@ -100,9 +100,10 @@ class ArticleRepositoryImpl @Inject constructor(
 
     private fun pagingConfig() = PagingConfig(
         pageSize = PAGE_SIZE,
-        initialLoadSize = PAGE_SIZE,
-        prefetchDistance = PAGE_SIZE / 2,
-        enablePlaceholders = false,
+        initialLoadSize = PAGE_SIZE * 2,
+        prefetchDistance = PAGE_SIZE,
+        enablePlaceholders = true,
+        maxSize = PagingConfig.MAX_SIZE_UNBOUNDED,
     )
 
     companion object {

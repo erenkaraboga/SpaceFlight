@@ -43,7 +43,9 @@ import com.spaceflight.designsystem.component.FloatingTabBarDefaults
 import com.spaceflight.designsystem.motion.LocalNavAnimatedVisibilityScope
 import com.spaceflight.designsystem.motion.LocalSharedTransitionScope
 import com.spaceflight.designsystem.theme.SpaceflightMotion
+import com.spaceflight.feature.favorites.navigation.FavoritesRoute
 import com.spaceflight.feature.favorites.presentation.FavoritesScreen
+import com.spaceflight.feature.news.navigation.NewsRoute
 import com.spaceflight.feature.news.presentation.NewsScreen
 import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
 import com.spaceflight.feature.newsdetail.presentation.NewsDetailScreen

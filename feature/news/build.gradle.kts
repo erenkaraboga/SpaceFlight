@@ -2,6 +2,7 @@ plugins {
     id("spaceflight.android.library")
     id("spaceflight.android.compose")
     id("spaceflight.android.hilt")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -15,6 +16,7 @@ dependencies {
     api(projects.designsystem)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.material.icons.extended)
