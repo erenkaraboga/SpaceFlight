@@ -29,9 +29,6 @@ android {
             )
         }
     }
-
-    // :app assembles the final APK, so it's what actually dexes/desugars the java.time calls made
-    // inside core:model, core:data and designsystem.
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }

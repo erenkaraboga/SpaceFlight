@@ -6,7 +6,6 @@ plugins {
 android {
     namespace = "com.spaceflight.core.data"
 
-    // ArticleMapper.kt calls java.time directly (Instant.parse/ofEpochMilli), API 26+.
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }

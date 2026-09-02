@@ -3,14 +3,8 @@ package com.spaceflight.navigation
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,8 +27,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.spaceflight.designsystem.component.FloatingTab
@@ -42,13 +34,9 @@ import com.spaceflight.designsystem.component.FloatingTabBar
 import com.spaceflight.designsystem.component.FloatingTabBarDefaults
 import com.spaceflight.designsystem.motion.LocalNavAnimatedVisibilityScope
 import com.spaceflight.designsystem.motion.LocalSharedTransitionScope
-import com.spaceflight.designsystem.theme.SpaceflightMotion
 import com.spaceflight.feature.favorites.navigation.FavoritesRoute
-import com.spaceflight.feature.favorites.presentation.FavoritesScreen
 import com.spaceflight.feature.news.navigation.NewsRoute
-import com.spaceflight.feature.news.presentation.NewsScreen
 import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailScreen
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 
@@ -89,104 +77,10 @@ fun SpaceflightApp(modifier: Modifier = Modifier) {
                 .hazeSource(state = hazeState),
         ) {
             CompositionLocalProvider(LocalSharedTransitionScope provides this) {
-                NavHost(
+                SpaceflightNavHost(
                     navController = navController,
-                    startDestination = NewsRoute,
-                    enterTransition = {
-                        fadeIn(
-                            tween(
-                                durationMillis = SpaceflightMotion.FadeThroughEnterMillis,
-                                delayMillis = SpaceflightMotion.FadeThroughExitMillis,
-                                easing = FastOutSlowInEasing,
-                            ),
-                        ) + scaleIn(
-                            animationSpec = tween(
-                                durationMillis = SpaceflightMotion.FadeThroughEnterMillis,
-                                delayMillis = SpaceflightMotion.FadeThroughExitMillis,
-                                easing = FastOutSlowInEasing,
-                            ),
-                            initialScale = 0.97f,
-                        )
-                    },
-                    exitTransition = {
-                        fadeOut(
-                            tween(
-                                durationMillis = SpaceflightMotion.FadeThroughExitMillis,
-                                easing = LinearOutSlowInEasing,
-                            ),
-                        )
-                    },
-                    popEnterTransition = {
-                        fadeIn(
-                            tween(
-                                durationMillis = SpaceflightMotion.FadeThroughEnterMillis,
-                                delayMillis = SpaceflightMotion.FadeThroughExitMillis,
-                                easing = FastOutSlowInEasing,
-                            ),
-                        )
-                    },
-                    popExitTransition = {
-                        fadeOut(
-                            tween(
-                                durationMillis = SpaceflightMotion.FadeThroughExitMillis + 40,
-                                easing = LinearOutSlowInEasing,
-                            ),
-                        )
-                    },
                     modifier = Modifier.fillMaxSize(),
-                ) {
-                    composable<NewsRoute> {
-                        SharedPane {
-                            NewsScreen(
-                                onArticleClick = { id ->
-                                    navController.navigate(NewsDetailRoute(id))
-                                },
-                            )
-                        }
-                    }
-                    composable<FavoritesRoute> {
-                        SharedPane {
-                            FavoritesScreen(
-                                onArticleClick = { id ->
-                                    navController.navigate(NewsDetailRoute(id))
-                                },
-                            )
-                        }
-                    }
-                    composable<NewsDetailRoute>(
-                        enterTransition = {
-                            fadeIn(
-                                tween(
-                                    durationMillis = SpaceflightMotion.SharedEnterMillis,
-                                    easing = FastOutSlowInEasing,
-                                ),
-                            )
-                        },
-                        exitTransition = {
-                            fadeOut(tween(220, easing = LinearOutSlowInEasing))
-                        },
-                        popEnterTransition = {
-                            fadeIn(
-                                tween(
-                                    durationMillis = 300,
-                                    easing = FastOutSlowInEasing,
-                                ),
-                            )
-                        },
-                        popExitTransition = {
-                            fadeOut(
-                                tween(
-                                    durationMillis = 300,
-                                    easing = FastOutSlowInEasing,
-                                ),
-                            )
-                        },
-                    ) {
-                        SharedPane {
-                            NewsDetailScreen(onBack = { navController.popBackStack() })
-                        }
-                    }
-                }
+                )
             }
         }
 
@@ -218,7 +112,7 @@ fun SpaceflightApp(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun AnimatedVisibilityScope.SharedPane(content: @Composable () -> Unit) {
+internal fun AnimatedVisibilityScope.SharedPane(content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this) {
         content()
     }

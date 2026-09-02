@@ -5,9 +5,6 @@ plugins {
 
 android {
     namespace = "com.spaceflight.designsystem"
-
-    // DateFormatting.kt calls java.time directly (Instant/LocalDate/DateTimeFormatter), which is
-    // API 26+ -- desugaring backports it down to minSdk 24.
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }
