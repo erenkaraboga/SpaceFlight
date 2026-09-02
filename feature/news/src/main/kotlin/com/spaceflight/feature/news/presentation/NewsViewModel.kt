@@ -15,6 +15,9 @@ import com.spaceflight.core.common.error.toAppErrorOrUnknown
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.designsystem.text.UiText
 import com.spaceflight.feature.news.R
+import com.spaceflight.feature.news.presentation.state.NewsEffect
+import com.spaceflight.feature.news.presentation.state.NewsEvent
+import com.spaceflight.feature.news.presentation.state.NewsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

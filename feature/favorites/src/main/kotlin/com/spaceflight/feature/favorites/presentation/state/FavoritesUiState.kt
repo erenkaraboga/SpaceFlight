@@ -1,4 +1,4 @@
-package com.spaceflight.feature.favorites.presentation
+package com.spaceflight.feature.favorites.presentation.state
 
 import androidx.compose.runtime.Immutable
 import com.spaceflight.core.model.Article

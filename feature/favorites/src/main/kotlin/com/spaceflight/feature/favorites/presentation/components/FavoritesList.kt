@@ -1,4 +1,4 @@
-package com.spaceflight.feature.favorites.presentation
+package com.spaceflight.feature.favorites.presentation.components
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
@@ -33,6 +33,8 @@ import com.spaceflight.designsystem.motion.sharedImageKey
 import com.spaceflight.designsystem.theme.SpaceflightMotion
 import com.spaceflight.designsystem.util.rememberRelativeDate
 import com.spaceflight.feature.favorites.R
+import com.spaceflight.feature.favorites.presentation.state.FavoritesEvent
+import com.spaceflight.feature.favorites.presentation.state.FavoritesUiState
 
 @Composable
 fun FavoritesList(

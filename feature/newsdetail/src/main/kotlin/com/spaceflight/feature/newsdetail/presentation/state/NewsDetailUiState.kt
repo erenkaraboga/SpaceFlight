@@ -1,4 +1,4 @@
-package com.spaceflight.feature.newsdetail.presentation
+package com.spaceflight.feature.newsdetail.presentation.state
 
 import androidx.compose.runtime.Immutable
 import com.spaceflight.core.model.Article

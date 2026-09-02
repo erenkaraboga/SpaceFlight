@@ -5,8 +5,8 @@ import com.spaceflight.core.model.AppError
 import com.spaceflight.feature.favorites.domain.usecase.ObserveFavoritesUseCase
 import com.spaceflight.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.spaceflight.core.common.error.toUiText
-import com.spaceflight.feature.favorites.presentation.FavoritesEffect
-import com.spaceflight.feature.favorites.presentation.FavoritesEvent
+import com.spaceflight.feature.favorites.presentation.state.FavoritesEffect
+import com.spaceflight.feature.favorites.presentation.state.FavoritesEvent
 import com.spaceflight.feature.favorites.presentation.FavoritesViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle

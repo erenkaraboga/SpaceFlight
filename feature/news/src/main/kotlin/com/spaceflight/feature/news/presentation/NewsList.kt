@@ -38,6 +38,8 @@ import com.spaceflight.feature.news.presentation.components.FeedArticle
 import com.spaceflight.feature.news.presentation.components.HeroArticleCardPlaceholder
 import com.spaceflight.feature.news.presentation.components.LatestSectionHeader
 import com.spaceflight.feature.news.presentation.components.NewsLoading
+import com.spaceflight.feature.news.presentation.state.NewsEvent
+import com.spaceflight.feature.news.presentation.state.NewsUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -6,6 +6,9 @@ import com.spaceflight.feature.favorites.domain.usecase.ObserveFavoritesUseCase
 import com.spaceflight.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.spaceflight.core.common.error.toAppErrorOrUnknown
 import com.spaceflight.core.common.error.toUiText
+import com.spaceflight.feature.favorites.presentation.state.FavoritesEffect
+import com.spaceflight.feature.favorites.presentation.state.FavoritesEvent
+import com.spaceflight.feature.favorites.presentation.state.FavoritesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

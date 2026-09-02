@@ -5,8 +5,8 @@ import com.spaceflight.feature.news.domain.usecase.GetArticlesUseCase
 import com.spaceflight.feature.news.domain.usecase.ObserveFavoriteIdsUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.designsystem.text.UiText
-import com.spaceflight.feature.news.presentation.NewsEffect
-import com.spaceflight.feature.news.presentation.NewsEvent
+import com.spaceflight.feature.news.presentation.state.NewsEffect
+import com.spaceflight.feature.news.presentation.state.NewsEvent
 import com.spaceflight.core.model.AppError
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.feature.news.presentation.NewsViewModel

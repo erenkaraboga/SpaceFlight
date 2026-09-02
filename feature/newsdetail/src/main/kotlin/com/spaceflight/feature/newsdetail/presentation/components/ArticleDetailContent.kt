@@ -1,4 +1,4 @@
-package com.spaceflight.feature.newsdetail.presentation
+package com.spaceflight.feature.newsdetail.presentation.components
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background

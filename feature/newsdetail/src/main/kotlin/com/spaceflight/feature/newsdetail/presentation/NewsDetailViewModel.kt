@@ -11,6 +11,9 @@ import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.core.common.error.toAppErrorOrUnknown
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
+import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEffect
+import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEvent
+import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

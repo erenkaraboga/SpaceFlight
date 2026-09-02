@@ -12,8 +12,8 @@ import com.spaceflight.feature.newsdetail.domain.usecase.ObserveIsFavoriteUseCas
 import com.spaceflight.feature.newsdetail.domain.usecase.RefreshArticleUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.core.common.error.toUiText
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailEffect
-import com.spaceflight.feature.newsdetail.presentation.NewsDetailEvent
+import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEffect
+import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEvent
 import com.spaceflight.feature.newsdetail.presentation.NewsDetailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
