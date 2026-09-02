@@ -1,4 +1,4 @@
-package com.spaceflight
+package com.spaceflight.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable

@@ -32,7 +32,7 @@ import com.spaceflight.designsystem.component.staggeredEntrance
 import com.spaceflight.designsystem.motion.sharedContent
 import com.spaceflight.designsystem.motion.sharedImageKey
 import com.spaceflight.designsystem.theme.SpaceflightMotion
-import com.spaceflight.designsystem.util.rememberRelativeDate
+import com.spaceflight.designsystem.date.rememberRelativeDate
 import com.spaceflight.feature.favorites.R
 import com.spaceflight.feature.favorites.presentation.state.FavoritesEvent
 import com.spaceflight.feature.favorites.presentation.state.FavoritesUiState

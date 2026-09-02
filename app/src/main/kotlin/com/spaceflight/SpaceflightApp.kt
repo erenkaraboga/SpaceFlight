@@ -1,4 +1,4 @@
-package com.spaceflight.navigation
+package com.spaceflight
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -37,6 +37,8 @@ import com.spaceflight.designsystem.motion.LocalSharedTransitionScope
 import com.spaceflight.feature.favorites.navigation.FavoritesRoute
 import com.spaceflight.feature.news.navigation.NewsRoute
 import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
+import com.spaceflight.navigation.SpaceflightNavHost
+import com.spaceflight.navigation.TopLevelDestination
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 

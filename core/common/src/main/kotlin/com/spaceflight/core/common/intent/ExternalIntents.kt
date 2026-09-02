@@ -1,4 +1,4 @@
-package com.spaceflight.designsystem.util
+package com.spaceflight.core.common.intent
 
 import android.content.ActivityNotFoundException
 import android.content.Context

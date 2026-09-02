@@ -5,6 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.spaceflight.feature.favorites.presentation.FavoritesScreen
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object FavoritesRoute
 
 fun NavGraphBuilder.favoritesScreen(
     onArticleClick: (Int) -> Unit,

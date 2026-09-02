@@ -12,7 +12,7 @@ import com.spaceflight.designsystem.component.StaggeredEntranceState
 import com.spaceflight.designsystem.component.staggeredEntrance
 import com.spaceflight.designsystem.motion.sharedContent
 import com.spaceflight.designsystem.motion.sharedImageKey
-import com.spaceflight.designsystem.util.rememberRelativeDate
+import com.spaceflight.designsystem.date.rememberRelativeDate
 import com.spaceflight.feature.news.R
 import com.spaceflight.feature.news.presentation.state.NewsEvent
 import com.spaceflight.feature.news.presentation.state.NewsUiState

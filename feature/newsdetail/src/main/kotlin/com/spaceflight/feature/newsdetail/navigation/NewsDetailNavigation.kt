@@ -11,6 +11,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.spaceflight.designsystem.theme.SpaceflightMotion
 import com.spaceflight.feature.newsdetail.presentation.NewsDetailScreen
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class NewsDetailRoute(val articleId: Int)
 
 fun NavGraphBuilder.newsDetailScreen(
     onBack: () -> Unit,

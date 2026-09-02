@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.spaceflight.designsystem.theme.SpaceflightTheme
-import com.spaceflight.navigation.SpaceflightApp
+import com.spaceflight.theme.rememberDarkTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

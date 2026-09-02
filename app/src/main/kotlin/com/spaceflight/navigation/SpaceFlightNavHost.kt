@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.spaceflight.SharedPane
 import com.spaceflight.designsystem.theme.SpaceflightMotion
 import com.spaceflight.feature.favorites.navigation.favoritesScreen
 import com.spaceflight.feature.news.navigation.NewsRoute

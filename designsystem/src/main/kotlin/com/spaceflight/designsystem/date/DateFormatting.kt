@@ -1,4 +1,4 @@
-package com.spaceflight.designsystem.util
+package com.spaceflight.designsystem.date
 
 import android.text.format.DateUtils
 import androidx.compose.runtime.Composable

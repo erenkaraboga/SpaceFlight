@@ -9,7 +9,9 @@ android {
 dependencies {
     api(projects.core.model)
     api(projects.designsystem)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.browser)
     implementation(libs.retrofit)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)

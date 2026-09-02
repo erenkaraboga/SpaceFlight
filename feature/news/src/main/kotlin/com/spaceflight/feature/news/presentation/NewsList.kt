@@ -35,7 +35,7 @@ import com.spaceflight.designsystem.component.ScreenCanvas
 import com.spaceflight.designsystem.component.SearchHeader
 import com.spaceflight.designsystem.component.rememberStaggeredEntranceState
 import com.spaceflight.designsystem.theme.SpaceflightMotion
-import com.spaceflight.designsystem.util.rememberTodayDate
+import com.spaceflight.designsystem.date.rememberTodayDate
 import com.spaceflight.feature.news.R
 import com.spaceflight.feature.news.presentation.components.FeedArticle
 import com.spaceflight.feature.news.presentation.components.HeroArticleCardPlaceholder

@@ -46,9 +46,9 @@ import com.spaceflight.designsystem.component.GlassIconButton
 import com.spaceflight.designsystem.motion.sharedContent
 import com.spaceflight.designsystem.motion.sharedImageKey
 import com.spaceflight.designsystem.text.asString
-import com.spaceflight.designsystem.util.openUrlInCustomTab
-import com.spaceflight.designsystem.util.rememberAbsoluteDate
-import com.spaceflight.designsystem.util.shareText
+import com.spaceflight.core.common.intent.openUrlInCustomTab
+import com.spaceflight.designsystem.date.rememberAbsoluteDate
+import com.spaceflight.core.common.intent.shareText
 import com.spaceflight.feature.newsdetail.R
 import com.spaceflight.feature.newsdetail.presentation.components.ArticleDetailContent
 import com.spaceflight.feature.newsdetail.presentation.components.heroTitleAlpha
