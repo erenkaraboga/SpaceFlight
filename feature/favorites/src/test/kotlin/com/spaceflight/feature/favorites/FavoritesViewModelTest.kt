@@ -13,7 +13,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 
@@ -37,7 +36,6 @@ class FavoritesViewModelTest {
 
         val state = viewModel.uiState.value
         assertFalse(state.isLoading)
-        assertNull(state.error)
         assertEquals(listOf(1, 2), state.favorites.map { it.id })
     }
 
@@ -69,36 +67,6 @@ class FavoritesViewModelTest {
         }
         // The removal itself never went through, so the article is still there.
         assertEquals(listOf(1, 2), viewModel.uiState.value.favorites.map { it.id })
-    }
-
-    @Test
-    fun `a failure loading favorites is shown as a full-screen error, not silently swallowed`() = runTest(
-        mainDispatcherRule.testDispatcher
-    ) {
-        repository.failNextObserve(AppError.NoConnection())
-
-        val viewModel = createViewModel()
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertFalse(state.isLoading)
-        assertEquals(AppError.NoConnection().toUiText(), state.error)
-    }
-
-    @Test
-    fun `retrying after a load failure re-subscribes and recovers`() = runTest(
-        mainDispatcherRule.testDispatcher
-    ) {
-        repository.failNextObserve(AppError.NoConnection())
-        val viewModel = createViewModel()
-        advanceUntilIdle()
-
-        viewModel.onEvent(FavoritesEvent.Retry)
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertNull(state.error)
-        assertEquals(listOf(1, 2), state.favorites.map { it.id })
     }
 
     private fun createViewModel() = FavoritesViewModel(

@@ -1,12 +1,15 @@
-package com.spaceflight.feature.favorites
+package com.spaceflight.feature.newsdetail
 
+import androidx.paging.PagingData
+import com.spaceflight.core.domain.repository.ArticleRepository
+import com.spaceflight.core.domain.repository.FavoriteRepository
 import com.spaceflight.core.model.AppError
 import com.spaceflight.core.model.Article
-import com.spaceflight.core.domain.repository.FavoriteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
@@ -27,9 +30,34 @@ class MainDispatcherRule(
     override fun finished(description: Description) = Dispatchers.resetMain()
 }
 
-class FakeFavoriteRepository(initial: List<Article> = emptyList()) : FavoriteRepository {
+class FakeArticleRepository(
+    private val articles: List<Article> = emptyList(),
+) : ArticleRepository {
 
-    private val favorites = MutableStateFlow(initial.associateBy { it.id })
+    val refreshedIds = mutableListOf<Int>()
+    private var refreshFailure: AppError? = null
+
+    /** Makes the next `refreshArticle` call fail once. */
+    fun failNextRefresh(error: AppError) {
+        refreshFailure = error
+    }
+
+    override fun getArticles(query: String): Flow<PagingData<Article>> =
+        flowOf(PagingData.from(articles))
+
+    override fun observeArticle(id: Int): Flow<Article?> =
+        flowOf(articles.firstOrNull { it.id == id })
+
+    override suspend fun refreshArticle(id: Int): Result<Unit> {
+        refreshedIds += id
+        refreshFailure?.let { return Result.failure(it.also { refreshFailure = null }) }
+        return Result.success(Unit)
+    }
+}
+
+class FakeFavoriteRepository : FavoriteRepository {
+
+    private val favorites = MutableStateFlow<Map<Int, Article>>(emptyMap())
     private var writeFailure: AppError? = null
 
     /** Makes the next mutating call (`addFavorite`/`removeFavorite`/`toggleFavorite`) fail once. */

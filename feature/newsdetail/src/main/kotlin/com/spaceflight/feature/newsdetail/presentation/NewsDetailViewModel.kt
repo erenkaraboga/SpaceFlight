@@ -28,15 +28,32 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class NewsDetailViewModel(
+    private val articleId: Int,
     observeArticle: ObserveArticleUseCase,
     observeIsFavorite: ObserveIsFavoriteUseCase,
     private val refreshArticle: RefreshArticleUseCase,
     private val toggleFavorite: ToggleFavoriteUseCase,
 ) : ViewModel() {
 
-    private val articleId: Int = savedStateHandle.toRoute<NewsDetailRoute>().articleId
+    /**
+     * Hilt calls this constructor and resolves [articleId] from the type-safe nav route. Tests call
+     * the primary constructor above directly instead: [SavedStateHandle.toRoute] decodes through a
+     * real Android `Bundle` under the hood, which throws ("not mocked") on a plain JVM unit test.
+     */
+    @Inject constructor(
+        savedStateHandle: SavedStateHandle,
+        observeArticle: ObserveArticleUseCase,
+        observeIsFavorite: ObserveIsFavoriteUseCase,
+        refreshArticle: RefreshArticleUseCase,
+        toggleFavorite: ToggleFavoriteUseCase,
+    ) : this(
+        articleId = savedStateHandle.toRoute<NewsDetailRoute>().articleId,
+        observeArticle = observeArticle,
+        observeIsFavorite = observeIsFavorite,
+        refreshArticle = refreshArticle,
+        toggleFavorite = toggleFavorite,
+    )
 
     private val _uiState = MutableStateFlow(NewsDetailUiState())
     val uiState: StateFlow<NewsDetailUiState> = _uiState.asStateFlow()
