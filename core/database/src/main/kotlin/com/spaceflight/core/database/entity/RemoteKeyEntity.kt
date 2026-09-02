@@ -12,7 +12,6 @@ data class RemoteKeyEntity(
     @PrimaryKey val id: Int = FEED_KEY_ID,
     val nextOffset: Int,
     val endReached: Boolean,
-    val lastRefreshedAt: Long,
 ) {
     companion object {
         const val FEED_KEY_ID = 1

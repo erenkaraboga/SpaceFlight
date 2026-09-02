@@ -4,17 +4,18 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.spaceflight.core.common.error.toAppErrorOrUnknown
+import com.spaceflight.core.common.error.toUiText
+import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.feature.newsdetail.domain.usecase.ObserveArticleUseCase
 import com.spaceflight.feature.newsdetail.domain.usecase.ObserveIsFavoriteUseCase
 import com.spaceflight.feature.newsdetail.domain.usecase.RefreshArticleUseCase
-import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
-import com.spaceflight.core.common.error.toAppErrorOrUnknown
-import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.feature.newsdetail.navigation.NewsDetailRoute
 import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEffect
 import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailEvent
 import com.spaceflight.feature.newsdetail.presentation.state.NewsDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,11 +37,6 @@ class NewsDetailViewModel(
     private val toggleFavorite: ToggleFavoriteUseCase,
 ) : ViewModel() {
 
-    /**
-     * Hilt calls this constructor and resolves [articleId] from the type-safe nav route. Tests call
-     * the primary constructor above directly instead: [SavedStateHandle.toRoute] decodes through a
-     * real Android `Bundle` under the hood, which throws ("not mocked") on a plain JVM unit test.
-     */
     @Inject constructor(
         savedStateHandle: SavedStateHandle,
         observeArticle: ObserveArticleUseCase,
@@ -58,8 +54,10 @@ class NewsDetailViewModel(
     private val _uiState = MutableStateFlow(NewsDetailUiState())
     val uiState: StateFlow<NewsDetailUiState> = _uiState.asStateFlow()
 
-    private val _effects = Channel<NewsDetailEffect>(Channel.BUFFERED)
+    private val _effects = Channel<NewsDetailEffect>(Channel.CONFLATED)
     val effects: Flow<NewsDetailEffect> = _effects.receiveAsFlow()
+
+    private var favoriteToggleJob: Job? = null
 
     init {
         observeArticle(articleId)
@@ -82,15 +80,17 @@ class NewsDetailViewModel(
             NewsDetailEvent.BackClicked -> viewModelScope.launch {
                 _effects.send(NewsDetailEffect.NavigateBack)
             }
-
-            NewsDetailEvent.FavoriteToggled -> viewModelScope.launch {
-                val article = _uiState.value.article ?: return@launch
-                toggleFavorite(article).onFailure { error ->
-                    _effects.send(
-                        NewsDetailEffect.ShowMessage(
-                            error.toAppErrorOrUnknown().toUiText()
+            NewsDetailEvent.FavoriteToggled -> {
+                favoriteToggleJob?.cancel()
+                favoriteToggleJob = viewModelScope.launch {
+                    val article = _uiState.value.article ?: return@launch
+                    toggleFavorite(article).onFailure { error ->
+                        _effects.send(
+                            NewsDetailEffect.ShowMessage(
+                                error.toAppErrorOrUnknown().toUiText()
+                            )
                         )
-                    )
+                    }
                 }
             }
 
@@ -111,6 +111,7 @@ class NewsDetailViewModel(
             refreshArticle(articleId).fold(
                 onSuccess = { _uiState.update { it.copy(isLoading = false) } },
                 onFailure = { error ->
+                    _uiState.update { it.copy(isLoading = false) }
                     _effects.send(
                         NewsDetailEffect.ShowMessage(
                             error.toAppErrorOrUnknown().toUiText()

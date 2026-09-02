@@ -40,7 +40,7 @@ fun FavoritesScreen(
         }
     }
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().padding(bottom = FloatingTabBarDefaults.Height),
         snackbarHost = {
             SnackbarHost(
                 snackbarHostState,

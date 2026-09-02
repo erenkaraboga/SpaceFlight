@@ -9,4 +9,6 @@
     <string name="news_empty_description">Nothing matched “%1$s”. Try a different keyword.</string>
     <string name="news_added_to_favorites">Added to favorites</string>
     <string name="news_removed_from_favorites">Removed from favorites</string>
+    <string name="news_error_title">Something went wrong</string>
+    <string name="news_error_description">We couldn\'t load the news. Pull down to try again.</string>
 </resources>

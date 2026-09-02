@@ -4,23 +4,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.spaceflight.core.common.error.toAppErrorOrUnknown
+import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
+import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.core.model.Article
+import com.spaceflight.designsystem.text.UiText
+import com.spaceflight.feature.news.R
 import com.spaceflight.feature.news.domain.usecase.GetArticlesUseCase
 import com.spaceflight.feature.news.domain.usecase.ObserveFavoriteIdsUseCase
 import com.spaceflight.feature.news.domain.usecase.ObserveGridLayoutUseCase
 import com.spaceflight.feature.news.domain.usecase.SetGridLayoutUseCase
-import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
-import com.spaceflight.core.common.error.toAppErrorOrUnknown
-import com.spaceflight.core.common.error.toUiText
-import com.spaceflight.designsystem.text.UiText
-import com.spaceflight.feature.news.R
 import com.spaceflight.feature.news.presentation.state.NewsEffect
 import com.spaceflight.feature.news.presentation.state.NewsEvent
 import com.spaceflight.feature.news.presentation.state.NewsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,8 +52,10 @@ class NewsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NewsUiState())
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
-    private val _effects = Channel<NewsEffect>(Channel.BUFFERED)
+    private val _effects = Channel<NewsEffect>(Channel.CONFLATED)
     val effects: Flow<NewsEffect> = _effects.receiveAsFlow()
+
+    private var favoriteToggleJob: Job? = null
 
     val articles: Flow<PagingData<Article>> = _uiState
         .map { it.searchQuery.trim() }
@@ -88,17 +91,20 @@ class NewsViewModel @Inject constructor(
                     )
                 }
 
-            is NewsEvent.FavoriteToggled -> viewModelScope.launch {
-                val text = toggleFavorite(event.article).fold(
-                    onSuccess = { added ->
-                        UiText.Resource(
-                            if (added) R.string.news_added_to_favorites
-                            else R.string.news_removed_from_favorites,
-                        )
-                    },
-                    onFailure = { error -> error.toAppErrorOrUnknown().toUiText() },
-                )
-                _effects.send(NewsEffect.ShowMessage(text))
+            is NewsEvent.FavoriteToggled -> {
+                favoriteToggleJob?.cancel()
+                favoriteToggleJob = viewModelScope.launch {
+                    val text = toggleFavorite(event.article).fold(
+                        onSuccess = { added ->
+                            UiText.Resource(
+                                if (added) R.string.news_added_to_favorites
+                                else R.string.news_removed_from_favorites,
+                            )
+                        },
+                        onFailure = { error -> error.toAppErrorOrUnknown().toUiText() },
+                    )
+                    _effects.send(NewsEffect.ShowMessage(text))
+                }
             }
 
             NewsEvent.LayoutToggled -> {

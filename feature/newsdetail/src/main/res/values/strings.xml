@@ -4,8 +4,6 @@
     <string name="newsdetail_share">Share</string>
     <string name="newsdetail_share_chooser">Share article via</string>
     <string name="newsdetail_no_browser">No app available to open this link</string>
-    <string name="newsdetail_added_to_favorites">Added to favorites</string>
-    <string name="newsdetail_removed_from_favorites">Removed from favorites</string>
     <string name="newsdetail_missing_title">Article not found</string>
     <string name="newsdetail_missing_description">This story is no longer in the cache. Go back and try again.</string>
     <string name="newsdetail_read_full_article">Read the full article</string>

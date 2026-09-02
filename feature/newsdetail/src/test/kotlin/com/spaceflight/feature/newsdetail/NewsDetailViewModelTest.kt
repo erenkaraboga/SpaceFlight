@@ -55,7 +55,7 @@ class NewsDetailViewModelTest {
     }
 
     @Test
-    fun `a refresh failure with nothing cached sends a message and leaves the screen loading`() = runTest(
+    fun `a refresh failure with nothing cached sends a message and falls back to the empty state`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
         articleRepository.failNextRefresh(AppError.NoConnection())
@@ -66,11 +66,11 @@ class NewsDetailViewModelTest {
 
             assertEquals(NewsDetailEffect.ShowMessage(AppError.NoConnection().toUiText()), awaitItem())
         }
-        // Nothing cached and the refresh failed, so there is still nothing to show -- and, since
-        // the current screen has no retry affordance, it is stuck showing the loading state.
+        // Nothing cached and the refresh failed: isLoading clears so the screen falls through to
+        // the "article not found" empty state instead of spinning forever.
         val state = viewModel.uiState.value
         assertNull(state.article)
-        assertTrue(state.isLoading)
+        assertFalse(state.isLoading)
     }
 
     @Test

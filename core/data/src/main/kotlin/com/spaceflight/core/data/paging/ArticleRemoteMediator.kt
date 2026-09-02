@@ -59,7 +59,6 @@ class ArticleRemoteMediator(
                     RemoteKeyEntity(
                         nextOffset = offset + response.results.size,
                         endReached = endReached,
-                        lastRefreshedAt = System.currentTimeMillis(),
                     )
                 )
             }

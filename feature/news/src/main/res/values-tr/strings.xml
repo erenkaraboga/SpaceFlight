@@ -8,4 +8,6 @@
     <string name="news_empty_description">“%1$s” ile eşleşen bir sonuç yok. Farklı bir kelime deneyin.</string>
     <string name="news_added_to_favorites">Favorilere eklendi</string>
     <string name="news_removed_from_favorites">Favorilerden çıkarıldı</string>
+    <string name="news_error_title">Bir şeyler ters gitti</string>
+    <string name="news_error_description">Haberler yüklenemedi. Yenilemek için aşağı çekin.</string>
 </resources>

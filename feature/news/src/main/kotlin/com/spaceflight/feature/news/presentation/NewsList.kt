@@ -13,7 +13,10 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -53,8 +56,15 @@ fun NewsList(
     val gridState = rememberLazyGridState()
     val isGrid = state.isGridLayout
     val toggleGrid: () -> Unit = { onEvent(NewsEvent.LayoutToggled) }
-    val isRefreshing = articles.loadState.refresh is LoadState.Loading && articles.itemCount > 0
+
     val refreshState = articles.loadState.refresh
+    val isInitialLoading = refreshState is LoadState.Loading && articles.itemCount == 0
+    val isRefreshing = refreshState is LoadState.Loading && articles.itemCount > 0
+
+    val isFullyLoadedAndEmpty = refreshState is LoadState.NotLoading &&
+            articles.loadState.append.endOfPaginationReached &&
+            articles.itemCount == 0
+
     ScreenCanvas(modifier) {
         Column(Modifier.fillMaxSize()) {
             SearchHeader(
@@ -68,35 +78,40 @@ fun NewsList(
             )
 
             OfflineBanner(isVisible = state.isOffline)
+
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
-                onRefresh = {
-                    if (articles.loadState.refresh !is LoadState.Loading) {
-                        articles.refresh()
-                    }
-                },
+                onRefresh = { articles.refresh() },
                 modifier = Modifier.fillMaxSize(),
             ) {
                 when {
-                    refreshState is LoadState.Loading -> {
+                    isInitialLoading -> {
                         NewsLoading()
                     }
-                    refreshState is LoadState.NotLoading && articles.itemCount == 0 -> {
+
+                    refreshState is LoadState.Error && articles.itemCount == 0 -> {
                         EmptyState(
-                            title = stringResource(R.string.news_empty_title),
-                            description = if (state.searchQuery.isBlank()) {
-                                stringResource(R.string.news_empty_generic_description)
-                            } else {
-                                stringResource(
-                                    R.string.news_empty_description,
-                                    state.searchQuery.trim()
-                                )
-                            },
-                            icon = Icons.Rounded.SearchOff,
-                            modifier = Modifier.fillMaxSize(),
+                            title = stringResource(R.string.news_error_title),
+                            description = stringResource(R.string.news_error_description),
+                            icon = Icons.Rounded.CloudOff,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState()),
                         )
                     }
-                    else -> {
+
+                    isFullyLoadedAndEmpty -> {
+                        EmptyState(
+                            title = stringResource(R.string.news_empty_title),
+                            description = stringResource(R.string.news_empty_description),
+                            icon = Icons.Rounded.SearchOff,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState()),
+                        )
+                    }
+
+                    articles.itemCount > 0 -> {
                         ArticleFeed(
                             state = state,
                             articles = articles,
@@ -178,7 +193,8 @@ private fun ArticleFeed(
             count = itemCount,
             key = { relativeIndex ->
                 val actualIndex = relativeIndex + startIndex
-                articles.peek(actualIndex)?.id ?: actualIndex
+                val article = articles.peek(actualIndex)
+                article?.id ?: "placeholder_$actualIndex"
             },
         ) { relativeIndex ->
             val actualIndex = relativeIndex + startIndex
@@ -202,7 +218,10 @@ private fun ArticleFeed(
         }
 
         if (articles.loadState.append is LoadState.Loading) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(
+                key = "append-loading-placeholder",
+                span = { GridItemSpan(maxLineSpan) },
+            ) {
                 ArticleCardPlaceholder(modifier = feedItemModifier())
             }
         }

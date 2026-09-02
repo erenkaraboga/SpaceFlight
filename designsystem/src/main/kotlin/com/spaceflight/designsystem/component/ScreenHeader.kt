@@ -68,7 +68,7 @@ private fun ScreenHeaderPreview() {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 ScreenHeader(
-                    title = "Spacecraft",
+                    title = "SpaceFlight",
                     subtitle = "Welcome",
                 )
                 ScreenHeader(
