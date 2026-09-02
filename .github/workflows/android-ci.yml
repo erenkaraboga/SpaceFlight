@@ -1,0 +1,61 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
+
+# A new push to the same branch/PR cancels any run already in progress for it, so force-pushes
+# don't queue up multiple redundant builds.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Fails the run if gradlew/gradle-wrapper.jar was tampered with, before anything executes it.
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      # AGP 8.x requires JDK 17+ to run Gradle itself; the project's own modules also target 17
+      # (see build-logic's convention plugins).
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Ensures the compileSdk/build-tools versions this project needs are installed, even if the
+      # runner image doesn't already have them.
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Caches ~/.gradle (dependencies + wrapper distribution) and the Gradle build cache between
+      # runs, keyed on the wrapper/build files -- subsequent runs are much faster.
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # assembleDebug builds every module (app APK + library AARs) to catch compile/config errors;
+      # testDebugUnitTest covers the Android modules' unit tests, plain `test` covers core:domain
+      # (a JVM-only module with no Android variant, so it has no testDebugUnitTest task).
+      # --continue runs everything it can instead of stopping at the first failure, so one broken
+      # module doesn't hide failures in the others.
+      - name: Build and run unit tests
+        run: ./gradlew assembleDebug testDebugUnitTest test --continue
+
+      # So a failure can be inspected from the GitHub Actions run page directly, without needing to
+      # reproduce it locally in Android Studio.
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/build/reports/tests/'
+          retention-days: 14
