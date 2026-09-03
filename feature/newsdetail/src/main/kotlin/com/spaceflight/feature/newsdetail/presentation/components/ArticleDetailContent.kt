@@ -1,6 +1,5 @@
 package com.spaceflight.feature.newsdetail.presentation.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
