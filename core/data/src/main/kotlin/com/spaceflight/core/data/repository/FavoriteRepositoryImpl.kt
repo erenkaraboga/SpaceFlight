@@ -24,10 +24,6 @@ class FavoriteRepositoryImpl @Inject constructor(
 
     override fun observeIsFavorite(id: Int): Flow<Boolean> = favoriteDao.observeIsFavorite(id)
 
-    override suspend fun addFavorite(article: Article): Result<Unit> = safeCall {
-        favoriteDao.upsert(article.toFavoriteEntity(System.currentTimeMillis()))
-    }
-
     override suspend fun removeFavorite(id: Int): Result<Unit> = safeCall {
         favoriteDao.deleteById(id)
     }

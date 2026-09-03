@@ -125,7 +125,7 @@ class NewsViewModelTest {
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = createViewModel()
-        favoriteRepository.addFavorite(testArticle(1))
+        favoriteRepository.toggleFavorite(testArticle(1))
         advanceUntilIdle()
 
         viewModel.effects.test {
