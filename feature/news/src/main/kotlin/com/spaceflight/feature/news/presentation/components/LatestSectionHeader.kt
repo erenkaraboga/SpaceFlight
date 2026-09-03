@@ -1,6 +1,6 @@
 package com.spaceflight.feature.news.presentation.components
 
-import LayoutToggleButton
+import com.spaceflight.designsystem.component.LayoutToggleButton
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

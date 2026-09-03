@@ -40,7 +40,7 @@ class FavoriteRepositoryImplTest {
     fun `the full article is kept so favorites survive a cache wipe`() = runTest {
         val original = article(7).copy(summary = "A long summary", authors = listOf("Ada"))
 
-        repository.addFavorite(original)
+        repository.toggleFavorite(original)
 
         assertEquals(original, repository.observeFavorites().first().single())
     }
@@ -50,7 +50,7 @@ class FavoriteRepositoryImplTest {
         repository.observeFavoriteIds().test {
             assertEquals(emptySet<Int>(), awaitItem())
 
-            repository.addFavorite(article(1))
+            repository.toggleFavorite(article(1))
             assertEquals(setOf(1), awaitItem())
 
             repository.removeFavorite(1)
@@ -63,28 +63,19 @@ class FavoriteRepositoryImplTest {
         repository.observeIsFavorite(3).test {
             assertFalse(awaitItem())
 
-            repository.addFavorite(article(3))
+            repository.toggleFavorite(article(3))
             assertTrue(awaitItem())
         }
     }
 
     @Test
-    fun `a dao failure while adding a favorite is reported as a Result failure, not a crash`() = runTest {
-        dao.failNextWrite(IOException("disk full"))
-
-        val result = repository.addFavorite(article(1))
-
-        assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is AppError.NoConnection)
-    }
-
-    @Test
-    fun `a dao failure while toggling a favorite is reported as a Result failure`() = runTest {
+    fun `a dao failure while toggling a favorite is reported as a Result failure, not a crash`() = runTest {
         dao.failNextWrite(IOException("disk full"))
 
         val result = repository.toggleFavorite(article(1))
 
         assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is AppError.NoConnection)
         assertTrue(repository.observeFavorites().first().isEmpty())
     }
 

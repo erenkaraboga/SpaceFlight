@@ -33,8 +33,6 @@ object SpaceflightMotion {
         stiffness = Spring.StiffnessMedium,
     )
 
-    fun <T> standard(): FiniteAnimationSpec<T> = tween(durationMillis = 320)
-
     fun <T> fadeThrough(): FiniteAnimationSpec<T> = tween(durationMillis = FadeThroughEnterMillis)
 
     /** Shared-element morph: a finite tween so clip/shape actually finishes instead of springing. */

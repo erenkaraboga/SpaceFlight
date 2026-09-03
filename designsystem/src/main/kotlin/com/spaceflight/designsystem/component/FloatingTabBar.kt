@@ -44,7 +44,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spaceflight.designsystem.theme.LocalIsDarkTheme
-import com.spaceflight.designsystem.theme.SpaceColors
 import com.spaceflight.designsystem.theme.SpaceflightTheme
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeTint

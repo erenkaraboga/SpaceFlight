@@ -12,10 +12,7 @@ interface FavoriteRepository {
 
     fun observeIsFavorite(id: Int): Flow<Boolean>
 
-    suspend fun addFavorite(article: Article): Result<Unit>
-
     suspend fun removeFavorite(id: Int): Result<Unit>
 
-    /** On success, wraps whether the article ended up favourited. */
     suspend fun toggleFavorite(article: Article): Result<Boolean>
 }

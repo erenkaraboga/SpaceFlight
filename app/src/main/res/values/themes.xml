@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Only the window background before Compose takes over; the real theme lives in
-         :designsystem. Matching its surface avoids a colour flash on cold start. -->
     <style name="Theme.SpaceFlight" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/space_background</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

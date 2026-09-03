@@ -60,7 +60,7 @@ class FakeFavoriteRepository : FavoriteRepository {
     private val favorites = MutableStateFlow<Map<Int, Article>>(emptyMap())
     private var writeFailure: AppError? = null
 
-    /** Makes the next mutating call (`addFavorite`/`removeFavorite`/`toggleFavorite`) fail once. */
+    /** Makes the next mutating call (`removeFavorite`/`toggleFavorite`) fail once. */
     fun failNextWrite(error: AppError) {
         writeFailure = error
     }
@@ -70,12 +70,6 @@ class FakeFavoriteRepository : FavoriteRepository {
     override fun observeFavoriteIds(): Flow<Set<Int>> = favorites.map { it.keys }
 
     override fun observeIsFavorite(id: Int): Flow<Boolean> = favorites.map { id in it }
-
-    override suspend fun addFavorite(article: Article): Result<Unit> {
-        writeFailure?.let { return Result.failure(it.also { writeFailure = null }) }
-        favorites.value = favorites.value + (article.id to article)
-        return Result.success(Unit)
-    }
 
     override suspend fun removeFavorite(id: Int): Result<Unit> {
         writeFailure?.let { return Result.failure(it.also { writeFailure = null }) }
@@ -89,7 +83,7 @@ class FakeFavoriteRepository : FavoriteRepository {
             removeFavorite(article.id)
             Result.success(false)
         } else {
-            addFavorite(article)
+            favorites.value = favorites.value + (article.id to article)
             Result.success(true)
         }
     }
