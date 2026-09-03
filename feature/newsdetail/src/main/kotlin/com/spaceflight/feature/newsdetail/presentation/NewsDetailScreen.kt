@@ -45,7 +45,7 @@ import com.spaceflight.designsystem.component.FavoriteButton
 import com.spaceflight.designsystem.component.GlassIconButton
 import com.spaceflight.designsystem.motion.sharedContent
 import com.spaceflight.designsystem.motion.sharedImageKey
-import com.spaceflight.designsystem.text.asString
+import com.spaceflight.core.common.text.asString
 import com.spaceflight.core.common.intent.openUrlInCustomTab
 import com.spaceflight.designsystem.date.rememberAbsoluteDate
 import com.spaceflight.core.common.intent.shareText

@@ -2,7 +2,7 @@ package com.spaceflight.core.common.error
 
 import com.spaceflight.core.model.AppError
 import com.spaceflight.core.common.R
-import com.spaceflight.designsystem.text.UiText
+import com.spaceflight.core.common.text.UiText
 
 /**
  * The single place that turns an [AppError] into copy a user can read. Every screen in the app —

@@ -1,7 +1,7 @@
 package com.spaceflight.core.common.error
 
 import com.spaceflight.core.model.AppError
-import com.spaceflight.designsystem.text.UiText
+import com.spaceflight.core.common.text.UiText
 import org.junit.Assert.assertTrue
 import org.junit.Test
 

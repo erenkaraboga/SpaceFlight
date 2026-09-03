@@ -9,7 +9,7 @@ import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.core.model.Article
-import com.spaceflight.designsystem.text.UiText
+import com.spaceflight.core.common.text.UiText
 import com.spaceflight.feature.news.R
 import com.spaceflight.feature.news.domain.usecase.GetArticlesUseCase
 import com.spaceflight.feature.news.domain.usecase.ObserveFavoriteIdsUseCase

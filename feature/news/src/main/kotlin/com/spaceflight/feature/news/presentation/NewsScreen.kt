@@ -20,7 +20,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.spaceflight.core.common.error.toAppErrorOrUnknown
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.designsystem.component.FloatingTabBarDefaults
-import com.spaceflight.designsystem.text.asString
+import com.spaceflight.core.common.text.asString
 import com.spaceflight.feature.news.presentation.state.NewsEffect
 import com.spaceflight.feature.news.presentation.state.appendError
 import com.spaceflight.feature.news.presentation.state.refreshError

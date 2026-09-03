@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1000" viewBox="0 0 1280 1000" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="1280" height="1000" fill="#0a0e17" />
+<defs>
+  <marker id="ablue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#3b82f6"/></marker>
+  <marker id="apurple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a855f7"/></marker>
+  <marker id="agreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#10b981"/></marker>
+  <marker id="aorange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f97316"/></marker>
+</defs>
+<text x="640.0" y="34" font-size="23" font-weight="700" fill="#f1f5f9" text-anchor="middle" letter-spacing="0.5">SPACEFLIGHT &#8212; MODULAR ARCHITECTURE GRAPH</text>
+<text x="640.0" y="56" font-size="13.5" font-weight="400" fill="#94a3b8" text-anchor="middle">Dependency Flow (Gradle Project Dependencies)</text>
+<text x="20" y="88" font-size="12.5" font-weight="700" fill="#ec4899" text-anchor="start" letter-spacing="0.5">DESIGN SYSTEM LAYER</text>
+<rect x="20" y="100" width="270" height="118" rx="12" fill="#22101a" stroke="#ec4899" stroke-width="1.6" />
+<text x="40" y="130" font-size="17" font-weight="700" fill="#f1f5f9" text-anchor="start">designsystem</text>
+<text x="40" y="152" font-size="11.5" font-weight="400" fill="#94a3b8" text-anchor="start">Reusable UI Components, Theme,</text>
+<text x="40" y="168" font-size="11.5" font-weight="400" fill="#94a3b8" text-anchor="start">Typography, Icons, Design Tokens</text>
+<rect x="985" y="78" width="235" height="152" rx="12" fill="#11162a" stroke="#334155" stroke-width="1.6" />
+<text x="1003" y="104" font-size="13" font-weight="700" fill="#f1f5f9" text-anchor="start" letter-spacing="0.5">LEGEND</text>
+<line x1="1003" y1="128" x2="1033" y2="128" stroke="#3b82f6" stroke-width="2.5" />
+<text x="1043" y="132" font-size="11.5" font-weight="400" fill="#94a3b8" text-anchor="start">App &#8594; Feature</text>
+<line x1="1003" y1="154" x2="1033" y2="154" stroke="#a855f7" stroke-width="2.5" />
+<text x="1043" y="158" font-size="11.5" font-weight="400" fill="#94a3b8" text-anchor="start">Feature &#8594; Core</text>
+<line x1="1003" y1="180" x2="1033" y2="180" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6 4" />
+<text x="1043" y="184" font-size="11.5" font-weight="400" fill="#94a3b8" text-anchor="start">Core &#8594; Model</text>
+<line x1="1003" y1="206" x2="1033" y2="206" stroke="#f97316" stroke-width="2.5" />
+<text x="1043" y="210" font-size="11.5" font-weight="400" fill="#94a3b8" text-anchor="start">Data &#8594; Data Sources</text>
+<rect x="985" y="250" width="235" height="190" rx="12" fill="#11162a" stroke="#334155" stroke-width="1.6" />
+<text x="1003" y="276" font-size="12.5" font-weight="700" fill="#f1f5f9" text-anchor="start" letter-spacing="0.3">ARCHITECTURE PRINCIPLES</text>
+<circle cx="1007" cy="294" r="3" fill="#10b981" />
+<text x="1019" y="298" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Feature modules depend on Domain,</text>
+<text x="1019" y="315.5" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Model, Common and DesignSystem</text>
+<circle cx="1007" cy="329.0" r="3" fill="#10b981" />
+<text x="1019" y="333.0" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Domain defines Repository contracts</text>
+<circle cx="1007" cy="346.5" r="3" fill="#10b981" />
+<text x="1019" y="350.5" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Data module implements repositories</text>
+<circle cx="1007" cy="364.0" r="3" fill="#10b981" />
+<text x="1019" y="368.0" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Data module uses Network &amp;</text>
+<text x="1019" y="385.5" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Database as data sources</text>
+<circle cx="1007" cy="399.0" r="3" fill="#10b981" />
+<text x="1019" y="403.0" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Dependency direction is inward</text>
+<text x="1019" y="420.5" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">(towards Domain)</text>
+<rect x="985" y="458" width="235" height="150" rx="12" fill="#11162a" stroke="#334155" stroke-width="1.6" />
+<text x="1003" y="484" font-size="12.5" font-weight="700" fill="#f1f5f9" text-anchor="start" letter-spacing="0.3">LAYER RESPONSIBILITIES</text>
+<circle cx="1007" cy="502" r="4" fill="#3b82f6" />
+<text x="1021" y="506" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">App: Entry point &amp; Navigation</text>
+<circle cx="1007" cy="526" r="4" fill="#a855f7" />
+<text x="1021" y="530" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Feature: UI &amp; State (ViewModels)</text>
+<circle cx="1007" cy="550" r="4" fill="#10b981" />
+<text x="1021" y="554" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Core: Business Logic &amp; Abstractions</text>
+<circle cx="1007" cy="574" r="4" fill="#f97316" />
+<text x="1021" y="578" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Data: Implementations &amp; Data Sources</text>
+<text x="635" y="90" font-size="12" font-weight="700" fill="#3b82f6" text-anchor="middle" letter-spacing="0.5">APPLICATION LAYER</text>
+<rect x="465" y="100" width="340" height="68" rx="12" fill="#0f1b33" stroke="#3b82f6" stroke-width="1.6" />
+<g transform="translate(499,134)" fill="none" stroke="#3b82f6" stroke-width="1.8"><path d="M0 -16 C7 -9 7 5 0 14 C-7 5 -7 -9 0 -16 Z" fill="#0f1b33"/><circle cx="0" cy="-4" r="3" fill="#3b82f6" stroke="none"/><path d="M-4 10 L-9 18 M4 10 L9 18" /></g>
+<text x="529" y="130" font-size="16.5" font-weight="700" fill="#f1f5f9" text-anchor="start">:app</text>
+<text x="529" y="150" font-size="11.5" font-weight="400" fill="#94a3b8" text-anchor="start">Android Application</text>
+<text x="20" y="268" font-size="12.5" font-weight="700" fill="#a855f7" text-anchor="start" letter-spacing="0.5">FEATURE LAYER</text>
+<text x="20" y="288" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">UI + ViewModels</text>
+<text x="20" y="303" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Depends on Domain + Common</text>
+<text x="20" y="318" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">+ DesignSystem</text>
+<rect x="175" y="300" width="255" height="92" rx="12" fill="#1c1230" stroke="#a855f7" stroke-width="1.6" />
+<g transform="translate(205,334)" fill="none" stroke="#a855f7" stroke-width="1.8"><rect x="-11" y="-13" width="22" height="26" rx="2"/><path d="M-6 -6 H6 M-6 0 H6 M-6 6 H2"/></g>
+<text x="227" y="328" font-size="13" font-weight="700" fill="#f1f5f9" text-anchor="start">:feature:news</text>
+<text x="227" y="347" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">News List UI</text>
+<text x="227" y="362" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">(Jetpack Compose)</text>
+<rect x="460" y="300" width="255" height="92" rx="12" fill="#1c1230" stroke="#a855f7" stroke-width="1.6" />
+<g transform="translate(490,334)" fill="none" stroke="#a855f7" stroke-width="1.8"><path d="M-9 -13 H5 L9 -9 V13 H-9 Z"/><path d="M5 -13 V-9 H9"/><path d="M-5 -3 H5 M-5 2 H5 M-5 7 H2"/></g>
+<text x="512" y="328" font-size="13" font-weight="700" fill="#f1f5f9" text-anchor="start">:feature:newsdetail</text>
+<text x="512" y="347" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">News Detail UI</text>
+<text x="512" y="362" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">(Jetpack Compose)</text>
+<rect x="745" y="300" width="255" height="92" rx="12" fill="#1c1230" stroke="#a855f7" stroke-width="1.6" />
+<g transform="translate(775,334)" fill="#1c1230" stroke="#a855f7" stroke-width="1.8"><path d="M0 12 C-11 3 -13 -8 -5 -12 C-1 -14 0 -9 0 -7 C0 -9 1 -14 5 -12 C13 -8 11 3 0 12 Z"/></g>
+<text x="797" y="328" font-size="13" font-weight="700" fill="#f1f5f9" text-anchor="start">:feature:favorites</text>
+<text x="797" y="347" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Favorites UI</text>
+<text x="797" y="362" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">(Jetpack Compose)</text>
+<path d="M 635.0 170 C 635.0 234.0, 302.5 234.0, 302.5 298" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#ablue)" />
+<path d="M 635.0 170 C 635.0 234.0, 587.5 234.0, 587.5 298" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#ablue)" />
+<path d="M 635.0 170 C 635.0 234.0, 872.5 234.0, 872.5 298" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#ablue)" />
+<text x="20" y="452" font-size="12.5" font-weight="700" fill="#10b981" text-anchor="start" letter-spacing="0.5">CORE LAYER</text>
+<text x="20" y="472" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Business Logic &amp;</text>
+<text x="20" y="487" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Abstractions</text>
+<rect x="175" y="465" width="255" height="108" rx="12" fill="#0c1f1c" stroke="#10b981" stroke-width="1.6" />
+<g transform="translate(205,505)" fill="none" stroke="#10b981" stroke-width="1.8"><path d="M0 -13 L11 -6 V8 L0 15 L-11 8 V-6 Z"/><path d="M0 -13 V15 M-11 -6 L0 1 L11 -6"/></g>
+<text x="227" y="495" font-size="13" font-weight="700" fill="#f1f5f9" text-anchor="start">:core:domain</text>
+<text x="227" y="515" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">UseCases, Repository</text>
+<text x="227" y="530" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Interfaces, Business Rules</text>
+<rect x="460" y="465" width="255" height="108" rx="12" fill="#0c1f1c" stroke="#10b981" stroke-width="1.6" />
+<g transform="translate(490,505)" fill="none" stroke="#10b981" stroke-width="1.8"><path d="M0 -12 L12 -5 L0 2 L-12 -5 Z"/><path d="M-12 2 L0 9 L12 2"/><path d="M-12 9 L0 16 L12 9"/></g>
+<text x="512" y="495" font-size="13" font-weight="700" fill="#f1f5f9" text-anchor="start">:core:model</text>
+<text x="512" y="515" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Entities, DTOs,</text>
+<text x="512" y="530" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Domain Models</text>
+<rect x="745" y="465" width="255" height="108" rx="12" fill="#0c1f1c" stroke="#10b981" stroke-width="1.6" />
+<g transform="translate(775,505)" fill="none" stroke="#10b981" stroke-width="1.8"><circle cx="-6" cy="-6" r="6"/><circle cx="6" cy="6" r="6"/><path d="M-2 -2 L2 2"/></g>
+<text x="797" y="495" font-size="13" font-weight="700" fill="#f1f5f9" text-anchor="start">:core:common</text>
+<text x="797" y="515" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Common Utils,</text>
+<text x="797" y="530" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Extensions, Helpers</text>
+<path d="M 302.5 394 L 302.5 463" stroke="#a855f7" stroke-width="2" fill="none" marker-end="url(#apurple)" />
+<path d="M 587.5 394 L 587.5 463" stroke="#a855f7" stroke-width="2" fill="none" marker-end="url(#apurple)" />
+<path d="M 872.5 394 L 872.5 463" stroke="#a855f7" stroke-width="2" fill="none" marker-end="url(#apurple)" />
+<path d="M 432 519.0 L 458 519.0" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#agreen)" stroke-dasharray="6 4" />
+<path d="M 743 519.0 L 717 519.0" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#agreen)" stroke-dasharray="6 4" />
+<text x="20" y="618" font-size="12.5" font-weight="700" fill="#f97316" text-anchor="start" letter-spacing="0.5">DATA LAYER</text>
+<text x="20" y="638" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">Repository Implementations</text>
+<text x="20" y="653" font-size="10.5" font-weight="400" fill="#94a3b8" text-anchor="start">&amp; Data Sources</text>
+<rect x="480" y="660" width="300" height="90" rx="12" fill="#241408" stroke="#f97316" stroke-width="1.6" />
+<g transform="translate(514,705)" fill="none" stroke="#f97316" stroke-width="1.8"><ellipse cx="0" cy="-12" rx="11" ry="4.5"/><path d="M-11 -12 V10 A11 4.5 0 0 0 11 10 V-12"/><path d="M-11 -1 A11 4.5 0 0 0 11 -1"/></g>
+<text x="544" y="694" font-size="15" font-weight="700" fill="#f1f5f9" text-anchor="start">:core:data</text>
+<text x="544" y="714" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Repository Implementations,</text>
+<text x="544" y="729" font-size="10.8" font-weight="400" fill="#94a3b8" text-anchor="start">Data Mappers, Data Sources</text>
+<path d="M 630.0 658 C 630.0 616.5, 302.5 616.5, 302.5 575" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#agreen)" stroke-dasharray="6 4" />
+<path d="M 630.0 658 C 630.0 616.5, 587.5 616.5, 587.5 575" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#agreen)" stroke-dasharray="6 4" />
+<path d="M 630.0 658 C 630.0 616.5, 872.5 616.5, 872.5 575" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#agreen)" stroke-dasharray="6 4" />
+<rect x="205" y="810" width="260" height="90" rx="12" fill="#241408" stroke="#f97316" stroke-width="1.6" />
+<rect x="610" y="810" width="260" height="90" rx="12" fill="#241408" stroke="#f97316" stroke-width="1.6" />
+<g transform="translate(237,855)" fill="none" stroke="#f97316" stroke-width="1.8"><circle cx="0" cy="0" r="13"/><ellipse cx="0" cy="0" rx="5.5" ry="13"/><path d="M-13 0 H13 M-11 -6 H11 M-11 6 H11"/></g>
+<text x="263" y="842" font-size="13.5" font-weight="700" fill="#f1f5f9" text-anchor="start">:core:network</text>
+<text x="263" y="862" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">Retrofit, OkHttp, Serialization,</text>
+<text x="263" y="877" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">API Service, Interceptors</text>
+<g transform="translate(642,855)" fill="none" stroke="#f97316" stroke-width="1.8"><ellipse cx="0" cy="-9" rx="10" ry="4"/><path d="M-10 -9 V9 A10 4 0 0 0 10 9 V-9"/><path d="M-10 0 A10 4 0 0 0 10 0"/></g>
+<text x="668" y="842" font-size="13.5" font-weight="700" fill="#f1f5f9" text-anchor="start">:core:database</text>
+<text x="668" y="862" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">Room, Paging, DAOs,</text>
+<text x="668" y="877" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">Local Data Source</text>
+<path d="M 600.0 752 C 600.0 780.0, 335.0 780.0, 335.0 808" stroke="#f97316" stroke-width="2" fill="none" marker-end="url(#aorange)" />
+<path d="M 660.0 752 C 660.0 780.0, 740.0 780.0, 740.0 808" stroke="#f97316" stroke-width="2" fill="none" marker-end="url(#aorange)" />
+<rect x="20" y="915" width="1240" height="60" rx="10" fill="#11162a" stroke="#334155" stroke-width="1.6" />
+<circle cx="58.0" cy="945" r="9" fill="none" stroke="#3b82f6" stroke-width="1.8" />
+<text x="74.0" y="949" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">User</text>
+<path d="M 226.0 945 L 242.0 945" stroke="#94a3b8" stroke-width="1.4" fill="none" marker-end="url(#agreen)" />
+<circle cx="258.0" cy="945" r="9" fill="none" stroke="#a855f7" stroke-width="1.8" />
+<text x="274.0" y="949" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">UI (Feature)</text>
+<path d="M 426.0 945 L 442.0 945" stroke="#94a3b8" stroke-width="1.4" fill="none" marker-end="url(#agreen)" />
+<circle cx="458.0" cy="945" r="9" fill="none" stroke="#10b981" stroke-width="1.8" />
+<text x="474.0" y="949" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">UseCase (Domain)</text>
+<path d="M 626.0 945 L 642.0 945" stroke="#94a3b8" stroke-width="1.4" fill="none" marker-end="url(#agreen)" />
+<circle cx="658.0" cy="945" r="9" fill="none" stroke="#10b981" stroke-width="1.8" />
+<text x="674.0" y="949" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">Repository Interface (Domain)</text>
+<path d="M 826.0 945 L 842.0 945" stroke="#94a3b8" stroke-width="1.4" fill="none" marker-end="url(#agreen)" />
+<circle cx="858.0" cy="945" r="9" fill="none" stroke="#f97316" stroke-width="1.8" />
+<text x="874.0" y="949" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">Repository Impl. (Data)</text>
+<path d="M 1026.0 945 L 1042.0 945" stroke="#94a3b8" stroke-width="1.4" fill="none" marker-end="url(#agreen)" />
+<circle cx="1058.0" cy="945" r="9" fill="none" stroke="#f97316" stroke-width="1.8" />
+<text x="1074.0" y="949" font-size="10.3" font-weight="400" fill="#94a3b8" text-anchor="start">Network / Database (Data Sources)</text>
+</svg>
