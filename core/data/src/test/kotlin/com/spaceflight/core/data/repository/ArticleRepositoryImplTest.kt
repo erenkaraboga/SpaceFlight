@@ -31,7 +31,6 @@ class ArticleRepositoryImplTest {
 
     private fun repository() = ArticleRepositoryImpl(
         api = api,
-        // Only the RemoteMediator touches the database, and none of these cases go through it.
         database = mockk<SpaceflightDatabase>(relaxed = true),
         articleDao = articleDao,
         favoriteDao = favoriteDao,

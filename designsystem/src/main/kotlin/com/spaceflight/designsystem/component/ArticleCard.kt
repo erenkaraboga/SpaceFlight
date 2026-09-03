@@ -178,10 +178,6 @@ private fun ShimmerBar(widthFraction: Float, height: Dp) {
     }
 }
 
-// ==========================================
-// PREVIEWS
-// ==========================================
-
 @Preview(name = "Article Card - Default", showBackground = true)
 @Composable
 private fun ArticleCardPreview() {

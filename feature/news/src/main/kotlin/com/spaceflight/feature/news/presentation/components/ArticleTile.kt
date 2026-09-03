@@ -89,10 +89,6 @@ fun ArticleTile(
     }
 }
 
-// ==========================================
-// PREVIEWS
-// ==========================================
-
 @Preview(name = "Article Tile - Default", showBackground = true, widthDp = 180)
 @Composable
 private fun ArticleTilePreview() {

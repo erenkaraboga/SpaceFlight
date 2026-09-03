@@ -65,7 +65,6 @@ class FavoritesViewModelTest {
 
             assertEquals(FavoritesEffect.ShowMessage(AppError.NoConnection().toUiText()), awaitItem())
         }
-        // The removal itself never went through, so the article is still there.
         assertEquals(listOf(1, 2), viewModel.uiState.value.favorites.map { it.id })
     }
 

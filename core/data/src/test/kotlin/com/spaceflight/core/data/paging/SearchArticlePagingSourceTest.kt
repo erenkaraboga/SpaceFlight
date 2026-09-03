@@ -22,8 +22,6 @@ import java.io.IOException
  */
 class SearchArticlePagingSourceTest {
 
-    // initialLoadSize must match pageSize -- otherwise TestPager's refresh() would request a
-    // bigger first page than SearchArticlePagingSource's own pageSize-based key math expects.
     private val config = PagingConfig(pageSize = 2, initialLoadSize = 2, enablePlaceholders = false)
     private val articleDao = FakeArticleDao()
 
@@ -63,7 +61,6 @@ class SearchArticlePagingSourceTest {
         pager.refresh()
         val second = pager.append() as PagingSource.LoadResult.Page
 
-        // pageSize is 2, so the second page picks up at offset 2.
         assertEquals(listOf(3, 4), second.data.map { it.id })
     }
 

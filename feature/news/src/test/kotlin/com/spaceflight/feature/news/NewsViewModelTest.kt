@@ -19,6 +19,7 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -57,7 +58,7 @@ class NewsViewModelTest {
     }
 
     @Test
-    fun `closing the search restores the feed without waiting out the debounce`() = runTest(
+    fun `closing the search restores the feed without re-fetching it`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = createViewModel()
@@ -71,7 +72,35 @@ class NewsViewModelTest {
         viewModel.onEvent(NewsEvent.SearchActiveChanged(isActive = false))
         advanceUntilIdle()
 
-        assertEquals(listOf(""), articleRepository.requestedQueries)
+        assertEquals(emptyList<String>(), articleRepository.requestedQueries)
+    }
+
+    @Test
+    fun `activating search flips the flag`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onEvent(NewsEvent.SearchActiveChanged(isActive = true))
+
+        assertTrue(viewModel.uiState.value.isSearchActive)
+    }
+
+    @Test
+    fun `closing search also clears whatever was typed`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.onEvent(NewsEvent.SearchActiveChanged(isActive = true))
+        viewModel.onEvent(NewsEvent.SearchQueryChanged("starship"))
+
+        viewModel.onEvent(NewsEvent.SearchActiveChanged(isActive = false))
+
+        val state = viewModel.uiState.value
+        assertFalse(state.isSearchActive)
+        assertEquals("", state.searchQuery)
     }
 
     @Test
@@ -104,6 +133,37 @@ class NewsViewModelTest {
 
             assertEquals(NewsEffect.ShowMessage(UiText.Resource(R.string.news_removed_from_favorites)), awaitItem())
         }
+    }
+
+    @Test
+    fun `a rapid second tap on the same heart cancels the first toggle instead of running both`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.effects.test {
+            viewModel.onEvent(NewsEvent.FavoriteToggled(testArticle(1)))
+            viewModel.onEvent(NewsEvent.FavoriteToggled(testArticle(1)))
+            advanceUntilIdle()
+
+            assertEquals(NewsEffect.ShowMessage(UiText.Resource(R.string.news_added_to_favorites)), awaitItem())
+        }
+        assertEquals(setOf(1), viewModel.uiState.value.favoriteIds)
+    }
+
+    @Test
+    fun `tapping two different hearts back to back toggles both independently`() = runTest(
+        mainDispatcherRule.testDispatcher
+    ) {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onEvent(NewsEvent.FavoriteToggled(testArticle(1)))
+        viewModel.onEvent(NewsEvent.FavoriteToggled(testArticle(2)))
+        advanceUntilIdle()
+
+        assertEquals(setOf(1, 2), viewModel.uiState.value.favoriteIds)
     }
 
     @Test
