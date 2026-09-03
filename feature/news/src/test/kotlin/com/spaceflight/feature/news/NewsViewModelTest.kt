@@ -57,7 +57,7 @@ class NewsViewModelTest {
     }
 
     @Test
-    fun `closing the search restores the feed without waiting out the debounce`() = runTest(
+    fun `closing the search restores the feed without re-fetching it`() = runTest(
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = createViewModel()
@@ -71,7 +71,7 @@ class NewsViewModelTest {
         viewModel.onEvent(NewsEvent.SearchActiveChanged(isActive = false))
         advanceUntilIdle()
 
-        assertEquals(listOf(""), articleRepository.requestedQueries)
+        assertEquals(emptyList<String>(), articleRepository.requestedQueries)
     }
 
     @Test
