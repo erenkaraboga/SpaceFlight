@@ -1,5 +1,6 @@
 package com.spaceflight.feature.news.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -73,6 +74,7 @@ fun HeroArticleCard(
         RemoteImage(
             imageUrl = imageUrl,
             contentDescription = null,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
             shape = RectangleShape,
             modifier = Modifier.fillMaxSize(),
         )

@@ -12,8 +12,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +44,7 @@ fun NewsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    var lastShownError by rememberSaveable { mutableStateOf<Throwable?>(null) }
 
     BackHandler(enabled = state.isSearchActive) {
         viewModel.onEvent(NewsEvent.SearchActiveChanged(false))
@@ -57,7 +61,8 @@ fun NewsScreen(
 
     val refreshError = articles.refreshError()
     LaunchedEffect(refreshError) {
-        if (refreshError != null) {
+        if (refreshError != null && refreshError != lastShownError) {
+            lastShownError = refreshError
             val message = refreshError.toAppError().toUiText().asString(context)
             scope.launch { snackbarHostState.showLatestSnackbar(message) }
         }

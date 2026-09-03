@@ -1,5 +1,6 @@
 package com.spaceflight.feature.newsdetail.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -88,6 +89,7 @@ fun ArticleDetailContent(
                 imageUrl = imageUrl,
                 contentDescription = null,
                 shape = RectangleShape,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer { translationY = scrollState.value * ParallaxFactor },
