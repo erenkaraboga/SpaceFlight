@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.spaceflight.core.common.error.toAppErrorOrUnknown
+import com.spaceflight.core.common.error.toAppError
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.core.domain.connectivity.NetworkMonitor
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
@@ -101,7 +101,7 @@ class NewsViewModel @Inject constructor(
                                 else R.string.news_removed_from_favorites,
                             )
                         },
-                        onFailure = { error -> error.toAppErrorOrUnknown().toUiText() },
+                        onFailure = { error -> error.toAppError().toUiText() },
                     )
                     _effects.send(NewsEffect.ShowMessage(text))
                 }

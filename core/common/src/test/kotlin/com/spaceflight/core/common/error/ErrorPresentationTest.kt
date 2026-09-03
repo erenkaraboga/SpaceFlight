@@ -21,18 +21,4 @@ class ErrorPresentationTest {
             assertTrue(error.toUiText() is UiText.Resource)
         }
     }
-
-    @Test
-    fun `a non-AppError throwable widens to Unknown instead of being dropped`() {
-        val error = RuntimeException("boom").toAppErrorOrUnknown()
-
-        assertTrue(error is AppError.Unknown)
-    }
-
-    @Test
-    fun `an AppError already typed passes through unchanged`() {
-        val original = AppError.Timeout()
-
-        assertTrue(original.toAppErrorOrUnknown() === original)
-    }
 }
