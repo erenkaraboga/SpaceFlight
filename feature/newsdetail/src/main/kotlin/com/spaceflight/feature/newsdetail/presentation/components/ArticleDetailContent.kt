@@ -89,7 +89,6 @@ fun ArticleDetailContent(
                 imageUrl = imageUrl,
                 contentDescription = null,
                 shape = RectangleShape,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer { translationY = scrollState.value * ParallaxFactor },

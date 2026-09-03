@@ -74,7 +74,6 @@ fun HeroArticleCard(
         RemoteImage(
             imageUrl = imageUrl,
             contentDescription = null,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
             shape = RectangleShape,
             modifier = Modifier.fillMaxSize(),
         )
