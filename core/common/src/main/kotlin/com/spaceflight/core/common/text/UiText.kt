@@ -1,4 +1,4 @@
-package com.spaceflight.designsystem.text
+package com.spaceflight.core.common.text
 
 import android.content.Context
 import androidx.annotation.StringRes

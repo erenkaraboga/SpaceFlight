@@ -2,7 +2,7 @@ package com.spaceflight.feature.favorites.presentation.state
 
 import androidx.compose.runtime.Immutable
 import com.spaceflight.core.model.Article
-import com.spaceflight.designsystem.text.UiText
+import com.spaceflight.core.common.text.UiText
 
 @Immutable
 data class FavoritesUiState(

@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.spaceflight.designsystem.component.FloatingTabBarDefaults
-import com.spaceflight.designsystem.text.asString
+import com.spaceflight.core.common.text.asString
 import com.spaceflight.feature.favorites.presentation.components.FavoritesList
 import com.spaceflight.feature.favorites.presentation.state.FavoritesEffect
 

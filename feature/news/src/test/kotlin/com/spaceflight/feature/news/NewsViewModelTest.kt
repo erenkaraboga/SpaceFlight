@@ -6,7 +6,7 @@ import com.spaceflight.feature.news.domain.usecase.ObserveFavoriteIdsUseCase
 import com.spaceflight.feature.news.domain.usecase.ObserveGridLayoutUseCase
 import com.spaceflight.feature.news.domain.usecase.SetGridLayoutUseCase
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
-import com.spaceflight.designsystem.text.UiText
+import com.spaceflight.core.common.text.UiText
 import com.spaceflight.feature.news.presentation.state.NewsEffect
 import com.spaceflight.feature.news.presentation.state.NewsEvent
 import com.spaceflight.core.model.AppError
