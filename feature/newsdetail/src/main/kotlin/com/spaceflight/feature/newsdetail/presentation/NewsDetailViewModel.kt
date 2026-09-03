@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.spaceflight.core.common.error.toAppErrorOrUnknown
+import com.spaceflight.core.common.error.toAppError
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.core.domain.usecase.ToggleFavoriteUseCase
 import com.spaceflight.feature.newsdetail.domain.usecase.ObserveArticleUseCase
@@ -87,7 +87,7 @@ class NewsDetailViewModel(
                     toggleFavorite(article).onFailure { error ->
                         _effects.send(
                             NewsDetailEffect.ShowMessage(
-                                error.toAppErrorOrUnknown().toUiText()
+                                error.toAppError().toUiText()
                             )
                         )
                     }
@@ -114,7 +114,7 @@ class NewsDetailViewModel(
                     _uiState.update { it.copy(isLoading = false) }
                     _effects.send(
                         NewsDetailEffect.ShowMessage(
-                            error.toAppErrorOrUnknown().toUiText()
+                            error.toAppError().toUiText()
                         )
                     )
                 },

@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.spaceflight.core.common.error.toAppErrorOrUnknown
+import com.spaceflight.core.common.error.toAppError
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.designsystem.component.FloatingTabBarDefaults
 import com.spaceflight.core.common.text.asString
@@ -48,7 +48,7 @@ fun NewsScreen(
     val refreshError = articles.refreshError()
     LaunchedEffect(refreshError) {
         if (refreshError != null) {
-            val message = refreshError.toAppErrorOrUnknown().toUiText().asString(context)
+            val message = refreshError.toAppError().toUiText().asString(context)
             snackbarHostState.showSnackbar(message)
         }
     }
@@ -56,7 +56,7 @@ fun NewsScreen(
     val appendError = articles.appendError()
     LaunchedEffect(appendError) {
         if (appendError != null) {
-            val message = appendError.toAppErrorOrUnknown().toUiText().asString(context)
+            val message = appendError.toAppError().toUiText().asString(context)
             snackbarHostState.showSnackbar(message)
         }
     }

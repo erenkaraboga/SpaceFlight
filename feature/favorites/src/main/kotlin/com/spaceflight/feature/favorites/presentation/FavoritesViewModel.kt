@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spaceflight.feature.favorites.domain.usecase.ObserveFavoritesUseCase
 import com.spaceflight.feature.favorites.domain.usecase.RemoveFavoriteUseCase
-import com.spaceflight.core.common.error.toAppErrorOrUnknown
+import com.spaceflight.core.common.error.toAppError
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.feature.favorites.presentation.state.FavoritesEffect
 import com.spaceflight.feature.favorites.presentation.state.FavoritesEvent
@@ -53,7 +53,7 @@ class FavoritesViewModel @Inject constructor(
                 removeFavorite(event.article.id).onFailure { error ->
                     _effects.send(
                         FavoritesEffect.ShowMessage(
-                            error.toAppErrorOrUnknown().toUiText()
+                            error.toAppError().toUiText()
                         )
                     )
                 }
