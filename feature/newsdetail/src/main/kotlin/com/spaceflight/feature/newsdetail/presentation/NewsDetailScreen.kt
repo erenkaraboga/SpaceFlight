@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.spaceflight.designsystem.component.EmptyState
 import com.spaceflight.designsystem.component.FavoriteButton
 import com.spaceflight.designsystem.component.GlassIconButton
+import com.spaceflight.designsystem.component.showLatestSnackbar
 import com.spaceflight.designsystem.motion.sharedContent
 import com.spaceflight.designsystem.motion.sharedImageKey
 import com.spaceflight.core.common.text.asString
@@ -78,7 +79,7 @@ fun NewsDetailScreen(
 
                 is NewsDetailEffect.OpenInBrowser ->
                     if (!context.openUrlInCustomTab(effect.url, toolbarColor)) {
-                        scope.launch { snackbarHostState.showSnackbar(noBrowserMessage) }
+                        scope.launch { snackbarHostState.showLatestSnackbar(noBrowserMessage) }
                     }
 
                 is NewsDetailEffect.ShareArticle ->
@@ -88,12 +89,12 @@ fun NewsDetailScreen(
                             chooserTitle,
                         )
                     ) {
-                        scope.launch { snackbarHostState.showSnackbar(noBrowserMessage) }
+                        scope.launch { snackbarHostState.showLatestSnackbar(noBrowserMessage) }
                     }
 
                 is NewsDetailEffect.ShowMessage -> {
                     val message = effect.text.asString(context)
-                    scope.launch { snackbarHostState.showSnackbar(message) }
+                    scope.launch { snackbarHostState.showLatestSnackbar(message) }
                 }
             }
         }

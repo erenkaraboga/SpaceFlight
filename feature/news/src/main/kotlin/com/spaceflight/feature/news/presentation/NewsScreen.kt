@@ -1,5 +1,6 @@
 package com.spaceflight.feature.news.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,10 +22,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.spaceflight.core.common.error.toAppError
 import com.spaceflight.core.common.error.toUiText
 import com.spaceflight.designsystem.component.FloatingTabBarDefaults
+import com.spaceflight.designsystem.component.showLatestSnackbar
 import com.spaceflight.core.common.text.asString
 import com.spaceflight.feature.news.presentation.state.NewsEffect
+import com.spaceflight.feature.news.presentation.state.NewsEvent
 import com.spaceflight.feature.news.presentation.state.appendError
 import com.spaceflight.feature.news.presentation.state.refreshError
+import kotlinx.coroutines.launch
 
 @Composable
 fun NewsScreen(
@@ -34,13 +39,18 @@ fun NewsScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val articles = viewModel.articles.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    BackHandler(enabled = state.isSearchActive) {
+        viewModel.onEvent(NewsEvent.SearchActiveChanged(false))
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 is NewsEffect.ShowMessage ->
-                    snackbarHostState.showSnackbar(effect.text.asString(context))
+                    scope.launch { snackbarHostState.showLatestSnackbar(effect.text.asString(context)) }
             }
         }
     }
@@ -49,7 +59,7 @@ fun NewsScreen(
     LaunchedEffect(refreshError) {
         if (refreshError != null) {
             val message = refreshError.toAppError().toUiText().asString(context)
-            snackbarHostState.showSnackbar(message)
+            scope.launch { snackbarHostState.showLatestSnackbar(message) }
         }
     }
 
@@ -57,7 +67,7 @@ fun NewsScreen(
     LaunchedEffect(appendError) {
         if (appendError != null) {
             val message = appendError.toAppError().toUiText().asString(context)
-            snackbarHostState.showSnackbar(message)
+            scope.launch { snackbarHostState.showLatestSnackbar(message) }
         }
     }
 

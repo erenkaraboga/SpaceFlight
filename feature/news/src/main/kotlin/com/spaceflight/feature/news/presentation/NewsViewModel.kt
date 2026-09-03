@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -57,12 +58,22 @@ class NewsViewModel @Inject constructor(
 
     private var favoriteToggleJob: Job? = null
 
-    val articles: Flow<PagingData<Article>> = _uiState
+
+    private val feedArticles: Flow<PagingData<Article>> = getArticles(query = "")
+        .cachedIn(viewModelScope)
+
+    private val searchArticles: Flow<PagingData<Article>> = _uiState
         .map { it.searchQuery.trim() }
         .distinctUntilChanged()
-        .debounce { query -> if (query.isEmpty()) 0L else SEARCH_DEBOUNCE_MILLIS }
+        .filter { it.isNotEmpty() }
+        .debounce(SEARCH_DEBOUNCE_MILLIS)
         .flatMapLatest { query -> getArticles(query) }
         .cachedIn(viewModelScope)
+
+    val articles: Flow<PagingData<Article>> = _uiState
+        .map { it.searchQuery.trim().isNotEmpty() }
+        .distinctUntilChanged()
+        .flatMapLatest { isSearching -> if (isSearching) searchArticles else feedArticles }
 
     init {
         observeFavoriteIds()

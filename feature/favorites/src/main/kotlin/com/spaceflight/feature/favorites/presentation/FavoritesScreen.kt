@@ -12,14 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.spaceflight.designsystem.component.FloatingTabBarDefaults
+import com.spaceflight.designsystem.component.showLatestSnackbar
 import com.spaceflight.core.common.text.asString
 import com.spaceflight.feature.favorites.presentation.components.FavoritesList
 import com.spaceflight.feature.favorites.presentation.state.FavoritesEffect
+import kotlinx.coroutines.launch
 
 @Composable
 fun FavoritesScreen(
@@ -29,13 +32,14 @@ fun FavoritesScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 is FavoritesEffect.ShowMessage ->
-                    snackbarHostState.showSnackbar(effect.text.asString(context))
+                    scope.launch { snackbarHostState.showLatestSnackbar(effect.text.asString(context)) }
             }
         }
     }
