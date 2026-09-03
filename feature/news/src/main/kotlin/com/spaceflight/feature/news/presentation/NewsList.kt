@@ -53,7 +53,10 @@ fun NewsList(
     onArticleClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val gridState = rememberLazyGridState()
+
+    val feedGridState = rememberLazyGridState()
+    val searchGridState = rememberLazyGridState()
+    val gridState = if (state.searchQuery.isBlank()) feedGridState else searchGridState
     val isGrid = state.isGridLayout
     val toggleGrid: () -> Unit = { onEvent(NewsEvent.LayoutToggled) }
 

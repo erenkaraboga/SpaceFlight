@@ -1,5 +1,6 @@
 package com.spaceflight.feature.news.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -24,6 +25,7 @@ import com.spaceflight.designsystem.component.FloatingTabBarDefaults
 import com.spaceflight.designsystem.component.showLatestSnackbar
 import com.spaceflight.core.common.text.asString
 import com.spaceflight.feature.news.presentation.state.NewsEffect
+import com.spaceflight.feature.news.presentation.state.NewsEvent
 import com.spaceflight.feature.news.presentation.state.appendError
 import com.spaceflight.feature.news.presentation.state.refreshError
 import kotlinx.coroutines.launch
@@ -39,6 +41,10 @@ fun NewsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    BackHandler(enabled = state.isSearchActive) {
+        viewModel.onEvent(NewsEvent.SearchActiveChanged(false))
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
