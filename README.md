@@ -122,6 +122,8 @@ Search behaves the same way when there's no connection: `ArticleDao.searchPaging
 
 Favorites are their own Room table (`FavoriteArticleEntity`), decoupled from the paged feed cache — a favorited article stays available even after it ages out of the feed's local cache.
 
+**Schema changes are real migrations, not a wipe.** `SpaceflightDatabase` is at version 3 with `exportSchema = true` (schema snapshots live in `core/database/schemas/`), and every past version bump so far has been declared as an `AutoMigration` — Room diffs the exported schema JSONs itself and only needs an explicit `AutoMigrationSpec` where the diff is ambiguous (a dropped column looks identical to an undeclared rename, so `AutoMigration1To2Spec`/`AutoMigration2To3Spec` spell out `@DeleteColumn` for each). `DatabaseModule` only falls back to `fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)` — i.e. it can never silently wipe data on a normal upgrade, only in the one scenario no migration path could handle anyway (an older APK installed over a newer on-device schema). This matters specifically because of the paragraph above: `favorite_articles` isn't a cache, so it's the one table a destructive migration would actually cost the user something real.
+
 ## Networking
 
 Retrofit + `kotlinx.serialization` talk to `https://api.spaceflightnewsapi.net/v4/` (`core:network`, base URL injected via `BuildConfig`). OkHttp's logging interceptor and [Chucker](https://github.com/ChuckerTeam/chucker) are wired for debug builds only (`debugImplementation` / `releaseImplementation(chucker-noop)`), so there is zero network-inspection overhead or attack surface in release builds.
@@ -155,6 +157,8 @@ A new push to the same branch/PR cancels any in-progress run for it (`concurrenc
 ## Testing
 
 Unit tests exist for the parts of the app where a bug would be silent and costly: ViewModels (`NewsViewModelTest`, `FavoritesViewModelTest`, `NewsDetailViewModelTest`, `ThemeViewModelTest`), the paging source and repository implementations (`SearchArticlePagingSourceTest`, `ArticleRepositoryImplTest`, `FavoriteRepositoryImplTest`), data mapping (`ArticleMapperTest`, `ConvertersTest`), and the error-handling layer (`ErrorMapperTest`, `ErrorPresentationTest`, `SafeCallTest`). Tests lean on MockK for fakes, Turbine for asserting `Flow` emissions, `kotlinx-coroutines-test` for controlling dispatchers, and `androidx.paging.testing` for driving a `PagingSource`/`RemoteMediator` without a real Activity.
+
+`core:database` additionally has an **instrumented** suite (`src/androidTest/.../migration/DatabaseMigrationTest.kt`) that runs each `AutoMigration` against the real, historical schema JSONs via Room's `MigrationTestHelper` — insert a row under the old schema, migrate, assert it's still there. These need a device/emulator (`MigrationTestHelper` requires real `Instrumentation` and SQLite), so they're separate from `testDebugUnitTest` and not currently wired into `android-ci.yml`.
 
 ## Error handling
 
