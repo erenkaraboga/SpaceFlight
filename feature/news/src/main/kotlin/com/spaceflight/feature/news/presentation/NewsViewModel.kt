@@ -53,10 +53,11 @@ class NewsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NewsUiState())
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
-    private val _effects = Channel<NewsEffect>(Channel.CONFLATED)
+
+    private val _effects = Channel<NewsEffect>(Channel.BUFFERED)
     val effects: Flow<NewsEffect> = _effects.receiveAsFlow()
 
-    private var favoriteToggleJob: Job? = null
+    private val favoriteToggleJobs = mutableMapOf<Int, Job>()
 
 
     private val feedArticles: Flow<PagingData<Article>> = getArticles(query = "")
@@ -103,8 +104,9 @@ class NewsViewModel @Inject constructor(
                 }
 
             is NewsEvent.FavoriteToggled -> {
-                favoriteToggleJob?.cancel()
-                favoriteToggleJob = viewModelScope.launch {
+                val articleId = event.article.id
+                favoriteToggleJobs[articleId]?.cancel()
+                val job = viewModelScope.launch {
                     val text = toggleFavorite(event.article).fold(
                         onSuccess = { added ->
                             UiText.Resource(
@@ -115,6 +117,12 @@ class NewsViewModel @Inject constructor(
                         onFailure = { error -> error.toAppError().toUiText() },
                     )
                     _effects.send(NewsEffect.ShowMessage(text))
+                }
+                favoriteToggleJobs[articleId] = job
+                job.invokeOnCompletion {
+                    if (favoriteToggleJobs[articleId] === job) {
+                        favoriteToggleJobs.remove(articleId)
+                    }
                 }
             }
 

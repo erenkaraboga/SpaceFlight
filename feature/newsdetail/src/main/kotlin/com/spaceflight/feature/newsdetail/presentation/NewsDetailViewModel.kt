@@ -37,7 +37,8 @@ class NewsDetailViewModel(
     private val toggleFavorite: ToggleFavoriteUseCase,
 ) : ViewModel() {
 
-    @Inject constructor(
+    @Inject
+    constructor(
         savedStateHandle: SavedStateHandle,
         observeArticle: ObserveArticleUseCase,
         observeIsFavorite: ObserveIsFavoriteUseCase,
@@ -54,7 +55,7 @@ class NewsDetailViewModel(
     private val _uiState = MutableStateFlow(NewsDetailUiState())
     val uiState: StateFlow<NewsDetailUiState> = _uiState.asStateFlow()
 
-    private val _effects = Channel<NewsDetailEffect>(Channel.CONFLATED)
+    private val _effects = Channel<NewsDetailEffect>(Channel.BUFFERED)
     val effects: Flow<NewsDetailEffect> = _effects.receiveAsFlow()
 
     private var favoriteToggleJob: Job? = null
@@ -80,6 +81,7 @@ class NewsDetailViewModel(
             NewsDetailEvent.BackClicked -> viewModelScope.launch {
                 _effects.send(NewsDetailEffect.NavigateBack)
             }
+
             NewsDetailEvent.FavoriteToggled -> {
                 favoriteToggleJob?.cancel()
                 favoriteToggleJob = viewModelScope.launch {

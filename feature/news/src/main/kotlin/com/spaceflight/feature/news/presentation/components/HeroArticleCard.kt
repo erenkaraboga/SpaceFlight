@@ -160,10 +160,6 @@ fun HeroArticleCardPlaceholder(modifier: Modifier = Modifier) {
     }
 }
 
-// ==========================================
-// PREVIEWS
-// ==========================================
-
 @Preview(name = "Hero Article Card - Default", showBackground = true)
 @Composable
 private fun HeroArticleCardPreview() {

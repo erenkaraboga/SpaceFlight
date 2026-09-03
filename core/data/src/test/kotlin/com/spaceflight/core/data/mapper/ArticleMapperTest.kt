@@ -48,8 +48,6 @@ class ArticleMapperTest {
             publishedAt = "2026-08-31T15:05:59.462497Z",
         ).toDomain()
 
-        // Timestamps are cached as epoch milliseconds, so the API's microseconds are truncated -
-        // harmless for a screen that shows "2 hours ago" and a formatted date.
         assertEquals(Instant.parse("2026-08-31T15:05:59.462Z"), article.publishedAt)
     }
 
@@ -64,7 +62,7 @@ class ArticleMapperTest {
     fun `strips the publisher footer and surrounding whitespace from the summary`() {
         val dto = fullDto().copy(
             summary = "\nThe observatory will shed new light on dark energy.\n\n\n" +
-                "The post Roman Space Telescope Headed to Deep Space appeared first on SpaceNews.",
+                    "The post Roman Space Telescope Headed to Deep Space appeared first on SpaceNews.",
         )
 
         assertEquals(
