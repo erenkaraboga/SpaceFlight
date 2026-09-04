@@ -6,7 +6,9 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +41,7 @@ import com.spaceflight.designsystem.theme.SpaceflightTheme
  * @param contentDescription Text description of the image for accessibility.
  * @param modifier The [Modifier] to be applied to the image container.
  * @param shape The clipping [Shape] of the image container.
+ * @param border Optional [BorderStroke] to draw around the image bounds.
  * @param contentScale Scaling strategy for fitting the image inside its bounds.
  */
 @Composable
@@ -47,13 +50,16 @@ fun RemoteImage(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
+    border: BorderStroke? = null,
     contentScale: ContentScale = ContentScale.Crop,
 ) {
     SubcomposeAsyncImage(
         model = imageUrl.takeIf { it.isNotBlank() },
         contentDescription = contentDescription,
         contentScale = contentScale,
-        modifier = modifier.clip(shape),
+        modifier = modifier
+            .then(if (border != null) Modifier.border(border, shape) else Modifier)
+            .clip(shape),
         loading = { ShimmerSurface(Modifier.fillMaxSize()) },
         error = { ImageFallback(Modifier.fillMaxSize()) },
     )
@@ -132,6 +138,13 @@ private fun RemoteImagePreview() {
                 RemoteImage(
                     imageUrl = "",
                     contentDescription = "Fallback placeholder example",
+                    modifier = Modifier.size(width = 200.dp, height = 120.dp)
+                )
+
+                RemoteImage(
+                    imageUrl = "",
+                    contentDescription = "Bordered fallback placeholder example",
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     modifier = Modifier.size(width = 200.dp, height = 120.dp)
                 )
             }

@@ -1,5 +1,6 @@
 package com.spaceflight.feature.news.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -57,6 +58,7 @@ fun ArticleTile(
                 imageUrl = imageUrl,
                 contentDescription = null,
                 shape = RectangleShape,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(4f / 3f)

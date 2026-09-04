@@ -1,5 +1,6 @@
 package com.spaceflight.designsystem.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -106,6 +107,7 @@ fun ArticleCard(
                 imageUrl = imageUrl,
                 contentDescription = null,
                 shape = RoundedCornerShape(18.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 modifier = Modifier
                     .size(96.dp)
                     .then(imageModifier),
