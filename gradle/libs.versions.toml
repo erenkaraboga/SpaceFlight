@@ -1,6 +1,3 @@
-# The whole catalog is pinned to the Android Gradle Plugin 8.11 / compileSdk 36 generation so the
-# project keeps opening in Android Studio 2025.1. Newer AndroidX releases demand AGP 9 and
-# compileSdk 37, which that IDE cannot load.
 [versions]
 agp = "8.11.2"
 kotlin = "2.2.21"
