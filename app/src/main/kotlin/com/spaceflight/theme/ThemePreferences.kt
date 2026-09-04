@@ -35,7 +35,11 @@ class ThemeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val darkThemeOverride: StateFlow<Boolean?> = userPreferencesRepository.darkThemeOverride
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
 
     fun setDarkThemeOverride(enabled: Boolean) {
         viewModelScope.launch { userPreferencesRepository.setDarkThemeOverride(enabled) }
