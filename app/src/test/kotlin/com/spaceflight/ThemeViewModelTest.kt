@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -37,6 +38,7 @@ class ThemeViewModelTest {
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = ThemeViewModel(repository)
+        backgroundScope.launch { viewModel.darkThemeOverride.collect {} }
         advanceUntilIdle()
 
         assertNull(viewModel.darkThemeOverride.value)
@@ -49,6 +51,7 @@ class ThemeViewModelTest {
         repository.setDarkThemeOverride(true)
 
         val viewModel = ThemeViewModel(repository)
+        backgroundScope.launch { viewModel.darkThemeOverride.collect {} }
         advanceUntilIdle()
 
         assertEquals(true, viewModel.darkThemeOverride.value)
@@ -59,6 +62,7 @@ class ThemeViewModelTest {
         mainDispatcherRule.testDispatcher
     ) {
         val viewModel = ThemeViewModel(repository)
+        backgroundScope.launch { viewModel.darkThemeOverride.collect {} }
         advanceUntilIdle()
 
         viewModel.setDarkThemeOverride(true)
@@ -74,6 +78,7 @@ class ThemeViewModelTest {
     ) {
         repository.setDarkThemeOverride(true)
         val viewModel = ThemeViewModel(repository)
+        backgroundScope.launch { viewModel.darkThemeOverride.collect {} }
         advanceUntilIdle()
 
         viewModel.setDarkThemeOverride(false)
